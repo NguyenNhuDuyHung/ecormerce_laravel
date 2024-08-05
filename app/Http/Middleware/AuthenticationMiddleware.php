@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class EnsureTokenIsValid
+class AuthenticationMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,7 +16,7 @@ class EnsureTokenIsValid
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(Auth::id() == null) {
+        if (Auth::id() == null) {
             return redirect()->route('auth.admin')->with("error", "Bạn phải đăng nhập để sử dụng dịch vụ này.");
         }
         return $next($request);
