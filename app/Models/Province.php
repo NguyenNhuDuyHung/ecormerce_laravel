@@ -9,7 +9,22 @@ class Province extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name'];
+    protected $fillable = [
+        'name',
+    ];
 
     protected $table = 'provinces';
+    protected $primaryKey = 'code';
+    public $incrementing = false;
+
+    public function districts()
+    {
+        return $this->hasMany(District::class, 'province_code', 'code');
+    }
+
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array<int, string>
+     */
 }
