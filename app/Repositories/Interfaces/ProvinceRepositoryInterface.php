@@ -10,5 +10,5 @@ interface ProvinceRepositoryInterface
 {
     public function all();
 
-    public function findById(int $id);
+    public function findById(int $id, array $column = ['*'], array $relation = []);
 }

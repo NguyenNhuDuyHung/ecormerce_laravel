@@ -10,5 +10,5 @@ interface DistrictRepositoryInterface
 {
     public function all();
     public function findDistrictByProvinceId(int $province_id);
-    public function findById(int $id);
+    public function findById(int $id, array $column = ['*'], array $relation = []);
 }
