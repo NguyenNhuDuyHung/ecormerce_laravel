@@ -10,7 +10,7 @@
 <link href="backend/css/style.css" rel="stylesheet">
 <link href="backend/css/customize.css" rel="stylesheet">
 
-@if (isset($config['css'])) && is_array($config['css'])
+@if (isset($config['css']) && is_array($config['css']))
     @foreach ($config['css'] as $key => $value)
         {!! '
                     <link href="' .

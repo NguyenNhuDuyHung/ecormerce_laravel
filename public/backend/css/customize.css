@@ -59,7 +59,7 @@ table strong {
     display: flex;
 }
 
-.filter-wrapper{
+.filter-wrapper {
     margin-bottom: 20px;
 }
 
@@ -85,4 +85,31 @@ table strong {
 
 .mr5 {
     margin-right: 5px;
+}
+
+.mb10 {
+    margin-bottom: 10px;
+}
+
+.mb15 {
+    margin-bottom: 15px;
+}
+
+.box .ibox {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.control-label {
+    display: block;
+}
+
+.panel-title {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+.panel-description {
+    font-size: 15px;
 }

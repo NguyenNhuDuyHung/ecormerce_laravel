@@ -4,7 +4,7 @@
 <!-- jQuery UI -->
 <script src="backend/js/plugins/jquery-ui/jquery-ui.min.js"></script>
 
-@if (isset($config['js'])) && is_array($config['js'])
+@if (isset($config['js']) && is_array($config['js']))
     @foreach ($config['js'] as $key => $value)
         {!! '
                     <script src="' .
