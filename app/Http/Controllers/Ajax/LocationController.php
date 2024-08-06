@@ -37,7 +37,7 @@ class LocationController extends Controller
         return response()->json($response);
     }
 
-    public function renderHtml($districts, $root = '[Chọn quận/huyện]')
+    public function renderHtml($districts, $root = '[Chọn Quận/Huyện]')
     {
         $html = '<option value="0">' . $root . '</option>';
         foreach ($districts as $district) {

@@ -30,7 +30,8 @@ class User extends Authenticatable
         'image',
         'description',
         'user_agent',
-        'ip'
+        'ip',
+        'user_catalogue_id',
     ];
 
     /**
