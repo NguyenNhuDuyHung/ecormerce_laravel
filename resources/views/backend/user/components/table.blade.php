@@ -32,11 +32,15 @@
                         {{ $user->address }}
                     </td>
                     <td class="text-center">
-                        <input type="checkbox" value="" class="js-switch" checked />
+                        <input type="checkbox" value="{{ $user->publish }}" class="js-switch"
+                            {{ $user->publish == 1 ? 'checked' : '' }} />
                     </td>
-                    <td class="text-center">
-                        <a href="" class="btn btn-success"><i class="fa fa-edit"></i></a>
-                        <a href="" class="btn btn-danger"><i class="fa fa-trash"></i></a>
+                    <td class="text-center" style="display: flex; justify-content: center; gap: 5px;">
+                        <a href="{{ route('user.edit', $user->id) }}" class="btn btn-success"><i
+                                class="fa fa-edit"></i></a>
+                        <form action="{{ route('user.delete', $user->id) }}" method="get">
+                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
             @endforeach

@@ -4,18 +4,22 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\UserServiceInterface as UserService;
-use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceService;
+use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepository;
+use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
     protected $userService;
     protected $provinceRepository;
+    protected $userRepository;
 
-    public function __construct(UserService $userService, ProvinceService $provinceService)
+    public function __construct(UserService $userService, ProvinceRepository $provinceRepository, UserRepository $userRepository)
     {
         $this->userService = $userService;
-        $this->provinceRepository = $provinceService;
+        $this->provinceRepository = $provinceRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function index()
@@ -50,8 +54,9 @@ class UserController extends Controller
         ];
 
         $config['seo'] = config('apps.user');
+        $config['method'] = 'create';
 
-        $template = 'backend.user.create';
+        $template = 'backend.user.store';
         return view('backend.dashboard.layout', compact('template', 'config', 'provinces'));
     }
 
@@ -60,6 +65,47 @@ class UserController extends Controller
         if ($this->userService->create($request)) {
             return redirect()->route('user.index')->with("success", "Đã thêm người dùng");
         }
-        return redirect()->route("user.create")->with("error","Đã xảy ra lỗi khi thêm người dùng");
+        return redirect()->route("user.create")->with("error", "Đã xảy ra lỗi khi thêm người dùng");
+    }
+
+    public function edit($id)
+    {
+        $user = $this->userRepository->findById($id);
+        $provinces = $this->provinceRepository->all();
+        $config = [
+            'css' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+            ],
+            'js' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'backend/library/location.js',
+            ]
+        ];
+        $config['seo'] = config('apps.user');
+        $config['method'] = 'edit';
+        $template = 'backend.user.store';
+        return view('backend.dashboard.layout', compact('template', 'config', 'provinces', 'user'));
+    }
+
+    public function update($id, UpdateUserRequest $request)
+    {
+        if ($this->userService->update($id, $request)) {
+            return redirect()->route('user.index')->with('success', 'Cập nhật thông tin thành công.');
+        }
+        return redirect()->route('user.edit', $id)->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
+    }
+
+    public function delete($id) {
+        $config['seo'] = config('apps.user');
+        $user = $this->userRepository->findById($id);
+        $template = 'backend.user.delete';
+        return view("backend.dashboard.layout", compact('template', 'user', 'config'));
+    }
+
+    public function destroy($id) {
+        if($this->userService->destroy($id)) {
+            return redirect()->route('user.index')->with('success', 'Đã xoá người dùng');
+        }
+        return redirect()->route('user.index')->with('error', 'Đã xảy ra lỗi khi xoá người dùng');
     }
 }

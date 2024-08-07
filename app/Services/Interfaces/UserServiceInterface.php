@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 interface UserServiceInterface
 {
     public function paginate();
-
     public function create(Request $request);
+    public function update($id, Request $request);
+
+    public function destroy($id);
 }
