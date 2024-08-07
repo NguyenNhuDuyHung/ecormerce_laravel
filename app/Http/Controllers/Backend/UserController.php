@@ -29,7 +29,9 @@ class UserController extends Controller
 
         $config = [
             'js' => [
-                'backend/js/plugins/switchery/switchery.js'
+                'backend/js/plugins/switchery/switchery.js',
+                'backend/library/switchery.js',
+                'backend/library/changeStatus.js',
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
@@ -50,6 +52,7 @@ class UserController extends Controller
             ],
             'js' => [
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'backend/library/select2.js',
                 'backend/library/location.js',
             ]
         ];
@@ -79,6 +82,7 @@ class UserController extends Controller
             ],
             'js' => [
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'backend/library/select2.js',
                 'backend/library/location.js',
             ]
         ];

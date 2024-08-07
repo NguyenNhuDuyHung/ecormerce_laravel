@@ -13,7 +13,6 @@
     @endforeach
 @endif
 
-<script src="backend/library/library.js"></script>
 {{-- <script>
     $(document).ready(function() {
         $('.chart').easyPieChart({

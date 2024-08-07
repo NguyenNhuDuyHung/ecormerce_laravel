@@ -194,9 +194,13 @@
         </div>
 
         <div class="text-right mb15">
-            <button class="btn btn-primary" name="send" value="send" type="submit">Thêm người
-                dùng</button>
-
+            @if ($config['method'] == 'create')
+                <button class="btn btn-primary" name="send" value="send" type="submit">Thêm người
+                    dùng</button>
+            @else
+                <button class="btn btn-primary" name="send" value="send" type="submit">Lưu thông tin
+                </button>
+            @endif
         </div>
     </div>
 </form>

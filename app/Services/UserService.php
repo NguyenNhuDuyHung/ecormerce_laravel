@@ -22,12 +22,13 @@ class UserService implements UserServiceInterface
         $this->userRepository = $userRepository;
     }
 
-    private function paginateSelect() {
+    private function paginateSelect()
+    {
         return ['id', 'name', 'email', 'phone', 'address', 'publish'];
     }
 
     public function paginate($request)
-    { 
+    {
 
         $condition['keyword'] = addcslashes($request->input('keyword'), '\\%_');
         $perpage = $request->integer('perpage');
@@ -86,6 +87,24 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             $user = $this->userRepository->forceDelete($id);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
+
+    public function updateStatus($status = [])
+    {
+        DB::beginTransaction();
+        try {
+            $field = $status['field'];
+            $payload = [$field => $status['value'] ? 0 : 1, ];
+            $user = $this->userRepository->update($status['modelId'], $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
