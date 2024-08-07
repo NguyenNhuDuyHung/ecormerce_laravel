@@ -8,6 +8,7 @@ use App\Repositories\Interfaces\ProvinceRepositoryInterface as ProvinceRepositor
 use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -22,9 +23,9 @@ class UserController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->userService->paginate();
+        $users = $this->userService->paginate($request);
 
         $config = [
             'js' => [
@@ -95,15 +96,17 @@ class UserController extends Controller
         return redirect()->route('user.edit', $id)->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $config['seo'] = config('apps.user');
         $user = $this->userRepository->findById($id);
         $template = 'backend.user.delete';
         return view("backend.dashboard.layout", compact('template', 'user', 'config'));
     }
 
-    public function destroy($id) {
-        if($this->userService->destroy($id)) {
+    public function destroy($id)
+    {
+        if ($this->userService->destroy($id)) {
             return redirect()->route('user.index')->with('success', 'Đã xoá người dùng');
         }
         return redirect()->route('user.index')->with('error', 'Đã xảy ra lỗi khi xoá người dùng');

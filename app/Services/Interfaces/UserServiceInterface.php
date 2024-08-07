@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  */
 interface UserServiceInterface
 {
-    public function paginate();
+    public function paginate($request);
     public function create(Request $request);
     public function update($id, Request $request);
 

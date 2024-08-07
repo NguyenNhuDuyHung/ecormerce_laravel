@@ -17,15 +17,19 @@ class BaseRepository implements BaseRepositoryInterface
         $this->model = $model;
     }
 
-    public function pagination(array $column = ['*'], array $condition = [], array $join = [], int $perpage = 20)
+    public function pagination(array $column = ['*'], array $condition = [], array $join = [], int $perpage = 1, array $extend = [])
     {
-        $query = $this->model->select($column)->where($condition);
+        $query = $this->model->select($column)->where(function ($queryWhere) use ($condition) {
+            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
+                $queryWhere->where('name', 'LIKE', '%' . $condition['keyword'] . '%');
+            }
+        });
 
         if (!empty($join)) {
             $query->join(...$join);
         }
 
-        return $query->paginate($perpage);
+        return $query->paginate($perpage)->withQueryString()->withPath(env('APP_URL') . $extend['path']);
     }
 
     public function create(array $payload = [])

@@ -22,9 +22,16 @@ class UserService implements UserServiceInterface
         $this->userRepository = $userRepository;
     }
 
-    public function paginate()
-    {
-        $users = $this->userRepository->pagination(['id','name', 'email'  ,'phone', 'address', 'publish']);
+    private function paginateSelect() {
+        return ['id', 'name', 'email', 'phone', 'address', 'publish'];
+    }
+
+    public function paginate($request)
+    { 
+
+        $condition['keyword'] = addcslashes($request->input('keyword'), '\\%_');
+        $perpage = $request->integer('perpage');
+        $users = $this->userRepository->pagination($this->paginateSelect(), $condition, [], $perpage, ['path' => 'user/index']);
         return $users;
     }
 
@@ -42,7 +49,8 @@ class UserService implements UserServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage(); die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
@@ -59,7 +67,8 @@ class UserService implements UserServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage(); die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
@@ -72,7 +81,8 @@ class UserService implements UserServiceInterface
         return $birthday;
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         DB::beginTransaction();
         try {
             $user = $this->userRepository->forceDelete($id);
@@ -81,8 +91,9 @@ class UserService implements UserServiceInterface
         } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage(); die();
+            echo $e->getMessage();
+            die();
             return false;
-         }
+        }
     }
 }
