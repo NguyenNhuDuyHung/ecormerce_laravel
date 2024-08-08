@@ -32,6 +32,7 @@ class UserController extends Controller
                 'backend/js/plugins/switchery/switchery.js',
                 'backend/library/switchery.js',
                 'backend/library/changeStatus.js',
+                'backend/library/selectAll.js',
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'

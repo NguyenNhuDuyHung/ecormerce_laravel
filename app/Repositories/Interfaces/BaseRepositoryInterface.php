@@ -13,7 +13,7 @@ interface BaseRepositoryInterface
     public function findById(int $id);
     public function create(array $payload);
     public function update(int $id, array $payload = []);
-
+    public function updateByWhereIn($whereInField = '', array $whereIn = [], array $payload = []);
     public function delete(int $id);
 
 }

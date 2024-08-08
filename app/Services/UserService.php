@@ -103,8 +103,26 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             $field = $status['field'];
-            $payload = [$field => $status['value'] ? 0 : 1, ];
+            $payload = [$field => $status['value'] ? 0 : 1,];
             $user = $this->userRepository->update($status['modelId'], $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
+
+    public function updateStatusAll($status = [])
+    {
+        DB::beginTransaction();
+        try {
+            $field = $status['field'];
+            $payload = [$field => $status['value']];
+            $flag = $this->userRepository->updateByWhereIn('id', $status['ids'], $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {

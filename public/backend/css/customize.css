@@ -113,3 +113,13 @@ table strong {
 .panel-description {
     font-size: 15px;
 }
+
+.active-bg {
+    background-color: #ffc !important;
+}
+
+#checkAll,
+.checkBoxItem {
+    width: 16px;
+    height: 16px;
+}
