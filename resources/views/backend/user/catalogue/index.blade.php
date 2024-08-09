@@ -4,11 +4,11 @@
         <div class="ibox float-e-margins">
             <div class="ibox-title">
                 <h5>{{ $config['seo']['index']['tableHeading'] }}</h5>
-                @include('backend.user.components.toolbox')
+                @include('backend.user.catalogue.components.toolbox')
             </div>
             <div class="ibox-content">
-                @include('backend.user.components.filter')
-                @include('backend.user.components.table')
+                @include('backend.user.catalogue.components.filter')
+                @include('backend.user.catalogue.components.table')
             </div>
         </div>
     </div>

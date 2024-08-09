@@ -22,7 +22,7 @@
                         $pulish = request('publish') ?: old('publish');
                     @endphp
                     <select name="publish" class="form-control mr10">
-                        <option {{ $pulish == -1 ? 'selected' : '' }} value="-1" selected="selected">
+                        <option {{ $pulish == -1 ? 'selected' : '' }} value="-1">
                             Chọn Tình Trạng
                         </option>
                         @foreach ($publishArray as $key => $value)

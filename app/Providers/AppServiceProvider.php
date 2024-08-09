@@ -17,6 +17,9 @@ class AppServiceProvider extends ServiceProvider
         'App\Repositories\Interfaces\UserRepositoryInterface' => 'App\Repositories\UserRepository',
         'App\Repositories\Interfaces\ProvinceRepositoryInterface' => 'App\Repositories\ProvinceRepository',
         'App\Repositories\Interfaces\DistrictRepositoryInterface' => 'App\Repositories\DistrictRepository',
+
+        'App\Repositories\Interfaces\UserCatalogueRepositoryInterface' => 'App\Repositories\UserCatalogueRepository',
+        'App\Services\Interfaces\UserCatalogueServiceInterface'=> 'App\Services\UserCatalogueService',
     ];
 
     public function register(): void
