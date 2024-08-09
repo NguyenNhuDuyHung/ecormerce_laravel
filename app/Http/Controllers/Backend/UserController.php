@@ -55,6 +55,8 @@ class UserController extends Controller
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
                 'backend/library/select2.js',
                 'backend/library/location.js',
+                'backend/library/finder.js',
+                'backend/plugins/ckfinder_2/ckfinder.js',
             ]
         ];
 

@@ -17,6 +17,19 @@
 
             <div class="action">
                 <div class="uk-flex uk-flex-middle">
+                    @php
+                        $publishArray = ['UnPublish', 'Publish'];
+                        $pulish = request('publish') ?: old('publish');
+                    @endphp
+                    <select name="publish" class="form-control mr10">
+                        <option {{ $pulish == -1 ? 'selected' : '' }} value="-1" selected="selected">
+                            Chọn Tình Trạng
+                        </option>
+                        @foreach ($publishArray as $key => $value)
+                            <option {{ $pulish == $key ? 'selected' : '' }} value="{{ $key }}">
+                                {{ $value }}</option>
+                        @endforeach
+                    </select>
                     <select name="user_catalogue_id" class="form-control mr10">
                         <option value="0" selected="selected">
                             Chọn nhóm thành viên

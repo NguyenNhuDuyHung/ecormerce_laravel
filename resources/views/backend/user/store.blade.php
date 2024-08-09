@@ -104,6 +104,26 @@
                                 </div>
                             </div>
                         @endif
+
+                        <div class="row mb15">
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <label for="" class="control-label">Ngày sinh <span
+                                            class="text-danger">(*)</span></label>
+                                    <input type="date" name="birthday"
+                                        value="{{ old('birthday', isset($user) && $user->birthday ? date('Y-m-d', strtotime($user->birthday)) : '') }}"
+                                        placeholder="" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-row">
+                                    <label for="" class="control-label">Ảnh đại diện</label>
+                                    <input type="text" name="image" placeholder=""
+                                        value="{{ old('image', isset($user) ? $user->image : '') }}" autocomplete="off"
+                                        class="form-control upload-image" data-type="Images">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -170,16 +190,7 @@
                             </div>
                         </div>
                         <div class="row mb15">
-                            <div class="col-lg-6">
-                                <div class="form-row">
-                                    <label for="" class="control-label">Ngày sinh</label>
-                                    <input type="date" name="birthday"
-                                        value="{{ old('birthday', isset($user) && $user->birthday ? date('Y-m-d', strtotime($user->birthday)) : '') }}"
-                                        placeholder="" autocomplete="off" class="form-control">
-                                </div>
-                            </div>
-
-                            <div class="col-lg-6">
+                            <div class="col-lg-12">
                                 <div class="form-row">
                                     <label for="" class="control-label">Ghi chú </label>
                                     <input type="text" name="description"

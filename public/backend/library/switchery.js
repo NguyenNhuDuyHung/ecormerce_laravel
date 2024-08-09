@@ -7,6 +7,7 @@
         $(".js-switch").each(function () {
             var switchery = new Switchery(this, {
                 color: "#1AB394",
+                size: 'small'
             });
         });
     };
