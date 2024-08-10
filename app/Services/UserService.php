@@ -24,7 +24,7 @@ class UserService implements UserServiceInterface
 
     private function paginateSelect()
     {
-        return ['id', 'name', 'email', 'phone', 'address', 'publish'];
+        return ['id', 'name', 'email', 'phone', 'address', 'publish', 'user_catalogue_id'];
     }
 
     public function paginate($request)
