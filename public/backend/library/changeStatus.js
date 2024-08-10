@@ -8,8 +8,8 @@
             $(document).on("change", ".status", function () {
                 let _this = $(this);
                 let option = {
-                    value: parseInt(_this.val()),
-                    modelId: parseInt(_this.attr("data-modelId")),
+                    value: _this.val(),
+                    modelId: _this.attr("data-modelId"),
                     model: _this.attr("data-model"),
                     field: _this.attr("data-field"),
                     _token: _token,
@@ -21,7 +21,7 @@
                     data: option,
                     dataType: "json",
                     success: function (res) {
-                        
+                        console.log(res);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log("Lỗi: " + textStatus + errorThrown);

@@ -12,6 +12,7 @@ class UserCatalogue extends Model
 
     protected $fillable = [
         'name',
+        'description',
         'publish',
     ];
 

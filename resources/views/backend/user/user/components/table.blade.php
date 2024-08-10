@@ -34,7 +34,7 @@
                     <td class="text-center js-switch-{{ $user->id }}">
                         <input type="checkbox" value="{{ $user->publish }}" class="js-switch status"
                             data-field="publish" data-model="User" data-modelId="{{ $user->id }}"
-                            {{ $user->publish == 1 ? 'checked' : '' }} />
+                            {{ $user->publish == 2 ? 'checked' : '' }} />
                     </td>
                     <td class="text-center" style="display: flex; justify-content: center; gap: 5px;">
                         <a href="{{ route('user.edit', $user->id) }}" class="btn btn-success"><i

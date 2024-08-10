@@ -7,13 +7,11 @@
     </a>
     <ul class="dropdown-menu dropdown-user">
         <li>
-            <a class="changeStatusAll" data-field="publish" data-value="1" data-model="User">Kích hoạt toàn bộ người
-                dùng
+            <a class="changeStatusAll" data-field="publish" data-value="1" data-model="UserCatalogue">Kích hoạt toàn bộ nhóm
             </a>
         </li>
         <li>
-            <a class="changeStatusAll" data-field="publish" data-value="0" data-model="User">Hủy kích hoạt toàn bộ người
-                dùng
+            <a class="changeStatusAll" data-field="publish" data-value="0" data-model="UserCatalogue">Hủy kích hoạt toàn bộ nhóm
             </a>
         </li>
     </ul>

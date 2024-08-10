@@ -1,5 +1,5 @@
 @include('backend.dashboard.components.breadcrum', ['title' => $config['seo']['delete']['title']])
-<form action="{{route('user.destroy', $user->id)}}" method="post" class="box">
+<form action="{{route('user.catalogue.destroy', $userCatalogue->id)}}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -7,8 +7,7 @@
                 <div class="panel-head">
                     <div class="panel-title">Thông tin chung</div>
                     <div class="panel-description">
-                        <p>Bạn đang muốn xóa người dùng có email là : {{ $user->email }}</p>
-                        <p>Lưu ý: Không thể khôi phục người dùng khi xóa. Hãy chắc chắn bạn muốn thực hiện chức năng
+                        <p>Lưu ý: Không thể khôi phục khi xóa. Hãy chắc chắn bạn muốn thực hiện chức năng
                             này.</p>
                     </div>
                 </div>
@@ -20,55 +19,31 @@
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label">Email <span
+                                    <label for="" class="control-label">Tên nhóm <span
                                             class="text-danger">(*)</span></label>
-                                    <input type="text" name="email"
-                                        value="{{ old('email', isset($user) ? $user->email : '') }}" placeholder=""
+                                    <input type="text" name="name"
+                                        value="{{ old('name', isset($userCatalogue) ? $userCatalogue->name : '') }}" placeholder=""
                                         autocomplete="off" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label">Họ Tên <span
+                                    <label for="" class="control-label">Ghi chú <span
                                             class="text-danger">(*)</span></label>
-                                    <input type="text" name="name"
-                                        value="{{ old('name', isset($user) ? $user->name : '') }}" placeholder=""
+                                    <input type="text" name="description"
+                                        value="{{ old('description', isset($userCatalogue) ? $userCatalogue->description : '') }}" placeholder=""
                                         autocomplete="off" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
 
                         @php
-                            $userCatalogue = ['[Chọn nhóm thành viên]', 'Quản trị viên', 'Cộng tác viên'];
-                            $userCatalogueSelected = old(
+                            $userCatalogueCatalogue = ['[Chọn nhóm thành viên]', 'Quản trị viên', 'Cộng tác viên'];
+                            $userCatalogueCatalogueSelected = old(
                                 'user_catalogue_id',
-                                isset($user) ? $user->user_catalogue_id : '',
+                                isset($userCatalogue) ? $userCatalogue->user_catalogue_id : '',
                             );
                         @endphp
-
-                        <div class="row mb15">
-                            <div class="col-lg-6">
-                                <div class="form-row">
-                                    <label for="" class="control-label">Nhóm Thành Viên <span
-                                            class="text-danger">(*)</span></label>
-                                    <select name="user_catalogue_id" class="form-control" disabled>
-                                        @foreach ($userCatalogue as $key => $item)
-                                            <option @if ($userCatalogueSelected) selected @endif 
-                                                value="{{ $key }}">{{ $item }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-row">
-                                    <label for="" class="control-label">Số điện thoại <span
-                                            class="text-danger">(*)</span></label>
-                                    <input type="text" name="phone"
-                                        value="{{ old('phone', isset($user) ? $user->phone : '') }}" placeholder=""
-                                        autocomplete="off" class="form-control" readonly>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -77,7 +52,7 @@
 
 
         <div class="text-right mb15">
-            <button class="btn btn-danger" name="send" value="send" type="submit">Xóa người dùng</button>
+            <button class="btn btn-danger" name="send" value="send" type="submit">Xóa dữ liệu</button>
         </div>
     </div>
 </form>

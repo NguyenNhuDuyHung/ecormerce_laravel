@@ -4,20 +4,20 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\UserCatalogueServiceInterface as UserCatalogueService;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
+use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
+use App\Http\Requests\StoreUserCatalogueRequest;
+use App\Http\Requests\UpdateUserCatalogueRequest;
 use Illuminate\Http\Request;
 
 class UserCatalogueController extends Controller
 {
     protected $userCatalogueService;
-    protected $userRepository;
+    protected $userCatalogueRepository;
 
-    public function __construct(UserCatalogueService $userCatalogueService, UserRepository $userRepository)
+    public function __construct(UserCatalogueService $userCatalogueService, UserCatalogueRepository $userCatalogueRepository)
     {
         $this->userCatalogueService = $userCatalogueService;
-        $this->userRepository = $userRepository;
+        $this->userCatalogueRepository = $userCatalogueRepository;
     }
 
     public function index(Request $request)
@@ -35,7 +35,7 @@ class UserCatalogueController extends Controller
                 'backend/css/plugins/switchery/switchery.css'
             ]
         ];
-        $config['seo'] = config('apps.user');
+        $config['seo'] = config('apps.usercatalogue');
 
         $template = 'backend.user.catalogue.index';
         return view("backend.dashboard.layout", compact('template', 'config', 'userCatalogues'));
@@ -56,61 +56,51 @@ class UserCatalogueController extends Controller
             ]
         ];
 
-        $config['seo'] = config('apps.user');
+        $config['seo'] = config('apps.usercatalogue');
         $config['method'] = 'create';
 
         $template = 'backend.user.catalogue.store';
-        return view('backend.dashboard.layout', compact('template', 'config', 'provinces'));
+        return view('backend.dashboard.layout', compact('template', 'config'));
     }
 
-    public function store(StoreUserRequest $request)
+    public function store(StoreUserCatalogueRequest $request)
     {
         if ($this->userCatalogueService->create($request)) {
-            return redirect()->route('user.index')->with("success", "Đã thêm người dùng");
+            return redirect()->route('user.catalogue.index')->with("success", "Đã thêm nhóm người dùng");
         }
-        return redirect()->route("user.create")->with("error", "Đã xảy ra lỗi khi thêm người dùng");
+        return redirect()->route("user.catalogue.create")->with("error", "Đã xảy ra lỗi khi thêm nhóm người dùng");
     }
 
     public function edit($id)
     {
-        $user = $this->userRepository->findById($id);
-        $config = [
-            'css' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
-            ],
-            'js' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
-                'backend/library/select2.js',
-                'backend/library/location.js',
-            ]
-        ];
-        $config['seo'] = config('apps.user');
+        $userCatalogue = $this->userCatalogueRepository->findById($id);
+        $config['seo'] = config('apps.usercatalogue');
         $config['method'] = 'edit';
         $template = 'backend.user.catalogue.store';
-        return view('backend.dashboard.layout', compact('template', 'config', 'provinces', 'user'));
+        return view('backend.dashboard.layout', compact('template', 'config', 'userCatalogue'));
     }
 
-    public function update($id, UpdateUserRequest $request)
+    public function update($id, UpdateUserCatalogueRequest $request)
     {
         if ($this->userCatalogueService->update($id, $request)) {
-            return redirect()->route('user.index')->with('success', 'Cập nhật thông tin thành công.');
+            return redirect()->route('user.catalogue.index')->with('success', 'Cập nhật thông tin thành công.');
         }
-        return redirect()->route('user.edit', $id)->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
+        return redirect()->route('user.catalogue.edit', $id)->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
     }
 
     public function delete($id)
     {
-        $config['seo'] = config('apps.user');
-        $user = $this->userRepository->findById($id);
+        $config['seo'] = config('apps.usercatalogue');
+        $userCatalogue = $this->userCatalogueRepository->findById($id);
         $template = 'backend.user.catalogue.delete';
-        return view("backend.dashboard.layout", compact('template', 'user', 'config'));
+        return view("backend.dashboard.layout", compact('template', 'userCatalogue', 'config'));
     }
 
     public function destroy($id)
     {
         if ($this->userCatalogueService->destroy($id)) {
-            return redirect()->route('user.index')->with('success', 'Đã xoá người dùng');
+            return redirect()->route('user.catalogue.index')->with('success', 'Đã xoá nhóm người dùng');
         }
-        return redirect()->route('user.index')->with('error', 'Đã xảy ra lỗi khi xoá người dùng');
+        return redirect()->route('user.catalogue.index')->with('error', 'Đã xảy ra lỗi khi xoá nhóm người dùng');
     }
 }

@@ -14,7 +14,6 @@ class DashboardController extends Controller
     public function changeStatus(Request $request)
     {
         $status = $request->input();
-
         // Gọi service động (model)
         $serviceInterfaceNamespace = 'App\Services\\' . ucfirst($status['model']) . 'Service';
         if (class_exists($serviceInterfaceNamespace)) {

@@ -104,7 +104,7 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             $field = $status['field'];
-            $payload = [$field => $status['value'] ? 0 : 1,];
+            $payload = [$field => $status['value'] == 1 ? 2 : 1];
             $user = $this->userRepository->update($status['modelId'], $payload);
             DB::commit();
             return true;
@@ -122,7 +122,7 @@ class UserService implements UserServiceInterface
         DB::beginTransaction();
         try {
             $field = $status['field'];
-            $payload = [$field => $status['value']];
+            $payload = [$field => $status['value'] == 1 ? 2 : 1];
             $flag = $this->userRepository->updateByWhereIn('id', $status['ids'], $payload);
             DB::commit();
             return true;

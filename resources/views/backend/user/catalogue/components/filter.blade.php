@@ -1,4 +1,4 @@
-<form action="{{ route('user.index') }}" method="get">
+<form action="{{ route('user.catalogue.index') }}" method="get">
     <div class="filter-wrapper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
@@ -18,18 +18,15 @@
             <div class="action">
                 <div class="uk-flex uk-flex-middle">
                     @php
-                        $publishArray = ['UnPublish', 'Publish'];
-                        $pulish = request('publish') ?: old('publish');
+                        $publish = request('publish') ?: old('publish');
                     @endphp
-                    <select name="publish" class="form-control mr10">
-                        <option {{ $pulish == -1 ? 'selected' : '' }} value="-1">
-                            Chọn Tình Trạng
-                        </option>
-                        @foreach ($publishArray as $key => $value)
-                            <option {{ $pulish == $key ? 'selected' : '' }} value="{{ $key }}">
-                                {{ $value }}</option>
+                    <select name="publish" class="form-control setupSelect2 ml10">
+                        @foreach (config('apps.general.publish') as $key => $val)
+                            <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
+                                {{ $val }}</option>
                         @endforeach
                     </select>
+                    
                     <select name="user_catalogue_id" class="form-control mr10">
                         <option value="0" selected="selected">
                             Chọn nhóm thành viên

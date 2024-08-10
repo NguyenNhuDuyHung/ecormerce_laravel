@@ -14,7 +14,6 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->tinyInteger('publish_at')->default(0);
             $table->timestamp('deleted_at')->nullable();
             $table->timestamps();
         });
