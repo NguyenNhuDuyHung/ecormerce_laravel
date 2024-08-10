@@ -17,4 +17,8 @@ class UserCatalogue extends Model
     ];
 
     protected $table = 'user_catalogues';
+
+    public function users() {
+        return $this->hasMany(User::class, 'user_catalogue_id', 'id');
+    }
 }

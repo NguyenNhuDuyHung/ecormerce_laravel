@@ -5,6 +5,7 @@
                 <input type="checkbox" value="" id="checkAll" class="input-checkbox">
             </th>
             <th>Tên nhóm người dùng</th>
+            <th>Số thành viên</th>
             <th>Mô tả</th>
             <th class="text-center">Tình trạng</th>
             <th class="text-center">Thao tác</th>
@@ -19,6 +20,9 @@
                     </td>
                     <td>
                         {{ $userCatalogue->name }}
+                    </td>
+                    <td>
+                        {{ $userCatalogue->users_count }}
                     </td>
                     <td>
                         {{ $userCatalogue->description }}
