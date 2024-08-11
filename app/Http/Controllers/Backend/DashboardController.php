@@ -15,7 +15,6 @@ class DashboardController extends Controller
     {
 
         $config = $this->config();
-
         $template = 'backend.dashboard.home.index';
         return view("backend.dashboard.layout", compact("template", 'config'));
     }
