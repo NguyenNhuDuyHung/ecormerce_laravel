@@ -32,7 +32,7 @@
             @endphp --}}
 
             @foreach (config('apps.module.module') as $key => $value)
-                <li {{ $segment == $value['name'] ? 'class=active' : '' }}>
+                <li {{ in_array($segment, $value['name']) ? 'class=active' : '' }}>
                     <a href="#"><i class="{{ $value['icon'] }}"></i><span
                             class="nav-label">{{ $value['title'] }}</span> </a>
                     <ul class="nav nav-second-level">

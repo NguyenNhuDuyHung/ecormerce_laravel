@@ -35,7 +35,7 @@ class BaseRepository implements BaseRepositoryInterface
             }
             return $queryWhere;
         });
-        if(!empty($relations)){
+        if (!empty($relations)) {
             foreach ($relations as $relation) {
                 $query->withCount($relation);
             }

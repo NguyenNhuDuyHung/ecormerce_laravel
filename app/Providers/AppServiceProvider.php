@@ -19,12 +19,15 @@ class AppServiceProvider extends ServiceProvider
         'App\Repositories\Interfaces\DistrictRepositoryInterface' => 'App\Repositories\DistrictRepository',
 
         'App\Repositories\Interfaces\UserCatalogueRepositoryInterface' => 'App\Repositories\UserCatalogueRepository',
-        'App\Services\Interfaces\UserCatalogueServiceInterface'=> 'App\Services\UserCatalogueService',
+        'App\Services\Interfaces\UserCatalogueServiceInterface' => 'App\Services\UserCatalogueService',
+
+        'App\Repositories\Interfaces\LanguageRepositoryInterface' => 'App\Repositories\LanguageRepository',
+        'App\Services\Interfaces\LanguageServiceInterface' => 'App\Services\LanguageService',
     ];
 
     public function register(): void
     {
-        foreach($this->serviceBinding as $key => $value) {
+        foreach ($this->serviceBinding as $key => $value) {
             $this->app->bind($key, $value);
         }
     }
