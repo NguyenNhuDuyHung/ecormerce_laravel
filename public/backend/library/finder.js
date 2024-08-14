@@ -7,15 +7,19 @@
             $(".ck-editor").each(function () {
                 let editor = $(this);
                 let elementId = editor.attr("id");
-                HT.ckeditor4(elementId);
+                let elementHeight = editor.attr("data-height");
+                HT.ckeditor4(elementId, elementHeight);
             });
         }
     };
 
-    HT.ckeditor4 = (elementId) => {
+    HT.ckeditor4 = (elementId, elementHeight) => {
+        if (typeof elementHeight == "undefined") {
+            elementHeight = 500;
+        }
         CKEDITOR.replace(elementId, {
-            autoUpdateElement: false,
-            height: 250,
+            autoUpdateElement: true,
+            height: elementHeight,
             removeButtons: "",
             entities: true,
             allowedContent: true,
@@ -51,6 +55,29 @@
         });
     };
 
+    HT.uploadImageAvatar = () => {
+        $(".img-target").click(function () {
+            let input = $(this);
+            let type = "Images";
+            HT.browseServerAvatar(input, type);
+        });
+    };
+
+    HT.browseServerAvatar = (object, type) => {
+        if (typeof type == "undefined") {
+            type = "Images";
+        }
+
+        var finder = new CKFinder();
+        finder.resourceType = type;
+        finder.selectActionFunction = function (fileUrl, data) {
+            object.find("img").attr("src", fileUrl);
+            object.siblings("input").val(fileUrl);
+        };
+
+        finder.popup();
+    };
+
     HT.setupCKFinder2 = (object, type) => {
         if (typeof type == "undefined") {
             type = "Images";
@@ -68,5 +95,6 @@
     $(document).ready(function () {
         HT.uploadImageToInput();
         HT.setupCkeditor();
+        HT.uploadImageAvatar();
     });
 })(jQuery);

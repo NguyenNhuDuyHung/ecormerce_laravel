@@ -6,14 +6,13 @@
     <div class="ibox-content">
         <div class="seo-container">
             <div class="meta-title">
-                Tự học laravel
+                {{ old('meta_title') ?? 'Bạn chưa có tiêu đề SEO' }}
             </div>
             <div class="canonical">
-                http://laravel.com/tu-hoc-laravel.html
+                {{ old('canonical') ? config('app.url') . old('canonical') . config('apps.general.suffix') : 'http://duong-dan-cua-ban.html' }}
             </div>
             <div class="meta-description">
-                Nội dung đơn giản dễ học, nếu kiên trì có thể bạn sẽ hoàn thành trong 4 ngày học, học
-                những phần cơ bản nhất để có được kiến thức ban đầu về Laravel.
+                {{ old('meta_description') ?? 'Bạn chưa có mô tả SEO' }}
             </div>
         </div>
 
@@ -23,12 +22,12 @@
                     <div class="form-row">
                         <label for="" class="control-label text-left">
                             <div class="uk-flex uk-flex-middel uk-flex-space-between">
-                                <span>Mô tả SEO</span>
+                                <span>Tiêu đề SEO</span>
                                 <span class="count_meta-title">0 ký tự</span>
                             </div>
                         </label>
-                        <input type="text" name="meta_description"
-                            value="{{ old('meta_description', isset($postCatalogue) ? $postCatalogue->meta_description : '') }}"
+                        <input type="text" name="meta_title"
+                            value="{{ old('meta_title', isset($postCatalogue) ? $postCatalogue->meta_title : '') }}"
                             placeholder="" autocomplete="off" class="form-control" />
                     </div>
                 </div>
@@ -54,9 +53,7 @@
                         <span class="count_meta-title">0 ký tự</span>
                     </div>
                 </label>
-                <textarea type="text" name="meta_description"
-                    value="{{ old('meta_description', isset($postCatalogue) ? $postCatalogue->meta_description : '') }}" placeholder=""
-                    autocomplete="off" class="form-control"></textarea>
+                <textarea type="text" name="meta_description" autocomplete="off" class="form-control">{{ old('meta_description', isset($postCatalogue) ? $postCatalogue->meta_description : '') }}</textarea>
             </div>
 
             <div class="row mb15">
@@ -64,12 +61,15 @@
                     <div class="form-row">
                         <label for="" class="control-label text-left">
                             <div class="uk-flex uk-flex-middel uk-flex-space-between">
-                                <span>Đường dẫn</span>
+                                <span>Đường dẫn <span class="text-danger">(*)</span></span>
                             </div>
                         </label>
-                        <input type="text" name="canonical"
-                            value="{{ old('canonical', isset($postCatalogue) ? $postCatalogue->canonical : '') }}"
-                            placeholder="" autocomplete="off" class="form-control" />
+                        <div class="input-wrapper">
+                            <input type="text" name="canonical"
+                                value="{{ old('canonical', isset($postCatalogue) ? $postCatalogue->canonical : '') }}"
+                                placeholder="" autocomplete="off" class="form-control" />
+                            <span class="baseUrl">{{ config('app.url') }}</span>
+                        </div>
                     </div>
                 </div>
             </div>

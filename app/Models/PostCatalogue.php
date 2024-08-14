@@ -10,7 +10,7 @@ class PostCatalogue extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = [
-        'parentId',
+        'parent_id',
         'lft',
         'rgt',
         'level',
@@ -18,7 +18,22 @@ class PostCatalogue extends Model
         'icon',
         'album',
         'publish',
+        'follow',
         'order',
         'user_id',
     ];
+
+    public function languages()
+    {
+        return $this->belongsToMany(Language::class, 'post_catalogue_language', 'post_catalogue_id', 'language_id')
+            ->withPivot(
+                'name',
+                'description',
+                'content',
+                'meta_title',
+                'meta_description',
+                'meta_keyword',
+                'canonical',
+            )->withTimestamps();
+    }
 }

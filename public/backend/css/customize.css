@@ -31,6 +31,9 @@ table .image {
     object-position: center;
 }
 
+.img-target {
+    cursor: pointer;
+}
 
 table strong {
     min-width: 88px;
@@ -156,4 +159,21 @@ table strong {
     font-style: italic;
 }
 
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper .baseUrl {
+    position: absolute;
+    height: 34px;
+    line-height: 34px;
+    display: inline-block;
+    padding: 0 10px;
+    top: 0;
+    left: 0;
+    background: linear-gradient(to bottom, #fff, #f9fafb);
+    border-color: #c4cdd5;
+    border: 1px solid;
+    border-right: none;
+}
 

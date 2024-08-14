@@ -86,4 +86,9 @@ class BaseRepository implements BaseRepositoryInterface
         $model = $this->findById($id);
         return $model->forceDelete();
     }
+
+    public function createLanguagePivot($model, array $payload = [])
+    {
+        return $model->languages()->attach($model->id, $payload);
+    }
 }

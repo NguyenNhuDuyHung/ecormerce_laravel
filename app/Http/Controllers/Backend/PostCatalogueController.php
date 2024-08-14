@@ -8,16 +8,23 @@ use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogu
 use App\Http\Requests\StorePostCatalogueRequest;
 use App\Http\Requests\UpdatePostCatalogueRequest;
 use Illuminate\Http\Request;
+use App\Classes\Nestedsetbie;
 
 class PostCatalogueController extends Controller
 {
     protected $postCatalogueService;
     protected $postCatalogueRepository;
+    protected $nestedSet;
 
-    public function __construct(PostCatalogueService $postCatalogueService, PostCatalogueRepository $postCatalogueRepository)
+    public function __construct(PostCatalogueService $postCatalogueService, PostCatalogueRepository $postCatalogueRepository, Nestedsetbie $nestedSet)
     {
         $this->postCatalogueService = $postCatalogueService;
         $this->postCatalogueRepository = $postCatalogueRepository;
+        $this->nestedSet = new Nestedsetbie([
+            'table' => 'post_catalogues',
+            'foreignkey' => 'post_catalogue_id',
+            'language_id' => 1,
+        ]);
     }
 
     public function index(Request $request)
@@ -48,8 +55,9 @@ class PostCatalogueController extends Controller
         $config['seo'] = config('apps.postcatalogue');
         $config['method'] = 'create';
 
+        $dropdown = $this->nestedSet->Dropdown();
         $template = 'backend.post.catalogue.store';
-        return view('backend.dashboard.layout', compact('template', 'config'));
+        return view('backend.dashboard.layout', compact('template', 'config', 'dropdown'));
     }
 
     public function store(StorePostCatalogueRequest $request)
@@ -106,6 +114,7 @@ class PostCatalogueController extends Controller
                 'backend/library/finder.js',
                 'backend/library/select2.js',
                 'backend/plugins/ckeditor/ckeditor.js',
+                'backend/library/seo.js',
             ]
         ];
     }

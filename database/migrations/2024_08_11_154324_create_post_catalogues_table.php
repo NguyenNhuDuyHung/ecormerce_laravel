@@ -13,8 +13,8 @@ return new class extends Migration {
         Schema::create('post_catalogues', function (Blueprint $table) {
             $table->id();
             $table->integer('parent_id')->nullable();
-            $table->integer('lpt')->default(0);
-            $table->integer('rpt')->default(0);
+            $table->integer('lft')->default(0);
+            $table->integer('rgt')->default(0);
             $table->integer('level')->default(0);
             $table->string('image')->nullable();
             $table->string('icon')->nullable();

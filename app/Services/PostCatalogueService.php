@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Services\Interfaces\PostCatalogueServiceInterface;
+
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
 
 use Illuminate\Support\Facades\DB;
@@ -11,22 +12,47 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Classes\Nestedsetbie;
 
 /**
  * Class PostCatalogueService
  * @package App\Services
  */
-class PostCatalogueService implements PostCatalogueServiceInterface
+class PostCatalogueService extends BaseService implements PostCatalogueServiceInterface
 {
     protected $postCatalogueRepository;
-    public function __construct(PostCatalogueRepository $postCatalogueRepository)
+    protected $nestedSet;
+    public function __construct(PostCatalogueRepository $postCatalogueRepository, Nestedsetbie $nestedSet)
     {
         $this->postCatalogueRepository = $postCatalogueRepository;
+        $this->nestedSet = new Nestedsetbie([
+            'table' => 'post_catalogues',
+            'foreignkey' => 'post_catalogue_id',
+            'language_id' => $this->currentLanguage(),
+        ]);
     }
 
     private function paginateSelect()
     {
-        return ['id', 'name', 'canonical', 'publish', 'image'];
+        return ['id', 'publish', 'image'];
+    }
+
+    private function payload()
+    {
+        return ['parent_id', 'follow', 'publish', 'image'];
+    }
+
+    private function payloadLanguage()
+    {
+        return [
+            'name',
+            'description',
+            'content',
+            'meta_title',
+            'meta_description',
+            'meta_keyword',
+            'canonical'
+        ];
     }
 
     public function paginate($request)
@@ -43,9 +69,22 @@ class PostCatalogueService implements PostCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload = $request->except(['_token', 'send']);
+            $payload = $request->only($this->payload());
             $payload['user_id'] = Auth::id();
-            $this->postCatalogueRepository->create($payload);
+            $postCatalogue = $this->postCatalogueRepository->create($payload);
+
+            if ($postCatalogue->id > 0) {
+                $payloadLanguage = $request->only($this->payloadLanguage());
+                $payloadLanguage['language_id'] = $this->currentLanguage();
+                $payloadLanguage['post_catalogue_id'] = $postCatalogue->id;
+
+                $language = $this->postCatalogueRepository->createLanguagePivot($postCatalogue, $payloadLanguage);
+            }
+
+            $this->nestedSet->Get('level ASC', 'order ASC');
+            $this->nestedSet->Recursive(0, $this->nestedSet->Set());
+            $this->nestedSet->Action();
+
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -90,36 +129,40 @@ class PostCatalogueService implements PostCatalogueServiceInterface
         }
     }
 
-    public function updateStatus($post = []){
+    public function updateStatus($post = [])
+    {
         DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
+        try {
+            $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
             $this->postCatalogueRepository->update($post['modelId'], $payload);
             // $this->changeUserStatus($post, $payload[$post['field']]);
 
             DB::commit();
             return true;
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function updateStatusAll($post){
+    public function updateStatusAll($post)
+    {
         DB::beginTransaction();
-        try{
+        try {
             $payload[$post['field']] = $post['value'];
             $flag = $this->postCatalogueRepository->updateByWhereIn('id', $post['ids'], $payload);
             // $this->changeUserStatus($post, $post['value']);
 
             DB::commit();
             return true;
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
