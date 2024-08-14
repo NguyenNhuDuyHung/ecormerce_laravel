@@ -43,12 +43,7 @@ class LanguageController extends Controller
 
     public function create()
     {
-        $config = [
-            'js' => [
-                'backend/library/finder.js',
-                'backend/plugins/ckfinder_2/ckfinder.js',
-            ]
-        ];
+        $config = $this->configData();
 
         $config['seo'] = config('apps.language');
         $config['method'] = 'create';
@@ -67,6 +62,7 @@ class LanguageController extends Controller
 
     public function edit($id)
     {
+        $config = $this->configData();
         $language = $this->languageRepository->findById($id);
         $config['seo'] = config('apps.language');
         $config['method'] = 'edit';
@@ -96,5 +92,15 @@ class LanguageController extends Controller
             return redirect()->route('language.index')->with('success', 'Đã xoá nhóm người dùng');
         }
         return redirect()->route('language.index')->with('error', 'Đã xảy ra lỗi khi xoá nhóm người dùng');
+    }
+
+    private function configData()
+    {
+        return [
+            'js' => [
+                'backend/plugins/ckfinder_2/ckfinder.js',
+                'backend/library/finder.js',
+            ]
+        ];
     }
 }

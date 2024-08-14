@@ -57,7 +57,7 @@
                                     <label for="" class="control-label">Ảnh đại diện</label>
                                     <input type="text" name="image"
                                         value="{{ old('image', isset($language) ? $language->image : '') }}"
-                                        placeholder="" autocomplete="off" class="form-control">
+                                        placeholder="" autocomplete="off" class="form-control upload-image">
                                 </div>
                             </div>
                             <div class="col-lg-6">

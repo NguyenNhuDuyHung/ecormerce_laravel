@@ -108,8 +108,7 @@
                         <div class="row mb15">
                             <div class="col-lg-6">
                                 <div class="form-row">
-                                    <label for="" class="control-label">Ngày sinh <span
-                                            class="text-danger">(*)</span></label>
+                                    <label for="" class="control-label">Ngày sinh </label>
                                     <input type="date" name="birthday"
                                         value="{{ old('birthday', isset($user) && $user->birthday ? date('Y-m-d', strtotime($user->birthday)) : '') }}"
                                         placeholder="" autocomplete="off" class="form-control">

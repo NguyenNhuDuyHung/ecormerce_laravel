@@ -29,7 +29,6 @@ class StoreUserRequest extends FormRequest
             're_password' => 'required|same:password',
             'avatar' => 'mimes:jpeg,jpg,png,gif|max:2048',
             'phone' => 'required',
-            'birthday' => 'required',
         ];
     }
 
@@ -51,7 +50,6 @@ class StoreUserRequest extends FormRequest
             're_password.required' => 'Bạn chưa nhập lại mật khẩu.',
             're_password.same' => 'Mật khẩu nhập lại chưa chính xác.',
             'phone.required' => 'Bạn chưa nhập số điện thoại',
-            'birthday.required' => 'Bạn phải nhập ngày tháng năm sinh',
         ];
     }
 }
