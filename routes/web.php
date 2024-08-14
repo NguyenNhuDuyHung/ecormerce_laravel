@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Backend\LanguageController;
+use App\Http\Controllers\Backend\PostCatalogueController;
 use App\Http\Controllers\Backend\UserCatalogueController;
 use App\Http\Controllers\Backend\UserController;
 
@@ -56,6 +57,17 @@ Route::group(['prefix' => 'language'], function () {
     Route::post('update/{id}', [LanguageController::class, 'update'])->where('id', '[0-9]+')->name('language.update')->middleware('admin');
     Route::get('delete/{id}', [LanguageController::class, 'delete'])->where('id', '[0-9]+')->name('language.delete')->middleware('admin');
     Route::post('destroy/{id}', [LanguageController::class, 'destroy'])->where('id', '[0-9]+')->name('language.destroy')->middleware('admin');
+});
+
+
+Route::group(['prefix' => 'post/catalogue'], function () {
+    Route::get('index', [PostCatalogueController::class, 'index'])->name('post.catalogue.index')->middleware('admin');
+    Route::get('create', [PostCatalogueController::class, 'create'])->name('post.catalogue.create')->middleware('admin');
+    Route::post('store', [PostCatalogueController::class, 'store'])->name('post.catalogue.store')->middleware('admin');
+    Route::get('edit/{id}', [PostCatalogueController::class, 'edit'])->where('id', '[0-9]+')->name('post.catalogue.edit')->middleware('admin');
+    Route::post('update/{id}', [PostCatalogueController::class, 'update'])->where('id', '[0-9]+')->name('post.catalogue.update')->middleware('admin');
+    Route::get('delete/{id}', [PostCatalogueController::class, 'delete'])->where('id', '[0-9]+')->name('post.catalogue.delete')->middleware('admin');
+    Route::post('destroy/{id}', [PostCatalogueController::class, 'destroy'])->where('id', '[0-9]+')->name('post.catalogue.destroy')->middleware('admin');
 });
 
 // Ajax 

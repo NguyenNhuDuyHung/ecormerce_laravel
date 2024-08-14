@@ -6,6 +6,7 @@
 			'2' => 'Kích hoạt',
 		],
 		'follow' => [
+			'0' => 'Chọn Điều hướng',
 			'1' => 'Follow',
 			'2' => 'Nofollow',
 			

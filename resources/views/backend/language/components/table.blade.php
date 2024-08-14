@@ -19,10 +19,9 @@
                     <td>
                         <input type="checkbox" value="{{ $language->id }}" class="input-checkbox checkBoxItem">
                     </td>
-                    <td>
-                        <span class="image" style="width: 100px"><img
-                                style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
-                                src="{{ 'http://' . $_SERVER['SERVER_NAME'] . '/laravelexample.com' . $language->image }}"
+                <td>
+                        <span class="image img-cover"><img
+                                src="{{$language->image }}"
                                 alt={{ $language->name }}></span>
                     </td>
                     <td>

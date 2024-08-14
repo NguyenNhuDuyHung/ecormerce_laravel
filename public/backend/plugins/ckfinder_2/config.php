@@ -85,7 +85,7 @@ Examples:
 
 ATTENTION: The trailing slash is required.
 */
-$baseUrl = '/public/userfiles/';
+$baseUrl = 'http://localhost/laravelexample.com/public/userfiles/';
 
 
 
