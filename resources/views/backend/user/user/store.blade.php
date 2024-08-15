@@ -1,4 +1,4 @@
-@include('backend.dashboard.components.breadcrum', ['title' => $config['seo']['create']['title']])
+@include('backend.dashboard.components.breadcrum', ['title' => $config['seo'][$config['method']]['title']])
 
 @if (isset($errors) && $errors->any())
     <div class="alert alert-danger">

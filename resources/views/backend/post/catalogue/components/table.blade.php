@@ -4,10 +4,7 @@
             <th>
                 <input type="checkbox" value="" id="checkAll" class="input-checkbox">
             </th>
-            <th style="width:100px;">Ảnh</th>
-            <th>Tên Ngôn ngữ</th>
-            <th>Canonical</th>
-            <th>Mô tả</th>
+            <th>Tên Nhóm</th>
             <th class="text-center">Tình Trạng</th>
             <th class="text-center">Thao tác</th>
         </tr>
@@ -20,23 +17,12 @@
                         <input type="checkbox" value="{{ $postCatalogue->id }}" class="input-checkbox checkBoxItem">
                     </td>
                     <td>
-                        <span class="image" style="width: 100px"><img
-                                style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
-                                src="{{ 'http://' . $_SERVER['SERVER_NAME'] . '/laravelexample.com' . $postCatalogue->image }}"
-                                alt={{ $postCatalogue->name }}></span>
-                    </td>
-                    <td>
-                        {{ $postCatalogue->name }}
-                    </td>
-                    <td>
-                        {{ $postCatalogue->canonical }}
-                    </td>
-                    <td>
-                        {{ $postCatalogue->description }}
+                        {{ str_repeat('|----', $postCatalogue->level > 0 ? $postCatalogue->level - 1 : 0) . $postCatalogue->name }}
                     </td>
                     <td class="text-center js-switch-{{ $postCatalogue->id }}">
                         <input type="checkbox" value="{{ $postCatalogue->publish }}" class="js-switch status "
-                            data-field="publish" data-model="PostCatalogue" {{ $postCatalogue->publish == 2 ? 'checked' : '' }}
+                            data-field="publish" data-model="PostCatalogue"
+                            {{ $postCatalogue->publish == 2 ? 'checked' : '' }}
                             data-modelId="{{ $postCatalogue->id }}" />
                     </td>
                     <td class="text-center">

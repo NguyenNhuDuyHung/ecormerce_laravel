@@ -8,7 +8,9 @@
                     <span class="text-danger notice">Chọn root nếu không có danh mục cha</span>
                     <select name="parent_id" class="form-control setupSelect2" id="">
                         @foreach ($dropdown as $key => $value)
-                            <option value="{{ $key }}">{{ $value }}</option>
+                            <option
+                                {{ $key == old('parent_id', isset($postCatalogue) ? $postCatalogue->parent_id : '') ? 'selected' : '' }}
+                                value="{{ $key }}">{{ $value }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -58,7 +60,7 @@
                     <select name="follow" class="form-control setupSelect2" id="">
                         @foreach (config('apps.general.follow') as $key => $value)
                             <option
-                                {{ old('follow', isset($postCatalogue) ? $postCatalogue->follow : '') == $key ? 'selected' : '' }}
+                                {{ $key == old('follow', isset($postCatalogue) ? $postCatalogue->follow : '') ? 'selected' : '' }}
                                 value="{{ $key }}">
                                 {{ $value }}</option>
                         @endforeach

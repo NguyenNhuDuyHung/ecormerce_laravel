@@ -110,7 +110,8 @@ class LanguageService implements LanguageServiceInterface
     public function updateStatusAll($post){
         DB::beginTransaction();
         try{
-            $payload[$post['field']] = $post['value'];
+            $field = $post['field'];
+            $payload = [$field => $post['value'] == 1 ? 2 : 1];
             $flag = $this->languageRepository->updateByWhereIn('id', $post['ids'], $payload);
             // $this->changeUserStatus($post, $post['value']);
 

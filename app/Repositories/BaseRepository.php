@@ -23,7 +23,9 @@ class BaseRepository implements BaseRepositoryInterface
         array $join = [],
         int $perpage = 1,
         array $extend = [],
-        array $relations = []
+        array $relations = [],
+        array $orderBy = ['id', 'DESC'],
+        array $where = [],
     ) {
         $query = $this->model->select($column)->where(function ($queryWhere) use ($condition) {
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
@@ -33,6 +35,12 @@ class BaseRepository implements BaseRepositoryInterface
             if (isset($condition['publish']) && $condition['publish'] != 0) {
                 $queryWhere->where('publish', '=', $condition['publish']);
             }
+
+            if (isset($condition['where']) && !empty($condition['where'])) {
+                foreach ($condition['where'] as $key => $value) {
+                    $queryWhere->where($value[0], $value[1], $value[2]);
+                }
+            }
             return $queryWhere;
         });
         if (!empty($relations)) {
@@ -41,9 +49,17 @@ class BaseRepository implements BaseRepositoryInterface
             }
         }
 
-        if (!empty($join)) {
-            $query->join(...$join);
+        if (isset($join) && is_array($join) && count($join)) {
+            foreach ($join as $key => $value) {
+                $query->join($value[0], $value[1], $value[2], $value[3]);
+            }
         }
+
+        if (isset($orderBy) && is_array($orderBy) && !empty($orderBy)) {
+            $query->orderBy($orderBy[0], $orderBy[1]);
+        }
+
+
 
         return $query->paginate($perpage)->withQueryString()->withPath(env('APP_URL') . $extend['path']);
     }

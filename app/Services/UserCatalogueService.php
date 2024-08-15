@@ -114,9 +114,9 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $payload[$post['field']] = $post['value'];
-            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['id'], $payload);
-            $this->changeUserStatus($post, $post['value']);
+            $field = $post['field'];
+            $payload = [$field => $post['value'] == 1 ? 2 : 1];
+            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['ids'], $payload);
 
             DB::commit();
             return true;

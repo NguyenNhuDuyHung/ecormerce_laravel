@@ -36,4 +36,8 @@ class PostCatalogue extends Model
                 'canonical',
             )->withTimestamps();
     }
+
+    public function post_catalogue_language() {
+        return $this->hasMany(PostCatalogueLanguage::class,'post_catalogue_id','id');
+    }
 }

@@ -9,4 +9,6 @@ namespace App\Repositories\Interfaces;
 interface PostCatalogueRepositoryInterface extends BaseRepositoryInterface
 {
     public function forceDelete(int $id);
+
+    public function getPostCatalogueById(int $id, int $language_id);
 }
