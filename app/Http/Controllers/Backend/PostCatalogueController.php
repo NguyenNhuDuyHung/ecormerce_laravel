@@ -9,6 +9,7 @@ use App\Http\Requests\StorePostCatalogueRequest;
 use App\Http\Requests\UpdatePostCatalogueRequest;
 use Illuminate\Http\Request;
 use App\Classes\Nestedsetbie;
+use App\Http\Requests\DeletePostCatalogueRequest;
 
 class PostCatalogueController extends Controller
 {
@@ -91,13 +92,13 @@ class PostCatalogueController extends Controller
 
     public function delete($id)
     {
+        $postCatalogue = $this->postCatalogueRepository->getPostCatalogueById($id, $this->language);
         $config['seo'] = config('apps.postcatalogue');
-        $postCatalogue = $this->postCatalogueRepository->findById($id);
         $template = 'backend.post.catalogue.delete';
         return view("backend.dashboard.layout", compact('template', 'postCatalogue', 'config'));
     }
 
-    public function destroy($id)
+    public function destroy($id, DeletePostCatalogueRequest $request)
     {
         if ($this->postCatalogueService->destroy($id)) {
             return redirect()->route('post.catalogue.index')->with('success', 'Đã xoá nhóm người dùng');

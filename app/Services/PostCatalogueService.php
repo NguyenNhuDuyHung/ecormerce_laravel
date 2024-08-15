@@ -161,6 +161,10 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         DB::beginTransaction();
         try {
             $this->postCatalogueRepository->forceDelete($id);
+            
+            $this->nestedSet->Get('level ASC', 'order ASC');
+            $this->nestedSet->Recursive(0, $this->nestedSet->Set());
+            $this->nestedSet->Action();
             DB::commit();
             return true;
         } catch (\Exception $e) {

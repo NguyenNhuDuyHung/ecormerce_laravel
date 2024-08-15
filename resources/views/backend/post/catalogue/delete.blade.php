@@ -1,5 +1,17 @@
 @include('backend.dashboard.components.breadcrum', ['title' => $config['seo']['delete']['title']])
-<form action="{{route('post.catalogue.destroy', $postCatalogue->id)}}" method="post" class="box">
+
+@if ($errors->any())
+
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+
+<form action="{{ route('post.catalogue.destroy', $postCatalogue->id) }}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
@@ -19,11 +31,11 @@
                         <div class="row mb15">
                             <div class="col-lg-12">
                                 <div class="form-row">
-                                    <label for="" class="control-label">Tên ngôn ngữ <span
+                                    <label for="" class="control-label">Tên nhóm <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text" name="name"
-                                        value="{{ old('name', isset($postCatalogue) ? $postCatalogue->name : '') }}" placeholder=""
-                                        autocomplete="off" class="form-control" readonly>
+                                        value="{{ old('name', isset($postCatalogue) ? $postCatalogue->name : '') }}"
+                                        placeholder="" autocomplete="off" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
