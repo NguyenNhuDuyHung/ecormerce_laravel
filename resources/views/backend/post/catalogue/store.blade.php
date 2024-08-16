@@ -27,11 +27,12 @@
                         <h5>Thông tin chung</h5>
                     </div>
 
-                    <div class="ibox-content">
+                    <div class="ibox-content" style="display: flex; flex-direction: column; gap: 40px">
                         @include('backend.post.catalogue.components.general')
                     </div>
                 </div>
 
+                @include('backend.dashboard.components.album')
                 @include('backend.post.catalogue.components.seo')
             </div>
 

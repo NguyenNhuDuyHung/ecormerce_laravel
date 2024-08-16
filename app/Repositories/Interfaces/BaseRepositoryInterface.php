@@ -12,11 +12,11 @@ interface BaseRepositoryInterface
     public function pagination(
         array $column = ['*'],
         array $condition = [],
-        array $join = [],
         int $perpage = 1,
         array $extend = [],
+        array $orderBy = ['id', 'DESC'],
+        array $join = [],
         array $relations = [],
-        array $orderBy = []
     );
     public function findById(int $id);
     public function create(array $payload);

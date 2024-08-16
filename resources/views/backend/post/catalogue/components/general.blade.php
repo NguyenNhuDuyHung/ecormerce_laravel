@@ -1,4 +1,4 @@
-<div class="row mb15">
+<div class="row">
     <div class="col-lg-12">
         <div class="form-row">
             <label for="" class="control-label text-left">Tiêu đề nhóm bài viết <span
@@ -10,7 +10,7 @@
     </div>
 </div>
 
-<div class="row mb15">
+<div class="row">
     <div class="col-lg-12">
         <div class="form-row">
             <label for="" class="control-label text-left">Mô tả ngắn </label>
@@ -20,10 +20,14 @@
     </div>
 </div>
 
-<div class="row mb15">
+<div class="row">
     <div class="col-lg-12">
         <div class="form-row">
-            <label for="" class="control-label text-left">Nội dung</label>
+            <div class="uk-flex uk-flex-middle uk-flex-space-between">
+                <label for="" class="control-label text-left">Nội dung</label>
+                <a href="" class="multipleUploadImageCkeditor" data-target='content'>Upload nhiều hình ảnh</a>
+            </div>
+
             <textarea type="text" name="content" placeholder="" autocomplete="off" class="form-control ck-editor" id="content"
                 data-height="500">{{ old('content', isset($postCatalogue) ? $postCatalogue->content : '') }}</textarea>
         </div>

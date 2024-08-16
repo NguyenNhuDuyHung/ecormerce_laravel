@@ -35,7 +35,7 @@ class LanguageService implements LanguageServiceInterface
         $condition['publish'] = $request->integer('publish');
         $perpage = $request->integer('perpage');
         $languages = $this->languageRepository
-            ->pagination($this->paginateSelect(), $condition, [], $perpage, ['path' => 'language/index']);
+            ->pagination($this->paginateSelect(), $condition, $perpage, ['path' => 'language/index']);
         return $languages;
     }
 
@@ -90,26 +90,29 @@ class LanguageService implements LanguageServiceInterface
         }
     }
 
-    public function updateStatus($post = []){
+    public function updateStatus($post = [])
+    {
         DB::beginTransaction();
-        try{
-            $payload[$post['field']] = (($post['value'] == 1)?2:1);
+        try {
+            $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
             $language = $this->languageRepository->update($post['modelId'], $payload);
             // $this->changeUserStatus($post, $payload[$post['field']]);
 
             DB::commit();
             return true;
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }
 
-    public function updateStatusAll($post){
+    public function updateStatusAll($post)
+    {
         DB::beginTransaction();
-        try{
+        try {
             $field = $post['field'];
             $payload = [$field => $post['value'] == 1 ? 2 : 1];
             $flag = $this->languageRepository->updateByWhereIn('id', $post['ids'], $payload);
@@ -117,10 +120,11 @@ class LanguageService implements LanguageServiceInterface
 
             DB::commit();
             return true;
-        }catch(\Exception $e ){
+        } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage();die();
+            echo $e->getMessage();
+            die();
             return false;
         }
     }

@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Classes\Nestedsetbie;
+use Illuminate\Support\Str;
 
 /**
  * Class PostCatalogueService
@@ -49,7 +50,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
     private function payload()
     {
-        return ['parent_id', 'follow', 'publish', 'image'];
+        return ['parent_id', 'follow', 'publish', 'image', 'album'];
     }
 
     private function payloadLanguage()
@@ -77,16 +78,15 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             ->pagination(
                 $this->paginateSelect(),
                 $condition,
-                [
-                    ['post_catalogue_language as tb2', 'tb2.post_catalogue_id', '=', 'post_catalogues.id'],
-                ],
                 $perpage,
                 ['path' => 'post/catalogue/index'],
-                [],
                 [
                     'post_catalogues.lft',
                     'ASC'
-                ]
+                ],
+                [
+                    ['post_catalogue_language as tb2', 'tb2.post_catalogue_id', '=', 'post_catalogues.id'],
+                ],
             );
 
         return $postCatalogues;
@@ -98,10 +98,13 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         try {
             $payload = $request->only($this->payload());
             $payload['user_id'] = Auth::id();
+
+            $payload['album'] = json_encode($payload['album']);
             $postCatalogue = $this->postCatalogueRepository->create($payload);
 
             if ($postCatalogue->id > 0) {
                 $payloadLanguage = $request->only($this->payloadLanguage());
+                $payloadLanguage['canonical'] = Str::slug($payloadLanguage['canonical']);
                 $payloadLanguage['language_id'] = $this->currentLanguage();
                 $payloadLanguage['post_catalogue_id'] = $postCatalogue->id;
 
@@ -161,7 +164,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
         DB::beginTransaction();
         try {
             $this->postCatalogueRepository->forceDelete($id);
-            
+
             $this->nestedSet->Get('level ASC', 'order ASC');
             $this->nestedSet->Recursive(0, $this->nestedSet->Set());
             $this->nestedSet->Action();

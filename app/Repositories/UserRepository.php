@@ -20,12 +20,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function pagination(
         array $column = ['*'],
         array $condition = [],
-        array $join = [],
         int $perpage = 1,
         array $extend = [],
+        array $orderBy = ['id', 'DESC'],
+        array $join = [],
         array $relations = [],
-        array $orderBy = [],
-        array $where = []
     ) {
         $query = $this->model->select($column)->where(function ($queryWhere) use ($condition) {
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
