@@ -23,5 +23,5 @@ interface BaseRepositoryInterface
     public function update(int $id, array $payload = []);
     public function updateByWhereIn($whereInField = '', array $whereIn = [], array $payload = []);
     public function delete(int $id);
-    public function createLanguagePivot($model, array $payload = []);
+    public function createPivot($model, array $payload = [], string $relation = '');
 }

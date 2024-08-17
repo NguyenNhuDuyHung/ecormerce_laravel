@@ -28,7 +28,7 @@ return [
                 ],
                 [
                     'title' => 'QL bài viết',
-                    'route' => 'user/index',
+                    'route' => 'post/index',
                 ]
             ]
         ],

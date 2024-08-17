@@ -18,13 +18,13 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     public function pagination(
-            array $column = ['*'],
-            array $condition = [],
-            int $perpage = 1,
-            array $extend = [],
-            array $orderBy = ['id', 'DESC'],
-            array $join = [],
-            array $relations = [],
+        array $column = ['*'],
+        array $condition = [],
+        int $perpage = 1,
+        array $extend = [],
+        array $orderBy = ['id', 'DESC'],
+        array $join = [],
+        array $relations = [],
     ) {
         $query = $this->model->select($column)->where(function ($queryWhere) use ($condition) {
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
@@ -102,8 +102,8 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->forceDelete();
     }
 
-    public function createLanguagePivot($model, array $payload = [])
+    public function createPivot($model, array $payload = [], string $relation = '')
     {
-        return $model->languages()->attach($model->id, $payload);
+        return $model->{$relation}()->attach($model->id, $payload);
     }
 }
