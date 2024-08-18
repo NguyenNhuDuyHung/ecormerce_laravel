@@ -233,3 +233,25 @@ table strong {
     width: 25px;
     height: 25px;
 }
+
+.maintitle {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.catalogue {
+    font-size: 12px;
+}
+
+.catalogue span {
+    font-weight: 600;
+}
+
+.catalogue a {
+    margin-right: 6px;
+}

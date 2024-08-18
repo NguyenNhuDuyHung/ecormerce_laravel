@@ -33,7 +33,8 @@ class LanguageController extends Controller
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
-            ]
+            ],
+            'model' => 'Language',  
         ];
         $config['seo'] = config('apps.language');
 

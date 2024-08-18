@@ -36,7 +36,8 @@ class UserController extends Controller
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
-            ]
+            ],
+            'model' => 'User',
         ];
         $config['seo'] = config('apps.user');
 

@@ -1,4 +1,4 @@
-<form action="{{ route('post.catalogue.index') }}" method="get">
+<form action="{{ route('post.index') }}" method="get">
     <div class="filter-wrapper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
@@ -19,10 +19,18 @@
                 <div class="uk-flex uk-flex-middle">
                     @php
                         $publish = request('publish') ?: old('publish');
+                        $postCatalogueId = request('post_catalogue_id') ?: old('post_catalogue_id');
                     @endphp
                     <select name="publish" class="form-control setupSelect2 mr10">
                         @foreach (config('apps.general.publish') as $key => $val)
                             <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
+                                {{ $val }}</option>
+                        @endforeach
+                    </select>
+
+                    <select name="post_catalogue_id" class="form-control setupSelect2 mr10">
+                        @foreach ($dropdown as $key => $val)
+                            <option {{ $postCatalogueId == $key ? 'selected' : '' }} value="{{ $key }}">
                                 {{ $val }}</option>
                         @endforeach
                     </select>
@@ -38,7 +46,8 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('post.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm mới
+                    <a href="{{ route('post.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm
+                        mới
                     </a>
                 </div>
             </div>

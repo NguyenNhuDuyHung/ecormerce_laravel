@@ -25,6 +25,7 @@ class BaseRepository implements BaseRepositoryInterface
         array $orderBy = ['id', 'DESC'],
         array $join = [],
         array $relations = [],
+        array $rawQuery = []
     ) {
         $query = $this->model->select($column)->where(function ($queryWhere) use ($condition) {
             if (isset($condition['keyword']) && !empty($condition['keyword'])) {
@@ -58,6 +59,11 @@ class BaseRepository implements BaseRepositoryInterface
             $query->orderBy($orderBy[0], $orderBy[1]);
         }
 
+        if (isset($rawQuery['whereRaw']) && count($rawQuery['whereRaw'])) {
+            foreach ($rawQuery['whereRaw'] as $key => $value) {
+                $query->whereRaw($value[0], $value[1]);
+            }
+        }
 
 
         return $query->paginate($perpage)->withQueryString()->withPath(env('APP_URL') . $extend['path']);

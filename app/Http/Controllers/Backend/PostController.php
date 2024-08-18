@@ -9,7 +9,6 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
 use App\Classes\Nestedsetbie;
-use App\Http\Requests\DeletePostRequest;
 
 class PostController extends Controller
 {
@@ -43,12 +42,14 @@ class PostController extends Controller
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
-            ]
+            ],
+            'model' => 'Post',
         ];
         $config['seo'] = config('apps.post');
+        $dropdown = $this->nestedSet->Dropdown();
 
         $template = 'backend.post.post.index';
-        return view("backend.dashboard.layout", compact('template', 'config', 'posts'));
+        return view("backend.dashboard.layout", compact('template', 'config', 'posts', 'dropdown'));
     }
 
     public function create()
@@ -77,7 +78,7 @@ class PostController extends Controller
         $config['seo'] = config('apps.post');
         $config['method'] = 'edit';
         $dropdown = $this->nestedSet->Dropdown();
-        $album = json_decode($post->album);
+        $album = $post->album;
         $template = 'backend.post.post.store';
         return view('backend.dashboard.layout', compact('template', 'config', 'post', 'dropdown', 'album'));
     }
@@ -87,7 +88,7 @@ class PostController extends Controller
         if ($this->postService->update($id, $request)) {
             return redirect()->route('post.index')->with('success', 'Cập nhật thông tin thành công.');
         }
-        return redirect()->route('post.edit', $id)->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
+        return redirect()->route('post.index')->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
     }
 
     public function delete($id)
@@ -98,7 +99,7 @@ class PostController extends Controller
         return view("backend.dashboard.layout", compact('template', 'post', 'config'));
     }
 
-    public function destroy($id, DeletePostRequest $request)
+    public function destroy($id)
     {
         if ($this->postService->destroy($id)) {
             return redirect()->route('post.index')->with('success', 'Đã xoá nhóm người dùng');

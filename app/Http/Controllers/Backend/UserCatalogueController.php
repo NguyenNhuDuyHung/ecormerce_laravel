@@ -33,7 +33,8 @@ class UserCatalogueController extends Controller
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
-            ]
+            ],
+            'model' => 'UserCatalogue',
         ];
         $config['seo'] = config('apps.usercatalogue');
 

@@ -43,7 +43,8 @@ class PostCatalogueController extends Controller
             ],
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
-            ]
+            ],
+            'model' => 'PostCatalogue',
         ];
         $config['seo'] = config('apps.postcatalogue');
 
@@ -78,7 +79,7 @@ class PostCatalogueController extends Controller
         $config['seo'] = config('apps.postcatalogue');
         $config['method'] = 'edit';
         $dropdown = $this->nestedSet->Dropdown();
-        $album = json_decode($postCatalogue->album);
+        $album = $postCatalogue->album;
         $template = 'backend.post.catalogue.store';
         return view('backend.dashboard.layout', compact('template', 'config', 'postCatalogue', 'dropdown', 'album'));
     }

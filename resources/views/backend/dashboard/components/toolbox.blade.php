@@ -7,11 +7,11 @@
     </a>
     <ul class="dropdown-menu dropdown-user">
         <li>
-            <a class="changeStatusAll" data-field="publish" data-value="1" data-model="PostCatalogue">Kích hoạt toàn bộ
+            <a class="changeStatusAll" data-field="publish" data-value="1" data-model="{{$config['model']}}">Kích hoạt toàn bộ
             </a>
         </li>
         <li>
-            <a class="changeStatusAll" data-field="publish" data-value="0" data-model="PostCatalogue">Hủy kích hoạt toàn bộ
+            <a class="changeStatusAll" data-field="publish" data-value="0" data-model="{{$config['model']}}">Hủy kích hoạt toàn bộ
             </a>
         </li>
     </ul>

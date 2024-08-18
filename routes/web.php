@@ -71,7 +71,7 @@ Route::group(['prefix' => 'post/catalogue'], function () {
     Route::post('destroy/{id}', [PostCatalogueController::class, 'destroy'])->where('id', '[0-9]+')->name('post.catalogue.destroy')->middleware('admin');
 });
 
-Route::group(['prefix' => 'post/'], function () {
+Route::group(['prefix' => 'post'], function () {
     Route::get('index', [PostController::class, 'index'])->name('post.index')->middleware('admin');
     Route::get('create', [PostController::class, 'create'])->name('post.create')->middleware('admin');
     Route::post('store', [PostController::class, 'store'])->name('post.store')->middleware('admin');

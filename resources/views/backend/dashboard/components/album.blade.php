@@ -11,8 +11,9 @@
 
     <div class="ibox-content">
         @php
-            $album = !empty($model->album) ? json_decode($model->album) : [];
-            $gallery = isset($album) && count($album) ? $album : old('album');
+            $albumTemplate = !empty($album) ? json_decode($album) : [];
+            $gallery = isset($albumTemplate) && count($albumTemplate) ? $albumTemplate : old('album');
+
         @endphp
         <div class="row">
             <div class="col-lg-12">
@@ -37,7 +38,7 @@
                     </div>
                 @endif
 
-                <div class="upload-list">
+                <div class="upload-list {{ isset($gallery) && count($gallery) ? '' : 'hidden' }}">
                     <div class="row">
                         <ul id="sorttable" class="clearfix data-album sort ui-sorttable" style="padding: 0 14px;">
                             @if (isset($gallery) && count($gallery))

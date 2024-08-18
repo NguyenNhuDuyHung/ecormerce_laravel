@@ -4,7 +4,8 @@
             <th>
                 <input type="checkbox" value="" id="checkAll" class="input-checkbox">
             </th>
-            <th>Tên Nhóm</th>
+            <th>Tiêu đề</th>
+            <th style="width: 60px">Vị trí</th>
             <th class="text-center">Tình Trạng</th>
             <th class="text-center">Thao tác</th>
         </tr>
@@ -12,17 +13,42 @@
     <tbody>
         @if (isset($posts) && is_object($posts))
             @foreach ($posts as $post)
-                <tr>
+                <tr id="{{ $post->id }}">
                     <td>
                         <input type="checkbox" value="{{ $post->id }}" class="input-checkbox checkBoxItem">
                     </td>
                     <td>
-                        {{ $post->name }}
+                        <div class="uk-flex uk-flex-middle">
+                            <div class="image mr5">
+                                <div class="img-cover">
+                                    <img src="{{ $post->image }}" alt="">
+                                </div>
+                            </div>
+                            <div class="main-info">
+                                <div class="name">
+                                    <span class="maintitle">{{ $post->name }}</span>
+                                </div>
+                                <div class="catalogue">
+                                    <span class="text-danger">Nhóm hiển thị:</span>
+                                    @foreach ($post->post_catalogues as $value)
+                                        @foreach ($value->post_catalogue_language as $catalogue)
+                                            <a href="{{ route('post.index', ['post_catalogue_id' => $value->id]) }}"
+                                                title="">{{ $catalogue->name }}</a>
+                                        @endforeach
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <input disabled type="text" value="{{ $post->order }}" name="order"
+                            class="form-control sort-order" data-id="{{ $post->id }}"
+                            data-model="{{ $config['model'] }}" />
                     </td>
                     <td class="text-center js-switch-{{ $post->id }}">
                         <input type="checkbox" value="{{ $post->publish }}" class="js-switch status "
-                            data-field="publish" data-model="PostCatalogue" {{ $post->publish == 2 ? 'checked' : '' }}
-                            data-modelId="{{ $post->id }}" />
+                            data-field="publish" data-model="{{ $config['model'] }}"
+                            {{ $post->publish == 2 ? 'checked' : '' }} data-modelId="{{ $post->id }}" />
                     </td>
                     <td class="text-center">
                         <a href="{{ route('post.edit', $post->id) }}" class="btn btn-success"><i

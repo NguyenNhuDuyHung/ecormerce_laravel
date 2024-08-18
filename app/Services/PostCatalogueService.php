@@ -99,7 +99,9 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             $payload = $request->only($this->payload());
             $payload['user_id'] = Auth::id();
 
-            $payload['album'] = json_encode($payload['album']);
+            $payload['album'] = (isset($payload['album']) && !empty($payload['album']))
+                ? json_encode($payload['album']) : '';
+            ;
             $postCatalogue = $this->postCatalogueRepository->create($payload);
 
             if ($postCatalogue->id > 0) {
@@ -108,7 +110,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
                 $payloadLanguage['language_id'] = $this->currentLanguage();
                 $payloadLanguage['post_catalogue_id'] = $postCatalogue->id;
 
-                $language = $this->postCatalogueRepository->createLanguagePivot($postCatalogue, $payloadLanguage);
+                $language = $this->postCatalogueRepository->createPivot($postCatalogue, $payloadLanguage, 'languages');
             }
 
             $this->nestedSet->Get('level ASC', 'order ASC');
@@ -140,7 +142,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
                 $payloadLanguage['post_catalogue_id'] = $id;
 
                 $postCatalogue->languages()->detach([$payloadLanguage['language_id'], $id]);
-                $response = $this->postCatalogueRepository->createLanguagePivot($postCatalogue, $payloadLanguage);
+                $response = $this->postCatalogueRepository->createPivot($postCatalogue, $payloadLanguage, 'languages');
                 $this->nestedSet->Get('level ASC', 'order ASC');
                 $this->nestedSet->Recursive(0, $this->nestedSet->Set());
                 $this->nestedSet->Action();

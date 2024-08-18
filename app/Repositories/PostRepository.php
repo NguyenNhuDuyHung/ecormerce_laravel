@@ -18,18 +18,17 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
         $this->model = $model;
     }
 
-    public function getPostCatalogueById(int $id = 0, $language_id = 0)
+    public function getPostById(int $id = 0, $language_id = 0)
     {
         return $this->model->select([
-            'post_catalogues.id',
-            'post_catalogues.parent_id',
-            'post_catalogues.publish',
-            'post_catalogues.image',
-            'post_catalogues.icon',
-            'post_catalogues.album',
-            'post_catalogues.level',
-            'post_catalogues.order',
-            'post_catalogues.follow',
+            'posts.id',
+            'posts.post_catalogue_id',
+            'posts.publish',
+            'posts.image',
+            'posts.icon',
+            'posts.album',
+            'posts.order',
+            'posts.follow',
             'tb2.name',
             'tb2.description',
             'tb2.content',
@@ -38,11 +37,12 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
             'tb2.meta_keyword',
             'tb2.canonical',
         ])->join(
-                'post_catalogue_language as tb2',
-                'tb2.post_catalogue_id',
+                'post_language as tb2',
+                'tb2.post_id',
                 '=',
-                'post_catalogues.id'
+                'posts.id'
             )
+            ->with('post_catalogues')
             ->where(
                 'tb2.language_id',
                 '=',
