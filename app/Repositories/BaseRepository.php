@@ -27,46 +27,19 @@ class BaseRepository implements BaseRepositoryInterface
         array $relations = [],
         array $rawQuery = []
     ) {
-        $query = $this->model->select($column)->where(function ($queryWhere) use ($condition) {
-            if (isset($condition['keyword']) && !empty($condition['keyword'])) {
-                $queryWhere->where('name', 'LIKE', '%' . $condition['keyword'] . '%');
-            }
-
-            if (isset($condition['publish']) && $condition['publish'] != 0) {
-                $queryWhere->where('publish', '=', $condition['publish']);
-            }
-
-            if (isset($condition['where']) && !empty($condition['where'])) {
-                foreach ($condition['where'] as $key => $value) {
-                    $queryWhere->where($value[0], $value[1], $value[2]);
-                }
-            }
-            return $queryWhere;
-        });
-        if (!empty($relations)) {
-            foreach ($relations as $relation) {
-                $query->withCount($relation);
-            }
-        }
-
-        if (isset($join) && is_array($join) && count($join)) {
-            foreach ($join as $key => $value) {
-                $query->join($value[0], $value[1], $value[2], $value[3]);
-            }
-        }
-
-        if (isset($orderBy) && is_array($orderBy) && !empty($orderBy)) {
-            $query->orderBy($orderBy[0], $orderBy[1]);
-        }
-
-        if (isset($rawQuery['whereRaw']) && count($rawQuery['whereRaw'])) {
-            foreach ($rawQuery['whereRaw'] as $key => $value) {
-                $query->whereRaw($value[0], $value[1]);
-            }
-        }
-
-
-        return $query->paginate($perpage)->withQueryString()->withPath(env('APP_URL') . $extend['path']);
+        $query = $this->model->select($column);
+        return $query->keyword($condition['keyword'] ?? null)
+            ->publish($condition['publish'] ?? null)
+            ->customWhere($condition['where'] ?? [])
+            ->customWhereRaw($rawQuery['whereRaw'] ?? [])
+            ->relationCount($relations ?? null)
+            ->relation($relations ?? null)
+            ->customJoin($join ?? null)
+            ->customOrderBy($orderBy ?? null)
+            ->customGroupBy($extend['groupBy'] ?? [])
+            ->paginate($perpage)
+            ->withQueryString()
+            ->withPath(env('APP_URL') . $extend['path']);
     }
 
     public function create(array $payload = [])
