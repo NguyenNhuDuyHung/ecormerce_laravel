@@ -9,7 +9,7 @@
                     <select name="perpage" class="form-control input-sm perpage filter mr10">
                         @for ($i = 20; $i <= 200; $i += 20)
                             <option {{ $perpage == $i ? 'selected' : '' }} value="{{ $i }}">
-                                {{ $i }} bản ghi</option>
+                                {{ $i }} {{ __('message.perpage') }}</option>
                         @endfor
                     </select>
                 </div>
@@ -22,7 +22,7 @@
                         $postCatalogueId = request('post_catalogue_id') ?: old('post_catalogue_id');
                     @endphp
                     <select name="publish" class="form-control setupSelect2 mr10">
-                        @foreach (config('apps.general.publish') as $key => $val)
+                        @foreach (__('message.publish') as $key => $val)
                             <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
                                 {{ $val }}</option>
                         @endforeach
@@ -38,16 +38,15 @@
                     <div class="uk-search uk-flex uk-flex-middle mr10">
                         <div class="input-group">
                             <input type="text" name="keyword" value="{{ request('keyword') ? old('keyword') : '' }}"
-                                placeholder="Nhập từ khóa bạn muốn tìm kiếm..." class="form-control">
+                                placeholder="{{ __('message.searchInput') }}" class="form-control">
                             <span class="input-group-btn">
                                 <button type="submit" name="search" value="search"
-                                    class="btn btn-primary mb0 btn-sm">Tìm
-                                    kiếm</button>
+                                    class="btn btn-primary mb0 btn-sm">{{ __('message.search') }}</button>
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('post.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm
-                        mới
+                    <a href="{{ route('post.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i>
+                        {{ __('message.post.create.title') }}
                     </a>
                 </div>
             </div>

@@ -4,10 +4,10 @@
             <th>
                 <input type="checkbox" value="" id="checkAll" class="input-checkbox">
             </th>
-            <th>Tiêu đề</th>
+            <th>T{{__('message.tableName')}}</th>
             <th style="width: 60px">Vị trí</th>
-            <th class="text-center">Tình Trạng</th>
-            <th class="text-center">Thao tác</th>
+            <th class="text-center">{{__('message.tableStatus')}}</th>
+            <th class="text-center">{{__('message.tableAction')}}</th>
         </tr>
     </thead>
     <tbody>
@@ -29,7 +29,7 @@
                                     <span class="maintitle">{{ $post->name }}</span>
                                 </div>
                                 <div class="catalogue">
-                                    <span class="text-danger">Nhóm hiển thị:</span>
+                                    <span class="text-danger">{{__('message.tableGroup')}}</span>
                                     @foreach ($post->post_catalogues as $value)
                                         @foreach ($value->post_catalogue_language as $catalogue)
                                             <a href="{{ route('post.index', ['post_catalogue_id' => $value->id]) }}"

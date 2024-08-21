@@ -3,9 +3,9 @@
         <div class="row mb15">
             <div class="col-lg-12">
                 <div class="form-row">
-                    <label for="" class="control-label">Chọn danh mục cha <span
+                    <label for="" class="control-label">{{ __('message.parent') }} <span
                             class="text-danger">(*)</span></label>
-                    <span class="text-danger notice">Chọn root nếu không có danh mục cha</span>
+                    <span class="text-danger notice">{{ __('message.parentNotice') }}</span>
                     <select name="post_catalogue_id" class="form-control setupSelect2" id="">
                         @foreach ($dropdown as $key => $value)
                             <option
@@ -32,7 +32,8 @@
                     <label class="control-label">Danh mục phụ</label>
                     <select multiple name="catalogue[]" class="form-control setupSelect2" id="">
                         @foreach ($dropdown as $key => $value)
-                            <option @if (is_array(old('catalogue', isset($catalogue) && count($catalogue) ? $catalogue : [])) && isset($post) &&
+                            <option @if (is_array(old('catalogue', isset($catalogue) && count($catalogue) ? $catalogue : [])) &&
+                                    isset($post) &&
                                     $key !== $post->post_catalogue_id &&
                                     in_array($key, old('catalogue', isset($catalogue) ? $catalogue : []))) selected @endif value="{{ $key }}">
                                 {{ $value }}</option>
@@ -45,7 +46,7 @@
 </div>
 <div class="ibox">
     <div class="ibox-title">
-        <h5>Chọn ảnh đại diện</h5>
+        <h5>{{ __('message.image') }} </h5>
     </div>
     <div class="ibox-content">
         <div class="row mb15">
@@ -65,7 +66,7 @@
 </div>
 <div class="ibox">
     <div class="ibox-title">
-        <h5>Cấu hình nâng cao</h5>
+        <h5>{{ __('message.advance') }}</h5>
     </div>
     <div class="ibox-content">
         <div class="row mb15">
@@ -73,7 +74,7 @@
                 <div class="form-row">
                     <div class="mb15">
                         <select name="publish" class="form-control setupSelect2" id="">
-                            @foreach (config('apps.general.publish') as $key => $value)
+                            @foreach (__('message.publish') as $key => $value)
                                 <option
                                     {{ old('pubish', isset($post) ? $post->publish : '') == $key ? 'selected' : '' }}
                                     value="{{ $key }}">

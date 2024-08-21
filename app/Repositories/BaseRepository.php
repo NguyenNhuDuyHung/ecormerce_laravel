@@ -28,8 +28,8 @@ class BaseRepository implements BaseRepositoryInterface
         array $rawQuery = []
     ) {
         $query = $this->model->select($column);
-        return $query->keyword($condition['keyword'] ?? null)
-            ->publish($condition['publish'] ?? null)
+        return $query->publish($condition['publish'] ?? null)
+            ->keyword($condition['keyword'] ?? null)
             ->customWhere($condition['where'] ?? [])
             ->customWhereRaw($rawQuery['whereRaw'] ?? [])
             ->relationCount($relations ?? null)
@@ -62,6 +62,15 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $model = $this->findById($id);
         return $model->update($payload);
+    }
+
+    public function updateByWhere($condition = [], array $payload = [])
+    {
+        $query = $this->model->newQuery();
+        foreach ($condition as $key => $value) {
+            $query->where($value[0], $value[1], $value[2]);
+        }
+        return $query->update($payload);
     }
 
     public function updateByWhereIn($whereInField = '', array $whereIn = [], array $payload = [])

@@ -21,7 +21,7 @@
                         $publish = request('publish') ?: old('publish');
                     @endphp
                     <select name="publish" class="form-control setupSelect2 mr10">
-                        @foreach (config('apps.general.publish') as $key => $val)
+                        @foreach (__('message.publish') as $key => $val)
                             <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
                                 {{ $val }}</option>
                         @endforeach

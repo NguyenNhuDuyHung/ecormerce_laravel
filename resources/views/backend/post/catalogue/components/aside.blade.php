@@ -48,7 +48,7 @@
                 <div class="form-row">
                     <div class="mb15">
                         <select name="publish" class="form-control setupSelect2" id="">
-                            @foreach (config('apps.general.publish') as $key => $value)
+                            @foreach (__('message.publish') as $key => $value)
                                 <option
                                     {{ old('pubish', isset($postCatalogue) ? $postCatalogue->publish : '') == $key ? 'selected' : '' }}
                                     value="{{ $key }}">

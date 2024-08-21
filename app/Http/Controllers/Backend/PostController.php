@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\PostServiceInterface as PostService;
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
+use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
@@ -16,8 +17,9 @@ class PostController extends Controller
     protected $postRepository;
     protected $nestedSet;
     protected $language;
+    protected $languageRepository;
 
-    public function __construct(PostService $postService, PostRepository $postRepository, Nestedsetbie $nestedSet)
+    public function __construct(PostService $postService, PostRepository $postRepository, Nestedsetbie $nestedSet, LanguageRepository $languageRepository)
     {
         $this->postService = $postService;
         $this->postRepository = $postRepository;
@@ -47,7 +49,6 @@ class PostController extends Controller
         ];
         $config['seo'] = config('apps.post');
         $dropdown = $this->nestedSet->Dropdown();
-
         $template = 'backend.post.post.index';
         return view("backend.dashboard.layout", compact('template', 'config', 'posts', 'dropdown'));
     }

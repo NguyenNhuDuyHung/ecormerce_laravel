@@ -3,31 +3,31 @@
 return [
     'module' => [
         [
-            'title' => 'QL Nhóm người dùng',
+            'title' => 'Nhóm người dùng',
             'icon' => "fa fa-th-large",
             'name' => ['user'],
             'subModule' => [
                 [
-                    'title' => 'QL Nhóm người dùng',
+                    'title' => 'Nhóm người dùng',
                     'route' => 'user/catalogue/index',
                 ],
                 [
-                    'title' => 'QL nguời dùng',
+                    'title' => 'Nguời dùng',
                     'route' => 'user/index',
                 ]
             ]
         ],
         [
-            'title' => 'QL Nhóm bài viết',
+            'title' => 'Nhóm bài viết',
             'icon' => "fa fa-th-large",
             'name' => ['post'],
             'subModule' => [
                 [
-                    'title' => 'QL Nhóm bài viết',
+                    'title' => 'Nhóm bài viết',
                     'route' => 'post/catalogue/index',
                 ],
                 [
-                    'title' => 'QL bài viết',
+                    'title' => 'Bài viết',
                     'route' => 'post/index',
                 ]
             ]
@@ -38,7 +38,7 @@ return [
             'name' => ['language'],
             'subModule' => [
                 [
-                    'title' => 'QL ngôn ngữ',
+                    'title' => 'Ngôn ngữ',
                     'route' => 'language/index',
                 ],
             ]

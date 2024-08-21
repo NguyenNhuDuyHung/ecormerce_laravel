@@ -21,17 +21,20 @@
                         $publish = request('publish') ?: old('publish');
                     @endphp
                     <select name="publish" class="form-control setupSelect2 ml10">
-                        @foreach (config('apps.general.publish') as $key => $val)
+                        @foreach (__('message.publish') as $key => $val)
                             <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
                                 {{ $val }}</option>
                         @endforeach
                     </select>
-                    
+
+
                     <select name="user_catalogue_id" class="form-control mr10">
                         <option value="0" selected="selected">
                             Chọn nhóm thành viên
                         </option>
-                        <option value="1">Quản trị viên</option>
+                        @foreach ($userCatalogues as $key => $value)
+                            <option value="{{ $value->id }}">{{ $value->name }}</option>
+                        @endforeach
                     </select>
 
                     <div class="uk-search uk-flex uk-flex-middle mr10">
@@ -45,7 +48,8 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm mới
+                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm
+                        mới
                         thành viên</a>
                 </div>
             </div>

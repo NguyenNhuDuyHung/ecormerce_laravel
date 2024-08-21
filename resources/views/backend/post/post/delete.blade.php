@@ -17,10 +17,9 @@
         <div class="row">
             <div class="col-lg-5">
                 <div class="panel-head">
-                    <div class="panel-title">Thông tin chung</div>
+                    <div class="panel-title">{{ __('message.generalTitle') }}</div>
                     <div class="panel-description">
-                        <p>Lưu ý: Không thể khôi phục khi xóa. Hãy chắc chắn bạn muốn thực hiện chức năng
-                            này.</p>
+                        <p>{{ __('message.generalDescription') }}</p>
                     </div>
                 </div>
             </div>
@@ -34,8 +33,8 @@
                                     <label for="" class="control-label">Tên nhóm <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text" name="name"
-                                        value="{{ old('name', isset($post) ? $post->name : '') }}"
-                                        placeholder="" autocomplete="off" class="form-control" readonly>
+                                        value="{{ old('name', isset($post) ? $post->name : '') }}" placeholder=""
+                                        autocomplete="off" class="form-control" readonly>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +47,7 @@
 
 
         <div class="text-right mb15">
-            <button class="btn btn-danger" name="send" value="send" type="submit">Xóa dữ liệu</button>
+            <button class="btn btn-danger" name="send" value="send" type="submit">{{ __('message.deleteButton') }}</button>
         </div>
     </div>
 </form>

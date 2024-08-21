@@ -21,7 +21,7 @@
                         $publish = request('publish') ?: old('publish');
                     @endphp
                     <select name="publish" class="form-control setupSelect2 ml10">
-                        @foreach (config('apps.general.publish') as $key => $val)
+                        @foreach (__('message.publish') as $key => $val)
                             <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
                                 {{ $val }}</option>
                         @endforeach
@@ -45,8 +45,7 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm mới
-                        thành viên</a>
+                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> {{__('message.user.create.title')}}</a>
                 </div>
             </div>
         </div>

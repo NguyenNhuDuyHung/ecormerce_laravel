@@ -8,5 +8,6 @@ namespace App\Repositories\Interfaces;
  */
 interface PostRepositoryInterface extends BaseRepositoryInterface
 {
+    public function getPostById(int $id, int $language_id);
     public function forceDelete(int $id);
 }

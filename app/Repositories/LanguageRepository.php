@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories; 
+namespace App\Repositories;
 
 use App\Models\Language;
 use App\Repositories\BaseRepository;

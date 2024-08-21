@@ -34,7 +34,7 @@ class LanguageController extends Controller
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
             ],
-            'model' => 'Language',  
+            'model' => 'Language',
         ];
         $config['seo'] = config('apps.language');
 
@@ -103,5 +103,15 @@ class LanguageController extends Controller
                 'backend/library/finder.js',
             ]
         ];
+    }
+
+    public function switchBackendLanguage($id)
+    {
+        $language = $this->languageRepository->findById($id);
+        if ($this->languageService->switch($id)) {
+            session(['app_locale' => $language->canonical]);
+            \App::setLocale($language->canonical);
+        }
+        return back();
     }
 }

@@ -151,4 +151,29 @@ class LanguageService implements LanguageServiceInterface
             return false;
         }
     }
+
+    public function switch($id)
+    {
+
+        DB::beginTransaction();
+        try {
+            $this->languageRepository->update($id, ['current' => 1]);
+            $this->languageRepository->updateByWhere(
+                [
+                    ['id', '!=', $id],
+                ],
+                [
+                    'current' => 0,
+                ]
+            );
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
 }
