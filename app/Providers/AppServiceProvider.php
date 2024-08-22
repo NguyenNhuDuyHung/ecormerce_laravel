@@ -29,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
 
         'App\Repositories\Interfaces\PostRepositoryInterface' => 'App\Repositories\PostRepository',
         'App\Services\Interfaces\PostServiceInterface' => 'App\Services\PostService',
+
+        'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
     ];
 
     public function register(): void

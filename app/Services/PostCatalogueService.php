@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Services\Interfaces\PostCatalogueServiceInterface;
 
 use App\Repositories\Interfaces\PostCatalogueRepositoryInterface as PostCatalogueRepository;
-
+use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
@@ -24,7 +24,8 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
     protected $postCatalogueRepository;
     protected $nestedSet;
     protected $language;
-    public function __construct(PostCatalogueRepository $postCatalogueRepository, Nestedsetbie $nestedSet)
+    protected $routerRepository;
+    public function __construct(PostCatalogueRepository $postCatalogueRepository, Nestedsetbie $nestedSet, RouterRepository $routerRepository)
     {
         $this->postCatalogueRepository = $postCatalogueRepository;
         $this->language = $this->currentLanguage();
@@ -33,6 +34,7 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
             'foreignkey' => 'post_catalogue_id',
             'language_id' => $this->language,
         ]);
+        $this->routerRepository = $routerRepository;
     }
 
     private function paginateSelect()
@@ -111,6 +113,14 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
                 $payloadLanguage['post_catalogue_id'] = $postCatalogue->id;
 
                 $language = $this->postCatalogueRepository->createPivot($postCatalogue, $payloadLanguage, 'languages');
+
+                $router = [
+                    'canonical' => $payloadLanguage['canonical'],
+                    'module_id' => $postCatalogue->id,
+                    'controllers' => 'App\Http\Controllers\Frontend\PostCatalogueController',
+                ];
+
+                $this->routerRepository->create($router);
             }
 
             $this->nestedSet->Get('level ASC', 'order ASC');
@@ -143,6 +153,22 @@ class PostCatalogueService extends BaseService implements PostCatalogueServiceIn
 
                 $postCatalogue->languages()->detach([$payloadLanguage['language_id'], $id]);
                 $response = $this->postCatalogueRepository->createPivot($postCatalogue, $payloadLanguage, 'languages');
+
+
+                $payloadRouter = [
+                    'canonical' => $payloadLanguage['canonical'],
+                    'module_id' => $postCatalogue->id,
+                    'controllers' => 'App\Http\Controllers\Frontend\PostCatalogueController',
+                ];
+
+                $router = $this->routerRepository->findByCondition(
+                    [
+                        ['module_id', '=', $id],
+                        ['controllers', '=', 'App\Http\Controllers\Frontend\PostCatalogueController']
+                    ]
+                );
+                $this->routerRepository->update($router->id, $payloadRouter);
+
                 $this->nestedSet->Get('level ASC', 'order ASC');
                 $this->nestedSet->Recursive(0, $this->nestedSet->Set());
                 $this->nestedSet->Action();

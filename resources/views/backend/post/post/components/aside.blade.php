@@ -84,7 +84,7 @@
                     </div>
 
                     <select name="follow" class="form-control setupSelect2" id="">
-                        @foreach (config('apps.general.follow') as $key => $value)
+                        @foreach (__('message.follow') as $key => $value)
                             <option {{ $key == old('follow', isset($post) ? $post->follow : '') ? 'selected' : '' }}
                                 value="{{ $key }}">
                                 {{ $value }}</option>

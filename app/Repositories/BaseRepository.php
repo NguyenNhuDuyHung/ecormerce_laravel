@@ -58,6 +58,15 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
+    public function findByCondition($condition = [])
+    {
+        $query = $this->model->newQuery();
+        foreach ($condition as $key => $value) {
+            $query = $query->where($value[0], $value[1], $value[2]);
+        }
+        return $query->first();
+    }
+
     public function update(int $id, array $payload = [])
     {
         $model = $this->findById($id);
