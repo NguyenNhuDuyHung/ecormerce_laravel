@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Services\Interfaces\PostServiceInterface;
 
 use App\Repositories\Interfaces\PostRepositoryInterface as PostRepository;
+use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -22,10 +23,13 @@ class PostService extends BaseService implements PostServiceInterface
 {
     protected $postRepository;
     protected $language;
-    public function __construct(PostRepository $postRepository)
+    protected $routerRepository;
+    public function __construct(PostRepository $postRepository, RouterRepository $routerRepository)
     {
         $this->postRepository = $postRepository;
+        $this->routerRepository = $routerRepository;
         $this->language = $this->currentLanguage();
+        $this->controllerName = 'PostController';
     }
 
     private function paginateSelect()
@@ -125,6 +129,7 @@ class PostService extends BaseService implements PostServiceInterface
             if ($post->id > 0) {
                 $this->updateLanguageForPost($post, $request);
                 $this->updateCatalogueForPost($post, $request);
+                $this->createRouter($post, $request, $this->controllerName);
             }
 
             DB::commit();
@@ -164,12 +169,6 @@ class PostService extends BaseService implements PostServiceInterface
         return $this->postRepository->update($post->id, $payload);
     }
 
-    private function formatAlbum($payload)
-    {
-        return (isset($payload['album']) && !empty($payload['album']))
-            ? json_encode($payload['album']) : '';
-    }
-
     private function updateLanguageForPost($post, $request)
     {
         $payload = $request->only($this->payloadLanguage());
@@ -202,6 +201,7 @@ class PostService extends BaseService implements PostServiceInterface
             if ($this->uploadPost($post, $request)) {
                 $this->updateLanguageForPost($post, $request);
                 $this->updateCatalogueForPost($post, $request);
+                $this->updateRouter($post, $request, $this->controllerName);
             }
 
             DB::commit();

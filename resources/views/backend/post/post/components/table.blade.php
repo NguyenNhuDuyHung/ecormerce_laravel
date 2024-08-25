@@ -4,7 +4,7 @@
             <th>
                 <input type="checkbox" value="" id="checkAll" class="input-checkbox">
             </th>
-            <th>T{{__('message.tableName')}}</th>
+            <th>{{__('message.tableName')}}</th>
             <th style="width: 60px">Vị trí</th>
             <th class="text-center">{{__('message.tableStatus')}}</th>
             <th class="text-center">{{__('message.tableAction')}}</th>
