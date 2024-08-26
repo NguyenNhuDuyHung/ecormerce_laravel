@@ -40,7 +40,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
             ->pagination($this->paginateSelect(), $condition, $perpage, ['path' => 'user/catalogue/index'], [], [], ['users']);
         return $userCatalogues;
     }
-    
+
     public function create(Request $request)
     {
         DB::beginTransaction();
@@ -142,6 +142,30 @@ class UserCatalogueService implements UserCatalogueServiceInterface
             }
             $payload[$post['field']] = $value;
             $this->userRepository->updateByWhereIn('user_catalogue_id', $array, $payload);
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
+
+    public function setPermission($request)
+    {
+        DB::beginTransaction();
+        try {
+            $permissions = $request->input('permission');
+            if(is_array($permissions)) {
+                foreach ($permissions as $key => $value) {
+                    $userCatalogue = $this->userCatalogueRepository->findById($key);
+                    $userCatalogue->permissions()->detach();
+                    $userCatalogue->permissions()->sync($value);
+                }
+            }
+
             DB::commit();
             return true;
         } catch (\Exception $e) {

@@ -5,7 +5,6 @@
                 <div class="form-row">
                     <label for="" class="control-label">{{ __('message.parent') }} <span
                             class="text-danger">(*)</span></label>
-                    <span class="text-danger notice">{{ __('message.parentNotice') }}</span>
                     <select name="post_catalogue_id" class="form-control setupSelect2" id="">
                         @foreach ($dropdown as $key => $value)
                             <option
@@ -76,7 +75,7 @@
                         <select name="publish" class="form-control setupSelect2" id="">
                             @foreach (__('message.publish') as $key => $value)
                                 <option
-                                    {{ old('pubish', isset($post) ? $post->publish : '') == $key ? 'selected' : '' }}
+                                    {{ old('publish', isset($post) ? $post->publish : '') == $key ? 'selected' : '' }}
                                     value="{{ $key }}">
                                     {{ $value }}</option>
                             @endforeach

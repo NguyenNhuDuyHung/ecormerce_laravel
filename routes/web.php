@@ -50,6 +50,8 @@ Route::group(['middleware' => ['admin', 'locale']], function () {
         Route::post('update/{id}', [UserCatalogueController::class, 'update'])->where('id', '[0-9]+')->name('user.catalogue.update');
         Route::get('delete/{id}', [UserCatalogueController::class, 'delete'])->where('id', '[0-9]+')->name('user.catalogue.delete');
         Route::post('destroy/{id}', [UserCatalogueController::class, 'destroy'])->where('id', '[0-9]+')->name('user.catalogue.destroy');
+        Route::get('permission', [UserCatalogueController::class, 'permission'])->name('user.catalogue.permission');
+        Route::post('updatePermission', [UserCatalogueController::class, 'updatePermission'])->name('user.catalogue.updatePermission');
     });
 
     Route::group(['prefix' => 'language'], function () {

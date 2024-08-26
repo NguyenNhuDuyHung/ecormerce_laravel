@@ -48,9 +48,14 @@
                             </span>
                         </div>
                     </div>
-                    <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm
-                        mới
-                        thành viên</a>
+                    <div class="uk-flex uk-flex-middle">
+                        <a href="{{ route('user.catalogue.permission') }}" class="btn btn-warning mr10"><i
+                                class="fa fa-key mr5"></i>
+                            {{ __('message.userCatalogue.permission.title') }}</a>
+                        <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i>
+                            {{ __('message.userCatalogue.create.title') }}</a>
+
+                    </div>
                 </div>
             </div>
         </div>

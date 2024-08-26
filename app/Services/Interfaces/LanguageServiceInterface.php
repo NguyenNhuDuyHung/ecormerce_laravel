@@ -15,4 +15,5 @@ interface LanguageServiceInterface
     public function update($id, Request $request);
 
     public function destroy($id);
+    public function switch($id);
 }

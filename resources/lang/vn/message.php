@@ -47,6 +47,9 @@ return [
         'delete' => [
             'title' => 'Xóa nhóm thành viên'
         ],
+        'permission' => [
+            'title' => 'Cập nhật quyền'
+        ],
     ],
     'user' => [
         'index' => [

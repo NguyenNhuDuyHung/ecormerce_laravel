@@ -76,7 +76,7 @@ return [
         ],
         'delete' => [
             'title' => 'Delete Permission'
-        ],   
+        ],
     ],
     'parent' => 'Choose parent category',
     'parentNotice' => 'Choose Root if there is no parent category',

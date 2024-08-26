@@ -15,4 +15,14 @@ class Permission extends Model
     ];
 
     protected $table = 'permissions';
+
+    public function user_catalogues()
+    {
+        return $this->belongsToMany(
+            UserCatalogue::class,
+            'user_catalogue_permission',
+            'permission_id',
+            'user_catalogue_id'
+        );
+    }
 }

@@ -8,5 +8,6 @@ namespace App\Repositories\Interfaces;
  */
 interface LanguageRepositoryInterface extends BaseRepositoryInterface
 {
+    public function updateByWhere(array $condition = [], array $payload = []);
     public function forceDelete(int $id);
 }

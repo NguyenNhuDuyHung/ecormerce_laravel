@@ -8,4 +8,6 @@ namespace App\Repositories\Interfaces;
  */
 interface PermissionRepositoryInterface extends BaseRepositoryInterface
 {
+    public function updateByWhere(array $condition = [], array $payload = []);
+    public function forceDelete(int $id);
 }

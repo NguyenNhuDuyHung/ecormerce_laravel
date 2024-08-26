@@ -17,19 +17,15 @@
                         <input type="checkbox" value="{{ $permission->id }}" class="input-checkbox checkBoxItem">
                     </td>
                     <td>
-                        <span class="image img-cover"><img src="{{ $permission->image }}"
-                                alt={{ $permission->name }}></span>
-                    </td>
-                    <td>
                         {{ $permission->name }}
                     </td>
                     <td>
                         {{ $permission->canonical }}
                     </td>
                     <td class="text-center">
-                        <a href="{{ route('language.edit', $permission->id) }}" class="btn btn-success"><i
+                        <a href="{{ route('permission.edit', $permission->id) }}" class="btn btn-success"><i
                                 class="fa fa-edit"></i></a>
-                        <a href="{{ route('language.delete', $permission->id) }}" class="btn btn-danger"><i
+                        <a href="{{ route('permission.delete', $permission->id) }}" class="btn btn-danger"><i
                                 class="fa fa-trash"></i></a>
                     </td>
                 </tr>
