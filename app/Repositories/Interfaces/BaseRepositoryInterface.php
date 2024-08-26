@@ -8,7 +8,7 @@ namespace App\Repositories\Interfaces;
  */
 interface BaseRepositoryInterface
 {
-    public function all();
+    public function all(array $relation = []);
     public function pagination(
         array $column = ['*'],
         array $condition = [],

@@ -1,4 +1,4 @@
-<form action="{{ route('user.catalogue.index') }}" method="get">
+<form action="{{ route('permission.index') }}" method="get">
     <div class="filter-wrapper">
         <div class="uk-flex uk-flex-middle uk-flex-space-between">
             <div class="perpage">
@@ -20,20 +20,10 @@
                     @php
                         $publish = request('publish') ?: old('publish');
                     @endphp
-                    <select name="publish" class="form-control setupSelect2 ml10">
+                    <select name="publish" class="form-control setupSelect2 mr10">
                         @foreach (__('message.publish') as $key => $val)
                             <option {{ $publish == $key ? 'selected' : '' }} value="{{ $key }}">
                                 {{ $val }}</option>
-                        @endforeach
-                    </select>
-
-
-                    <select name="user_catalogue_id" class="form-control mr10">
-                        <option value="0" selected="selected">
-                            Chọn nhóm thành viên
-                        </option>
-                        @foreach ($userCatalogues as $key => $value)
-                            <option value="{{ $value->id }}">{{ $value->name }}</option>
                         @endforeach
                     </select>
 
@@ -48,14 +38,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="uk-flex uk-flex-middle">
-                        <a href="{{ route('user.catalogue.permission') }}" class="btn btn-warning mr10"><i
-                                class="fa fa-key mr5"></i>
-                            {{ __('message.userCatalogue.permission.title') }}</a>
-                        <a href="{{ route('user.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i>
-                            {{ __('message.userCatalogue.create.title') }}</a>
-
-                    </div>
+                    <a href="{{ route('permission.create') }}" class="btn btn-danger"><i class="fa fa-plus mr5"></i> Thêm mới
+                    </a>
                 </div>
             </div>
         </div>

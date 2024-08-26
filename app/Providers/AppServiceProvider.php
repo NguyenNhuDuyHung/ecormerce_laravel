@@ -31,6 +31,9 @@ class AppServiceProvider extends ServiceProvider
         'App\Services\Interfaces\PostServiceInterface' => 'App\Services\PostService',
 
         'App\Repositories\Interfaces\RouterRepositoryInterface' => 'App\Repositories\RouterRepository',
+
+        'App\Repositories\Interfaces\PermissionRepositoryInterface'=> 'App\Repositories\PermissionRepository',
+        'App\Services\Interfaces\PermissionServiceInterface'=> 'App\Services\PermissionService',
     ];
 
     public function register(): void

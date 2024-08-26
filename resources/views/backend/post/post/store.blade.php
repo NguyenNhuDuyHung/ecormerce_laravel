@@ -11,10 +11,7 @@
 @endif
 
 @php
-    $url =
-        $config['method'] == 'create'
-            ? route('post.store')
-            : route('post.update', $post->id);
+    $url = $config['method'] == 'create' ? route('post.store') : route('post.update', $post->id);
 @endphp
 
 <form action="{{ $url }}" method="post" class="box">
@@ -24,7 +21,7 @@
             <div class="col-lg-9">
                 <div class="ibox">
                     <div class="ibox-title">
-                        <h5>{{__('message_tableHeading')}}</h5>
+                        <h5>{{ __('message.tableHeading') }}</h5>
                     </div>
 
                     <div class="ibox-content" style="display: flex; flex-direction: column; gap: 40px">
@@ -47,7 +44,7 @@
             @if ($config['method'] == 'create')
                 <button class="btn btn-primary" name="send" value="send" type="submit">Thêm</button>
             @else
-                <button class="btn btn-primary" name="send" value="send" type="submit">{{__('message_save')}}
+                <button class="btn btn-primary" name="send" value="send" type="submit">{{ __('message_save') }}
                 </button>
             @endif
         </div>

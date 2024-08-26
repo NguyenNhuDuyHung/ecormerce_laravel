@@ -2,33 +2,30 @@
 
 namespace App\Services;
 
-use App\Services\Interfaces\UserCatalogueServiceInterface;
-use App\Repositories\Interfaces\UserCatalogueRepositoryInterface as UserCatalogueRepository;
-use App\Repositories\Interfaces\UserRepositoryInterface as UserRepository;
-
+use App\Repositories\Interfaces\PermissionRepositoryInterface as PermissionRepository;
+use App\Services\Interfaces\PermissionServiceInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 /**
- * Class UserCatalogueService
+ * Class LanguageService
  * @package App\Services
  */
-class UserCatalogueService implements UserCatalogueServiceInterface
+class PermissionService implements PermissionServiceInterface
 {
-    protected $userCatalogueRepository;
-    protected $userRepository;
-    public function __construct(UserCatalogueRepository $userCatalogueRepository, UserRepository $userRepository)
+    protected $permissionRepository;
+    public function __construct(PermissionRepository $permissionRepository)
     {
-        $this->userCatalogueRepository = $userCatalogueRepository;
-        $this->userRepository = $userRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     private function paginateSelect()
     {
-        return ['id', 'name', 'description', 'publish'];
+        return ['id', 'name', 'canonical'];
     }
 
     public function paginate($request)
@@ -36,9 +33,9 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         $condition['keyword'] = addcslashes($request->input('keyword'), '\\%_');
         $condition['publish'] = $request->integer('publish');
         $perpage = $request->integer('perpage');
-        $userCatalogues = $this->userCatalogueRepository
-            ->pagination($this->paginateSelect(), $condition, $perpage, ['path' => 'user/catalogue/index'], [], [], ['users']);
-        return $userCatalogues;
+        $permissions = $this->permissionRepository
+            ->pagination($this->paginateSelect(), $condition, $perpage, ['path' => 'permission/index']);
+        return $permissions;
     }
 
     public function create(Request $request)
@@ -46,7 +43,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send']);
-            $users = $this->userCatalogueRepository->create($payload);
+            $payload['user_id'] = Auth::id();
+            $this->permissionRepository->create($payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -63,7 +61,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         DB::beginTransaction();
         try {
             $payload = $request->except(['_token', 'send']);
-            $user = $this->userCatalogueRepository->update($id, $payload);
+            $this->permissionRepository->update($id, $payload);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -79,7 +77,7 @@ class UserCatalogueService implements UserCatalogueServiceInterface
     {
         DB::beginTransaction();
         try {
-            $user = $this->userCatalogueRepository->forceDelete($id);
+            $this->permissionRepository->forceDelete($id);
             DB::commit();
             return true;
         } catch (\Exception $e) {
@@ -96,8 +94,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         DB::beginTransaction();
         try {
             $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
-            $user = $this->userCatalogueRepository->update($post['modelId'], $payload);
-            $this->changeUserStatus($post, $payload[$post['field']]);
+            $permission = $this->permissionRepository->update($post['modelId'], $payload);
+            // $this->changeUserStatus($post, $payload[$post['field']]);
 
             DB::commit();
             return true;
@@ -116,7 +114,8 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         try {
             $field = $post['field'];
             $payload = [$field => $post['value'] == 1 ? 2 : 1];
-            $flag = $this->userCatalogueRepository->updateByWhereIn('id', $post['ids'], $payload);
+            $flag = $this->permissionRepository->updateByWhereIn('id', $post['ids'], $payload);
+            // $this->changeUserStatus($post, $post['value']);
 
             DB::commit();
             return true;
@@ -129,43 +128,20 @@ class UserCatalogueService implements UserCatalogueServiceInterface
         }
     }
 
-
-    private function changeUserStatus($post, $value)
+    public function switch($id)
     {
+
         DB::beginTransaction();
         try {
-            $array = [];
-            if (isset($post['modelId'])) {
-                $array[] = $post['modelId'];
-            } else {
-                $array = $post['id'];
-            }
-            $payload[$post['field']] = $value;
-            $this->userRepository->updateByWhereIn('user_catalogue_id', $array, $payload);
-            DB::commit();
-            return true;
-        } catch (\Exception $e) {
-            DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();
-            die();
-            return false;
-        }
-    }
-
-    public function setPermission($request)
-    {
-        DB::beginTransaction();
-        try {
-            $permissions = $request->input('permission');
-            if(is_array($permissions)) {
-                foreach ($permissions as $key => $value) {
-                    $userCatalogue = $this->userCatalogueRepository->findById($key);
-                    $userCatalogue->permissions()->detach();
-                    $userCatalogue->permissions()->sync($value);
-                }
-            }
-
+            $this->permissionRepository->update($id, ['current' => 1]);
+            $this->permissionRepository->updateByWhere(
+                [
+                    ['id', '!=', $id],
+                ],
+                [
+                    'current' => 0,
+                ]
+            );
             DB::commit();
             return true;
         } catch (\Exception $e) {

@@ -63,6 +63,21 @@ return [
             'title' => 'Delete User'
         ],
     ],
+    'permission' => [
+        'index' => [
+            'title' => 'Permission Management',
+            'tableHeading' => 'Permission List'
+        ],
+        'create' => [
+            'title' => 'Add New Permission'
+        ],
+        'edit' => [
+            'title' => 'Update Permission'
+        ],
+        'delete' => [
+            'title' => 'Delete Permission'
+        ],
+    ],
     'parent' => 'Choose parent category',
     'parentNotice' => 'Choose Root if there is no parent category',
     'subparent' => 'Choose sub-category (if available)',

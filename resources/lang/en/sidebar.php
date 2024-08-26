@@ -40,6 +40,10 @@ return [
                     'title' => 'Language',
                     'route' => 'language/index'
                 ],
+                [
+                    'title' => 'Permission',
+                    'route' => 'permission/index',
+                ],
             ]
         ]
     ],

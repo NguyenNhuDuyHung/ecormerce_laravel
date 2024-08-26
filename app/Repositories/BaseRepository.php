@@ -48,9 +48,9 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->fresh();
     }
 
-    public function all()
+    public function all(array $relation = [])
     {
-        return $this->model->all();
+        return $this->model->with($relation)->get();
     }
 
     public function findById(int $modelId, array $column = ['*'], array $relation = [])
