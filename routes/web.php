@@ -6,6 +6,7 @@ use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
 use App\Http\Controllers\Backend\LanguageController;
+use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\PostCatalogueController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\UserCatalogueController;
@@ -81,6 +82,16 @@ Route::group(['middleware' => ['admin', 'locale']], function () {
         Route::post('update/{id}', [PostController::class, 'update'])->where('id', '[0-9]+')->name('post.update');
         Route::get('delete/{id}', [PostController::class, 'delete'])->where('id', '[0-9]+')->name('post.delete');
         Route::post('destroy/{id}', [PostController::class, 'destroy'])->where('id', '[0-9]+')->name('post.destroy');
+    });
+
+    Route::group(['prefix' => 'permission'], function () {
+        Route::get('index', [PermissionController::class, 'index'])->name('permission.index');
+        Route::get('create', [PermissionController::class, 'create'])->name('permission.create');
+        Route::post('store', [PermissionController::class, 'store'])->name('permission.store');
+        Route::get('edit/{id}', [PermissionController::class, 'edit'])->where('id', '[0-9]+')->name('permission.edit');
+        Route::post('update/{id}', [PermissionController::class, 'update'])->where('id', '[0-9]+')->name('permission.update');
+        Route::get('delete/{id}', [PermissionController::class, 'delete'])->where('id', '[0-9]+')->name('permission.delete');
+        Route::post('destroy/{id}', [PermissionController::class, 'destroy'])->where('id', '[0-9]+')->name('permission.destroy');
     });
 
     // Ajax 

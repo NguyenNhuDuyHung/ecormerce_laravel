@@ -3,7 +3,7 @@
 namespace App\Repositories\Interfaces;
 
 /**
- * Interface UserServiceInterface
+ * Interface LanguageServiceInterface
  * @package App\Services\Interfaces
  */
 interface LanguageRepositoryInterface extends BaseRepositoryInterface

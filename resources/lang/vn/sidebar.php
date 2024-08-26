@@ -41,6 +41,10 @@ return [
                     'title' => 'Ngôn ngữ',
                     'route' => 'language/index',
                 ],
+                [
+                    'title' => 'Phân quyền',
+                    'route' => 'permission/index',
+                ],
             ]
         ]
     ]

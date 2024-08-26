@@ -63,6 +63,22 @@ return [
             'title' => 'Xóa thành viên'
         ],
     ],
+    'permission' => [
+        'index' => [
+            'title' => 'Quản lý Quyền',
+            'tableHeading' => 'Danh sách Quyền'
+        ],
+        'create' => [
+            'title' => 'Thêm mới Quyền'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật Quyền'
+        ],
+        'delete' => [
+            'title' => 'Xóa Quyền'
+        ],
+        
+    ],
     'parent' => 'Chọn danh mục cha',
     'parentNotice' => 'Chọn Root nếu không có danh mục cha',
     'subparent' => 'Chọn danh mục phụ (nếu có)',
