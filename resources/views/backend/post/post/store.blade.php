@@ -41,12 +41,8 @@
         <hr>
 
         <div class="text-right mb15">
-            @if ($config['method'] == 'create')
-                <button class="btn btn-primary" name="send" value="send" type="submit">Thêm</button>
-            @else
-                <button class="btn btn-primary" name="send" value="send" type="submit">{{ __('message_save') }}
-                </button>
-            @endif
+            <button class="btn btn-primary" name="send" value="send" type="submit">{{ __('message_save') }}
+            </button>
         </div>
     </div>
 </form>

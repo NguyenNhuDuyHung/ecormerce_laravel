@@ -2,7 +2,7 @@
 return [
     'postCatalogue' => [
         'index' => [
-            'title' => 'Post Management',
+            'title' => 'Post Group Management',
             'tableHeading' => 'Post Group List'
         ],
         'create' => [

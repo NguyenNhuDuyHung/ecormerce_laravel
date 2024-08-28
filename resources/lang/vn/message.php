@@ -2,20 +2,20 @@
 return [
     'postCatalogue' => [
         'index' => [
-            'title' => "Quản lý bài viết",
-            'tableHeading' => "Danh sách bài viết",
+            'title' => "Quản lý  nhóm bài viết",
+            'tableHeading' => "Danh sách nhóm bài viết",
         ],
 
         'create' => [
-            'title' => "Thêm mới bài viết",
+            'title' => "Thêm mới nhóm bài viết",
         ],
 
         'edit' => [
-            'title' => "Cập nhật thông tin bài viết",
+            'title' => "Cập nhật thông tin nhóm bài viết",
         ],
 
         'delete' => [
-            'title' => "Xóa bài viết",
+            'title' => "Xóa nhóm bài viết",
         ],
     ],
     'post' => [
@@ -80,7 +80,7 @@ return [
         'delete' => [
             'title' => 'Xóa Quyền'
         ],
-        
+
     ],
     'parent' => 'Chọn danh mục cha',
     'parentNotice' => 'Chọn Root nếu không có danh mục cha',

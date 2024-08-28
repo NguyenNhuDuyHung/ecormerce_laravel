@@ -47,6 +47,6 @@ class PostRepository extends BaseRepository implements PostRepositoryInterface
                 'tb2.language_id',
                 '=',
                 $language_id
-            )->findOrFail($id);
+            )->find($id);
     }
 }

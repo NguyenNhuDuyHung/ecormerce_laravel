@@ -17,6 +17,7 @@ interface BaseRepositoryInterface
         array $orderBy = ['id', 'DESC'],
         array $join = [],
         array $relations = [],
+        array $rawQuery = []
     );
     public function findById(int $id);
     public function create(array $payload);

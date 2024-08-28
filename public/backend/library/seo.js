@@ -9,13 +9,16 @@
             $(".meta-title").html(value);
         });
 
-        $("input[name=canonical]").css({
-            "padding-left": $(".baseUrl").outerWidth() + 10,
+        $(".seo-canonical").each(function () {
+            let _this = $(this);
+            _this.css({
+                "padding-left": $(".baseUrl").outerWidth() + 10,
+            });
         });
 
         $("input[name=canonical]").on("keyup", function () {
             let input = $(this);
-            let value = HT.removeUtf8(input.val())
+            let value = HT.removeUtf8(input.val());
             $(".canonical").html(BASE_URL + value + SUFFIX);
         });
 
@@ -35,11 +38,14 @@
         str = str.replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, "u");
         str = str.replace(/ỳ|ý|ỵ|ỷ|ỹ/g, "y");
         str = str.replace(/đ/g, "d");
-        str = str.replace(/!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'|\–| |\"|\&|\#|\[|\]|\\|\/|~|$|_/g, "-");
+        str = str.replace(
+            /!|@|%|\^|\*|\(|\)|\+|\=|\<|\>|\?|,|\.|\:|\;|\'|\–| |\"|\&|\#|\[|\]|\\|\/|~|$|_/g,
+            "-"
+        );
         str = str.replace(/-+-/g, "-");
         str = str.replace(/^\-+|\-+$/g, "");
         return str;
-    }
+    };
 
     $(document).ready(function () {
         HT.seoPreview();

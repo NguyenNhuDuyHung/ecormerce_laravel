@@ -53,8 +53,11 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->with($relation)->get();
     }
 
-    public function findById(int $modelId, array $column = ['*'], array $relation = [])
-    {
+    public function findById(
+        int $modelId,
+        array $column = ['*'],
+        array $relation = []
+    ){
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
@@ -67,7 +70,7 @@ class BaseRepository implements BaseRepositoryInterface
         return $query->first();
     }
 
-    public function update(int $id, array $payload = [])
+    public function update(int $id = 0, array $payload = [])
     {
         $model = $this->findById($id);
         return $model->update($payload);

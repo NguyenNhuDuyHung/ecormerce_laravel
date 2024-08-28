@@ -8,6 +8,7 @@ use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepositor
 use App\Http\Requests\StoreLanguageRequest;
 use App\Http\Requests\UpdateLanguageRequest;
 use Illuminate\Http\Request;
+use App\Http\Requests\TranslateRequest;
 
 class LanguageController extends Controller
 {
@@ -118,5 +119,63 @@ class LanguageController extends Controller
             \App::setLocale($language->canonical);
         }
         return back();
+    }
+
+    public function translate($id = 0, $languageId = 0, $model = '')
+    {
+        $repositoryInstance = $this->repositoryInstance($model);
+        $languageInstance = $this->repositoryInstance('Language');
+        $currentLanguage = $languageInstance->findByCondition([
+            ['canonical', '=', session('app_locale')]
+        ]);
+        $methodName = 'get' . ucfirst($model) . 'ById';
+        $object = $repositoryInstance->{$methodName}($id, $currentLanguage->id);
+        $objectTranslate = $repositoryInstance->{$methodName}($id, $languageId);
+        $this->authorize('modules', 'language.translate');
+        $config = [
+            'css' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+            ],
+            'js' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
+                'backend/plugins/ckfinder_2/ckfinder.js',
+                'backend/library/finder.js',
+                'backend/library/select2.js',
+                'backend/plugins/ckeditor/ckeditor.js',
+                'backend/library/seo.js',
+            ]
+        ];
+
+        $option = [
+            'id' => $id,
+            'languageId' => $languageId,
+            'model' => $model,
+        ];
+
+        $config['seo'] = config('apps.language');
+        $template = 'backend.language.translate';
+        return view(
+            'backend.dashboard.layout',
+            compact('template', 'config', 'object', 'objectTranslate', 'option')
+        );
+    }
+
+    public function storeTranslate(TranslateRequest $request)
+    {
+        $option = $request->input('option');
+        if ($this->languageService->saveTranslate($option, $request)) {
+            return redirect()->back()->with('success', 'Đã cập nhật ngôn ngữ');
+        }
+        return redirect()->back()->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
+    }
+
+    private function repositoryInstance($model)
+    {
+        $repositoryNamespace = 'App\Repositories\\' . ucfirst($model) . 'Repository';
+        if (class_exists($repositoryNamespace)) {
+            $repositoryInstance = app($repositoryNamespace);
+        }
+
+        return $repositoryInstance;
     }
 }

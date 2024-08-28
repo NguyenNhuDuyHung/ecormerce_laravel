@@ -10,20 +10,32 @@ use App\Http\Requests\StorePostRequest;
 use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Http\Request;
 use App\Classes\Nestedsetbie;
+use App\Models\Language;
 
 class PostController extends Controller
 {
     protected $postService;
     protected $postRepository;
-    protected $nestedSet;
     protected $language;
     protected $languageRepository;
+    protected $nestedSet;
 
-    public function __construct(PostService $postService, PostRepository $postRepository, Nestedsetbie $nestedSet, LanguageRepository $languageRepository)
+    public function __construct(PostService $postService, PostRepository $postRepository, LanguageRepository $languageRepository)
     {
         $this->postService = $postService;
         $this->postRepository = $postRepository;
-        $this->language = $this->currentLanguage();
+
+        $this->middleware(function($request, $next){
+            $locale = app()->getLocale(); // vn en cn
+            $language = Language::where('canonical', $locale)->first();
+            $this->language = $language->id;
+            $this->initialize();
+            return $next($request);
+        });
+    }
+
+    private function initialize()
+    {
         $this->nestedSet = new Nestedsetbie([
             'table' => 'post_catalogues',
             'foreignkey' => 'post_catalogue_id',
@@ -35,8 +47,7 @@ class PostController extends Controller
     {
         $this->authorize('modules', 'post.index');
 
-        $posts = $this->postService->paginate($request);
-
+        $posts = $this->postService->paginate($request, $this->language);
         $config = [
             'js' => [
                 'backend/js/plugins/switchery/switchery.js',
@@ -70,7 +81,7 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
-        if ($this->postService->create($request)) {
+        if ($this->postService->create($request, $this->language)) {
             return redirect()->route('post.index')->with("success", "Đã thêm nhóm người dùng");
         }
         return redirect()->route("post.create")->with("error", "Đã xảy ra lỗi khi thêm nhóm người dùng");
@@ -92,7 +103,7 @@ class PostController extends Controller
 
     public function update($id, UpdatePostRequest $request)
     {
-        if ($this->postService->update($id, $request)) {
+        if ($this->postService->update($id, $request, $this->language)) {
             return redirect()->route('post.index')->with('success', 'Cập nhật thông tin thành công.');
         }
         return redirect()->route('post.index')->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
@@ -110,7 +121,7 @@ class PostController extends Controller
 
     public function destroy($id)
     {
-        if ($this->postService->destroy($id)) {
+        if ($this->postService->destroy($id, $this->language)) {
             return redirect()->route('post.index')->with('success', 'Đã xoá nhóm người dùng');
         }
         return redirect()->route('post.index')->with('error', 'Đã xảy ra lỗi khi xoá nhóm người dùng');

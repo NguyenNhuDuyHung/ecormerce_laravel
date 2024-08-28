@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Services\Interfaces\BaseServiceInterface;
 use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
+use Illuminate\Support\Str;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -26,12 +27,6 @@ class BaseService implements BaseServiceInterface
     {
         $this->routerRepository = $routerRepository;
     }
-
-    public function currentLanguage()
-    {
-        return 1;
-    }
-
     public function formatAlbum($payload)
     {
         return (isset($payload['album']) && !empty($payload['album']))
@@ -45,25 +40,26 @@ class BaseService implements BaseServiceInterface
         $this->nestedSet->Action();
     }
 
-    public function formatRouterPayload($model, $request, $controllerName)
+    public function formatRouterPayload($model, $request, $controllerName, $languageId)
     {
         $router = [
-            'canonical' => $request->input('canonical'),
+            'canonical' => Str::slug($request->input('canonical')),
             'module_id' => $model->id,
+            'language_id' => $languageId,
             'controllers' => 'App\Http\Controllers\Frontend\\' . $controllerName . '',
         ];
         return $router;
     }
 
-    public function createRouter($model, $request, $controllerName)
+    public function createRouter($model, $request, $controllerName, $languageId)
     {
-        $router = $this->formatRouterPayload($model, $request, $controllerName);
+        $router = $this->formatRouterPayload($model, $request, $controllerName, $languageId);
         $this->routerRepository->create($router);
     }
 
-    public function updateRouter($model, $request, $controllerName)
+    public function updateRouter($model, $request, $controllerName, $languageId)
     {
-        $payload = $this->formatRouterPayload($model, $request, $controllerName);
+        $payload = $this->formatRouterPayload($model, $request, $controllerName, $languageId);
         $condition = [
             ['module_id', '=', $model->id],
             ['controllers', '=', 'App\Http\Controllers\Frontend\\' . $controllerName . ''],

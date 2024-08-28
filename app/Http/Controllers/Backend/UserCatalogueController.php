@@ -140,6 +140,7 @@ class UserCatalogueController extends Controller
 
     public function updatePermission(Request $request)
     {
+        $this->authorize('modules', 'user.catalogue.permission');
         if($this->userCatalogueService->setPermission($request)) {
             return redirect()->route('user.catalogue.index')->with('success', 'Đã cập nhật quyền');
         }

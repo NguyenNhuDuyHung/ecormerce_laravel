@@ -10,6 +10,7 @@ use App\Http\Requests\UpdatePostCatalogueRequest;
 use Illuminate\Http\Request;
 use App\Classes\Nestedsetbie;
 use App\Http\Requests\DeletePostCatalogueRequest;
+use App\Models\Language;
 
 class PostCatalogueController extends Controller
 {
@@ -18,23 +19,33 @@ class PostCatalogueController extends Controller
     protected $nestedSet;
     protected $language;
 
-    public function __construct(PostCatalogueService $postCatalogueService, PostCatalogueRepository $postCatalogueRepository, Nestedsetbie $nestedSet)
+    public function __construct(PostCatalogueService $postCatalogueService, PostCatalogueRepository $postCatalogueRepository)
     {
         $this->postCatalogueService = $postCatalogueService;
         $this->postCatalogueRepository = $postCatalogueRepository;
+
+        $this->middleware(function ($request, $next) {
+            $locale = app()->getLocale();
+            $language = Language::where('canonical', $locale)->first();
+            $this->language = $language->id;
+            $this->initialize();
+            return $next($request);
+        });
+    }
+
+    private function initialize()
+    {
         $this->nestedSet = new Nestedsetbie([
             'table' => 'post_catalogues',
             'foreignkey' => 'post_catalogue_id',
-            'language_id' => 1,
+            'language_id' => $this->language,
         ]);
-        $this->language = $this->currentLanguage();
     }
 
     public function index(Request $request)
     {
         $this->authorize('modules', 'post.catalogue.index');
-        $postCatalogues = $this->postCatalogueService->paginate($request);
-
+        $postCatalogues = $this->postCatalogueService->paginate($request, $this->language);
         $config = [
             'js' => [
                 'backend/js/plugins/switchery/switchery.js',
@@ -47,7 +58,7 @@ class PostCatalogueController extends Controller
             ],
             'model' => 'PostCatalogue',
         ];
-        $config['seo'] = __('message.postCatalogue');
+        $config['seo'] = __('message.post');
 
         $template = 'backend.post.catalogue.index';
         return view("backend.dashboard.layout", compact('template', 'config', 'postCatalogues'));
@@ -69,7 +80,7 @@ class PostCatalogueController extends Controller
 
     public function store(StorePostCatalogueRequest $request)
     {
-        if ($this->postCatalogueService->create($request)) {
+        if ($this->postCatalogueService->create($request, $this->language)) {
             return redirect()->route('post.catalogue.index')->with("success", "Đã thêm nhóm người dùng");
         }
         return redirect()->route("post.catalogue.create")->with("error", "Đã xảy ra lỗi khi thêm nhóm người dùng");
@@ -91,7 +102,7 @@ class PostCatalogueController extends Controller
 
     public function update($id, UpdatePostCatalogueRequest $request)
     {
-        if ($this->postCatalogueService->update($id, $request)) {
+        if ($this->postCatalogueService->update($id, $request, $this->language)) {
             return redirect()->route('post.catalogue.index')->with('success', 'Cập nhật thông tin thành công.');
         }
         return redirect()->route('post.catalogue.edit', $id)->with('error', 'Đã xảy ra lỗi khi cập nhật. Vui lòng thử lại sau.');
@@ -109,7 +120,7 @@ class PostCatalogueController extends Controller
 
     public function destroy($id, DeletePostCatalogueRequest $request)
     {
-        if ($this->postCatalogueService->destroy($id)) {
+        if ($this->postCatalogueService->destroy($id, $this->language)) {
             return redirect()->route('post.catalogue.index')->with('success', 'Đã xoá nhóm người dùng');
         }
         return redirect()->route('post.catalogue.index')->with('error', 'Đã xảy ra lỗi khi xoá nhóm người dùng');
