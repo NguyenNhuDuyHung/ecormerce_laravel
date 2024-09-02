@@ -14,7 +14,11 @@
     </thead>
     <tbody>
         @if (isset($languages) && is_object($languages))
+<<<<<<< HEAD
         @foreach ($languages as $language)
+=======
+            @foreach ($languages as $language)
+>>>>>>> language
                 <tr>
                     <td>
                         <input type="checkbox" value="{{ $language->id }}" class="input-checkbox checkBoxItem">
@@ -22,10 +26,17 @@
                 <td>
                         <span class="image img-cover"><img
                                 src="{{$language->image }}"
+<<<<<<< HEAD
                                 alt="{{ $language->name }}"></span>
                     </td>
                     <td>
                     {{ $language->name }}
+=======
+                                alt={{ $language->name }}></span>
+                    </td>
+                    <td>
+                        {{ $language->name }}
+>>>>>>> language
                     </td>
                     <td>
                         {{ $language->canonical }}
@@ -49,3 +60,7 @@
         @endif
     </tbody>
 </table>
+<<<<<<< HEAD
+=======
+{{ $languages->links('pagination::bootstrap-4') }}
+>>>>>>> language

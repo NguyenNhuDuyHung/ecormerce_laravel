@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateGenerateRequest;
 use Illuminate\Http\Request;
 use App\Http\Requests\TranslateRequest;
 
+
 class GenerateController extends Controller
 {
     protected $generateService;

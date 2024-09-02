@@ -34,3 +34,7 @@
         @endif
     </tbody>
 </table>
+<<<<<<< HEAD
+=======
+{{ $generates->links('pagination::bootstrap-4') }}
+>>>>>>> language
