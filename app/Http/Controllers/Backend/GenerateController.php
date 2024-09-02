@@ -8,7 +8,6 @@ use App\Repositories\Interfaces\GenerateRepositoryInterface as GenerateRepositor
 use App\Http\Requests\StoreGenerateRequest;
 use App\Http\Requests\UpdateGenerateRequest;
 use Illuminate\Http\Request;
-use App\Http\Requests\TranslateRequest;
 
 class GenerateController extends Controller
 {

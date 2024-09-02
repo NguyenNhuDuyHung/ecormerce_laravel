@@ -34,4 +34,4 @@
         @endif
     </tbody>
 </table>
-{{ $languages->links('pagination::bootstrap-4') }}
+{{ $generates->links('pagination::bootstrap-4') }}

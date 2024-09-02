@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\AuthController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Ajax\DashboardController as AjaxDashboardController;
+use App\Http\Controllers\Backend\GenerateController;
 use App\Http\Controllers\Backend\LanguageController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\PostCatalogueController;
@@ -101,6 +102,16 @@ Route::group(['middleware' => ['admin', 'locale']], function () {
         Route::post('update/{id}', [PermissionController::class, 'update'])->where('id', '[0-9]+')->name('permission.update');
         Route::get('delete/{id}', [PermissionController::class, 'delete'])->where('id', '[0-9]+')->name('permission.delete');
         Route::post('destroy/{id}', [PermissionController::class, 'destroy'])->where('id', '[0-9]+')->name('permission.destroy');
+    });
+
+    Route::group(['prefix' => 'generate'], function () {
+        Route::get('index', [GenerateController::class, 'index'])->name('generate.index');
+        Route::get('create', [GenerateController::class, 'create'])->name('generate.create');
+        Route::post('store', [GenerateController::class, 'store'])->name('generate.store');
+        Route::get('edit/{id}', [GenerateController::class, 'edit'])->where('id', '[0-9]+')->name('generate.edit');
+        Route::post('update/{id}', [GenerateController::class, 'update'])->where('id', '[0-9]+')->name('generate.update');
+        Route::get('delete/{id}', [GenerateController::class, 'delete'])->where('id', '[0-9]+')->name('generate.delete');
+        Route::post('destroy/{id}', [GenerateController::class, 'destroy'])->where('id', '[0-9]+')->name('generate.destroy');
     });
 
     // Ajax 
