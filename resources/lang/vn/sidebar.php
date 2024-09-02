@@ -35,7 +35,7 @@ return [
         [
             'title' => 'Cấu hình chung',
             'icon' => "fa fa-th-large",
-            'name' => ['language'],
+            'name' => ['language', 'permission', 'generate'],
             'subModule' => [
                 [
                     'title' => 'Ngôn ngữ',
@@ -45,6 +45,11 @@ return [
                     'title' => 'Phân quyền',
                     'route' => 'permission/index',
                 ],
+                [
+                    'title' => 'Module',
+                    'route' => 'generate/index',
+                ],
+
             ]
         ]
     ]

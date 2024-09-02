@@ -80,8 +80,23 @@ return [
         'delete' => [
             'title' => 'Xóa Quyền'
         ],
-
     ],
+    'generate' => [
+        'index' => [
+            'title' => 'Quản lý Module',
+            'tableHeading' => 'Danh sách Module'
+        ],
+        'create' => [
+            'title' => 'Thêm mới Module'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật Module'
+        ],
+        'delete' => [
+            'title' => 'Xóa Module'
+        ],
+    ],
+
     'parent' => 'Chọn danh mục cha',
     'parentNotice' => 'Chọn Root nếu không có danh mục cha',
     'subparent' => 'Chọn danh mục phụ (nếu có)',
