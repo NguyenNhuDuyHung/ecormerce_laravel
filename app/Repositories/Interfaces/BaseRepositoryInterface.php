@@ -23,6 +23,7 @@ interface BaseRepositoryInterface
     public function create(array $payload);
     public function update(int $id, array $payload = []);
     public function updateByWhereIn($whereInField = '', array $whereIn = [], array $payload = []);
+    public function forceDelete(int $id);
     public function delete(int $id);
     public function createPivot($model, array $payload = [], string $relation = '');
 }

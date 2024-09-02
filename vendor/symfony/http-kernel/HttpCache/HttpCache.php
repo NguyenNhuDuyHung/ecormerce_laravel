@@ -237,9 +237,7 @@ class HttpCache implements HttpKernelInterface, TerminableInterface
 
         $response->prepare($request);
 
-        if (HttpKernelInterface::MAIN_REQUEST === $type) {
-            $response->isNotModified($request);
-        }
+        $response->isNotModified($request);
 
         return $response;
     }
