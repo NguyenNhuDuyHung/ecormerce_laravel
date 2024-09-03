@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Validation\Rule;
 use App\Traits\QueryScopes;
 
-class PostCatalogue extends Model
+class {ModuleTemplate} extends Model
 {
     use HasFactory, SoftDeletes, QueryScopes;
     protected $fillable = [
@@ -25,13 +25,13 @@ class PostCatalogue extends Model
         'user_id',
     ];
 
-    protected $table = 'post_catalogues';
+    protected $table = '{tableName}';
 
     public function languages()
     {
-        return $this->belongsToMany(Language::class, 'post_catalogue_language', 'post_catalogue_id', 'language_id')
+        return $this->belongsToMany(Language::class, '{pivotTable}', '{foreignKey}', 'language_id')
             ->withPivot(
-                'post_catalogue_id',
+                '{foreignKey}',
                 'language_id',
                 'name',
                 'description',
@@ -43,24 +43,24 @@ class PostCatalogue extends Model
             )->withTimestamps();
     }
 
-    public function post_catalogue_language()
+    public function {module}_language()
     {
-        return $this->hasMany(PostCatalogueLanguage::class, 'post_catalogue_id', 'id')->where('language_id', '=', app()->getLocale());
+        return $this->hasMany({pivotModel}::class, '{foreignKey}', 'id')->where('language_id', '=', app()->getLocale());
     }
 
     public static function isNodeCheck($id = 0)
     {
-        $postCatalogue = PostCatalogue::find($id);
+        ${relation}Catalogue = {ModuleTemplate}::find($id);
 
-        if ($postCatalogue->rgt - $postCatalogue->lft !== 1) {
+        if (${relation}Catalogue->rgt - ${relation}Catalogue->lft !== 1) {
             return false;
         }
 
         return true;
     }
 
-    public function posts()
+    public function {relation}s()
     {
-        return $this->belongsToMany(Post::class, 'post_catalogue_post', 'post_catalogue_id', 'post_id');
+        return $this->belongsToMany({relationModel}::class, '{relationPivot}', '{foreignKey}', '{relation}_id');
     }
 }

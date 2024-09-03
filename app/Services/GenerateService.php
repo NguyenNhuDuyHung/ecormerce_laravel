@@ -125,7 +125,6 @@ SCHEMA;
         }
     }
 
-
     // make controller
     private function makeController($request)
     {
@@ -159,12 +158,9 @@ SCHEMA;
                 'tableName' => $this->convertModuleNameToTableName($name) . 's',
             ];
 
-            $controllerContent = str_replace('{ModuleTemplate}', $replace['ModuleTemplate'], $controllerContent);
-            $controllerContent = str_replace('{moduleTemplate}', $replace['moduleTemplate'], $controllerContent);
-            $controllerContent = str_replace('{foreignKey}', $replace['foreignKey'], $controllerContent);
-            $controllerContent = str_replace('{moduleView}', $replace['moduleView'], $controllerContent);
-            $controllerContent = str_replace('{tableName}', $replace['tableName'], $controllerContent);
-
+            foreach ($replace as $key => $value) {
+                $controllerContent = str_replace($key, $value, $controllerContent);
+            }
             $controllerPath = base_path('app/Http/Controllers/Backend/' . $controllerName . '.php');
             FILE::put($controllerPath, $controllerContent);
             die();
@@ -176,12 +172,59 @@ SCHEMA;
         }
     }
 
+    // make model
+    private function makeModel($request)
+    {
+        try {
+            if ($request->input('module_type') == 1) {
+                $this->createModelTemplate($request);
+            } else {
+                echo 1;
+                die();
+            }
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
+
+    private function createModelTemplate($request)
+    {
+        $templateModelPath = base_path('app/Templates/TemplateCatalogueModel.php');
+        $modelContent = file_get_contents($templateModelPath);
+        
+        $extractModule = explode('_', $this->convertModuleNameToTableName($request->input('name')));
+        
+        $replace = [
+            'ModuleTemplate' => $request->input('name'),
+            'foreignKey' => $this->convertModuleNameToTableName($request->input('name')) . '_id',
+            'tableName' => $this->convertModuleNameToTableName($request->input('name')) . 's',
+            'relation' => $extractModule[0],
+            'relationPivot' => $this->convertModuleNameToTableName($request->input('name')) . '_' . $extractModule[0],
+            'pivotModel' => $request->input('name') . 'Language',
+            'pivotTable' => $this->convertModuleNameToTableName($request->input('name')) . '_language',
+            'module' => $this->convertModuleNameToTableName($request->input('name')),
+            'relationModel' => ucfirst($extractModule[0]),
+        ];
+
+        foreach($replace as $key => $value) {
+            $modelContent = str_replace('{' . $key . '}', $value, $modelContent);
+        }
+        
+        $modelName = $request->input('name') . '.php';
+        $modelPath = base_path('app/Models/' . $modelName);
+        FILE::put($modelPath, $modelContent);
+
+        die();
+    }
+
     public function create(Request $request)
     {
 
         // $this->makeDatabase($request);
-        $this->makeController($request);
-        // $this->makeModel(); 
+        // $this->makeController($request);
+        $this->makeModel($request);
         // $this->makeRepository();
         // $this->makeService();
         // $this->makeProvider();
