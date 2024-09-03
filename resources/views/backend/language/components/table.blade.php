@@ -14,29 +14,17 @@
     </thead>
     <tbody>
         @if (isset($languages) && is_object($languages))
-<<<<<<< HEAD
-        @foreach ($languages as $language)
-=======
             @foreach ($languages as $language)
->>>>>>> language
+
                 <tr>
                     <td>
                         <input type="checkbox" value="{{ $language->id }}" class="input-checkbox checkBoxItem">
                     </td>
-                <td>
-                        <span class="image img-cover"><img
-                                src="{{$language->image }}"
-<<<<<<< HEAD
-                                alt="{{ $language->name }}"></span>
-                    </td>
                     <td>
-                    {{ $language->name }}
-=======
-                                alt={{ $language->name }}></span>
+                        <span class="image img-cover"><img src="{{$language->image }}" alt="{{ $language->name }}"></span>
                     </td>
                     <td>
                         {{ $language->name }}
->>>>>>> language
                     </td>
                     <td>
                         {{ $language->canonical }}
@@ -45,8 +33,8 @@
                         {{ $language->description }}
                     </td>
                     <td class="text-center js-switch-{{ $language->id }}">
-                        <input type="checkbox" value="{{ $language->publish }}" class="js-switch status "
-                            data-field="publish" data-model="Language" {{ $language->publish == 2 ? 'checked' : '' }}
+                        <input type="checkbox" value="{{ $language->publish }}" class="js-switch status " data-field="publish"
+                            data-model="Language" {{ $language->publish == 2 ? 'checked' : '' }}
                             data-modelId="{{ $language->id }}" />
                     </td>
                     <td class="text-center">
@@ -60,7 +48,3 @@
         @endif
     </tbody>
 </table>
-<<<<<<< HEAD
-=======
-{{ $languages->links('pagination::bootstrap-4') }}
->>>>>>> language
