@@ -163,11 +163,9 @@ SCHEMA;
             }
             $controllerPath = base_path('app/Http/Controllers/Backend/' . $controllerName . '.php');
             FILE::put($controllerPath, $controllerContent);
-            die();
             return true;
         } catch (\Exception $e) {
             echo $e->getMessage();
-            die();
             return false;
         }
     }
@@ -180,11 +178,9 @@ SCHEMA;
                 $this->createModelTemplate($request);
             } else {
                 echo 1;
-                die();
             }
         } catch (\Exception $e) {
             echo $e->getMessage();
-            die();
             return false;
         }
     }
@@ -193,9 +189,9 @@ SCHEMA;
     {
         $templateModelPath = base_path('app/Templates/TemplateCatalogueModel.php');
         $modelContent = file_get_contents($templateModelPath);
-        
+
         $extractModule = explode('_', $this->convertModuleNameToTableName($request->input('name')));
-        
+
         $replace = [
             'ModuleTemplate' => $request->input('name'),
             'foreignKey' => $this->convertModuleNameToTableName($request->input('name')) . '_id',
@@ -208,15 +204,110 @@ SCHEMA;
             'relationModel' => ucfirst($extractModule[0]),
         ];
 
-        foreach($replace as $key => $value) {
+        foreach ($replace as $key => $value) {
             $modelContent = str_replace('{' . $key . '}', $value, $modelContent);
         }
-        
+
         $modelName = $request->input('name') . '.php';
         $modelPath = base_path('app/Models/' . $modelName);
         FILE::put($modelPath, $modelContent);
 
+    }
+
+    // make repository
+    private function makeRepository($request)
+    {
+        try {
+            $name = $request->input('name');
+            $repository = $this->initializeServiceLayer('Repository', 'Repositories', $request);
+            $replaceRepositoryInterface = [
+                'Module' => $name,
+            ];
+            $repositoryInterfaceContent = str_replace('{Module}', $replaceRepositoryInterface['Module'], $repository['interface']['layerInterfaceContent']);
+            FILE::put($repository['interface']['layerInterfacePath'], $repositoryInterfaceContent);
+
+            $replaceRepository = [
+                'Module' => $name,
+                'tableName' => $this->convertModuleNameToTableName($name) . 's',
+                'pivotTableName' => $this->convertModuleNameToTableName($name) . '_' . explode('_', $this->convertModuleNameToTableName($name))[0],
+                'foreignKey' => $this->convertModuleNameToTableName($name) . '_id',
+            ];
+
+            $layerContent = $repository['Repository']['layerContent'];
+
+            foreach ($replaceRepository as $key => $value) {
+                $layerContent = str_replace('{' . $key . '}', $value, $layerContent);
+            }
+
+            FILE::put($repository['Repository']['layerPath'], $layerContent);
+
+            die();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    // make service
+    private function makeService($request)
+    {
+        try {
+            $name = $request->input('name');
+            $service = $this->initializeServiceLayer('Service', 'Services', $request);
+
+            $replaceServiceInterface = [
+                'Module' => $name,
+            ];
+            $serviceInterfaceContent = str_replace('{Module}', $replaceServiceInterface['Module'], $service['interface']['layerInterfaceContent']);
+            FILE::put($service['interface']['layerInterfacePath'], $serviceInterfaceContent);
+
+            $replaceService = [
+                'Module' => $name,
+                'module' => lcfirst($name),
+                'tableName' => $this->convertModuleNameToTableName($name) . 's',
+                'foreignKey' => $this->convertModuleNameToTableName($name) . '_id',
+                'pivotTableName' => $this->convertModuleNameToTableName($name) . '_' . '_language',
+            ];
+
+            $layerContent = $service['Service']['layerContent'];
+            foreach ($replaceService as $key => $value) {
+                $layerContent = str_replace('{' . $key . '}', $value, $layerContent);
+            }
+
+            FILE::put($service['Service']['layerPath'], $layerContent);
+            die();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
         die();
+    }
+
+    private function initializeServiceLayer($layer = '', $folder = '', $request)
+    {
+        $name = $request->input('name');
+        $option = [
+            $layer . 'Name' => $name . $layer,
+            $layer . 'InterfaceName' => $name . $layer . 'Interface',
+        ];
+
+        $templateRepositoryInterfacePath = base_path('app/Templates/Template' . $layer . 'Interface.php');
+        $layerInterfaceContent = file_get_contents($templateRepositoryInterfacePath);
+        $layerInterfacePath = base_path('app/' . $folder . '/Interfaces/' . $option[$layer . 'InterfaceName'] . '.php');
+
+        $templateRepositoryPath = base_path('app/Templates/Template' . $layer . '.php');
+        $layerContent = file_get_contents($templateRepositoryPath);
+        $layerPath = base_path('app/' . $folder . '/' . $option[$layer . 'Name'] . '.php');
+        return [
+            'interface' => [
+                'layerInterfaceContent' => $layerInterfaceContent,
+                'layerInterfacePath' => $layerInterfacePath
+            ],
+            $layer => [
+                'layerContent' => $layerContent,
+                'layerPath' => $layerPath,
+            ]
+        ];
     }
 
     public function create(Request $request)
@@ -224,9 +315,9 @@ SCHEMA;
 
         // $this->makeDatabase($request);
         // $this->makeController($request);
-        $this->makeModel($request);
-        // $this->makeRepository();
-        // $this->makeService();
+        // $this->makeModel($request);
+        // $this->makeRepository($request);
+        $this->makeService($request);
         // $this->makeProvider();
         // $this->makeRequest();
         // $this->makeView();
@@ -246,7 +337,6 @@ SCHEMA;
             DB::rollBack();
             // Log::error($e->getMessage());
             echo $e->getMessage();
-            die();
             return false;
         }
     }
@@ -263,7 +353,6 @@ SCHEMA;
             DB::rollBack();
             // Log::error($e->getMessage());
             echo $e->getMessage();
-            die();
             return false;
         }
     }
@@ -279,7 +368,6 @@ SCHEMA;
             DB::rollBack();
             // Log::error($e->getMessage());
             echo $e->getMessage();
-            die();
             return false;
         }
     }
