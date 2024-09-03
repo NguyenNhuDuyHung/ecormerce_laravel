@@ -38,6 +38,7 @@ class GenerateService implements GenerateServiceInterface
         return $languages;
     }
 
+    // make database + file migration
     private function createMigrationFile($payload)
     {
         $migrationTemplate = <<<MIGRATION
@@ -62,15 +63,13 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('{$payload['name']}'); 
+        Schema::dropIfExists('{$this->convertModuleNameToTableName($payload['name'])}'); 
     }
 };
 
 
 MIGRATION;
-        dd($migrationTemplate);
         return $migrationTemplate;
-
     }
 
     private function convertModuleNameToTableName($name)
@@ -95,41 +94,93 @@ SCHEMA;
 
     private function makeDatabase($request)
     {
-        // create database
-        $payload = $request->only('schema', 'name', 'module_type');
+        DB::beginTransaction();
+        try {
+            $payload = $request->only('schema', 'name', 'module_type');
+            $tableName = $this->convertModuleNameToTableName($payload['name']) . 's';
+            $migrationFileName = date('Y_m_d_His') . '_create_' . $tableName . '_table.php';
+            $migrationPath = database_path('migrations/' . $migrationFileName);
+            $migrationTemplate = $this->createMigrationFile($payload);
+            FILE::put($migrationPath, $migrationTemplate);
 
-        $tableName = $this->convertModuleNameToTableName($payload['name']) . 's';
-        $migrationFileName = date('Y_m_d_His') . '_create_' . $tableName . '_table.php';
-        $migrationPath = database_path('migrations/' . $migrationFileName);
-        $migrationTemplate = $this->createMigrationFile($payload);
-        FILE::put($migrationPath, $migrationTemplate);
-
-        if ($payload['module_type'] !== 3) {
-            $foreignKey = $this->convertModuleNameToTableName($payload['name']) . '_id';
-            $pivotTableName = $this->convertModuleNameToTableName($payload['name']) . '_language';
-            $pivotSchema = $this->pivotSchema($tableName, $foreignKey, $pivotTableName);
-            $migrationPivotTemplate = $this->createMigrationFile([
-                'schema' => $pivotSchema,
-                'name' => $pivotTableName,
-            ]);
-            $migrationPivotFileName = date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table.php';
-            $migrationPivotPath = database_path('migrations/' . $migrationPivotFileName);
-
-            FILE::put($migrationPivotPath, $migrationPivotTemplate);
+            if ($payload['module_type'] !== 3) {
+                $foreignKey = $this->convertModuleNameToTableName($payload['name']) . '_id';
+                $pivotTableName = $this->convertModuleNameToTableName($payload['name']) . '_language';
+                $pivotSchema = $this->pivotSchema($tableName, $foreignKey, $pivotTableName);
+                $migrationPivotTemplate = $this->createMigrationFile([
+                    'schema' => $pivotSchema,
+                    'name' => $pivotTableName,
+                ]);
+                $migrationPivotFileName = date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table.php';
+                $migrationPivotPath = database_path('migrations/' . $migrationPivotFileName);
+                FILE::put($migrationPivotPath, $migrationPivotTemplate);
+            }
+            ARTISAN::call('migrate');
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            return false;
         }
+    }
 
 
-        // ARTISAN::call('migrate');
-        die();
-        // create file migration
+    // make controller
+    private function makeController($request)
+    {
+        $payload = $request->only('name', 'module_type');
 
+        switch ($payload['module_type']) {
+            case 1:
+                $this->createTemplateController($payload['name'], 'TemplateCatalogueController');
+                break;
+            case 2:
+                $this->createTemplateController($payload['name'], 'TemplateController');
+                break;
+            default:
+                $this->createTemplateSingleController($payload['name']);
+                break;
+        }
+    }
+
+    private function createTemplateController($name, $controllerFileName)
+    {
+        try {
+            $controllerName = $name . 'Controller';
+            $templateControllerPath = base_path('app/Templates/' . $controllerFileName . '.php');
+            $controllerContent = file_get_contents($templateControllerPath);
+
+            $replace = [
+                'ModuleTemplate' => $name,
+                'moduleTemplate' => lcfirst($name),
+                'foreignKey' => $this->convertModuleNameToTableName($name) . '_id',
+                'moduleView' => str_replace('_', '.', $this->convertModuleNameToTableName($name)),
+                'tableName' => $this->convertModuleNameToTableName($name) . 's',
+            ];
+
+            $controllerContent = str_replace('{ModuleTemplate}', $replace['ModuleTemplate'], $controllerContent);
+            $controllerContent = str_replace('{moduleTemplate}', $replace['moduleTemplate'], $controllerContent);
+            $controllerContent = str_replace('{foreignKey}', $replace['foreignKey'], $controllerContent);
+            $controllerContent = str_replace('{moduleView}', $replace['moduleView'], $controllerContent);
+            $controllerContent = str_replace('{tableName}', $replace['tableName'], $controllerContent);
+
+            $controllerPath = base_path('app/Http/Controllers/Backend/' . $controllerName . '.php');
+            FILE::put($controllerPath, $controllerContent);
+            die();
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            die();
+            return false;
+        }
     }
 
     public function create(Request $request)
     {
 
-        $this->makeDatabase($request);
-        // $this->makeController();
+        // $this->makeDatabase($request);
+        $this->makeController($request);
         // $this->makeModel(); 
         // $this->makeRepository();
         // $this->makeService();
@@ -189,5 +240,4 @@ SCHEMA;
             return false;
         }
     }
-
 }
