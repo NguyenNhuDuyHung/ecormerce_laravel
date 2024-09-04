@@ -33,9 +33,9 @@
                 <div class="ibox">
                     <div class="ibox-content">
                         <div class="row mb15">
-                            <div class="col-lg-12 mb-20">
+                            <div class="col-lg-6 mb-20">
                                 <div class="form-row">
-                                    <label for="" class="control-label">Tên Module <span
+                                    <label for="" class="control-label">Tên Model <span
                                             class="text-danger">(*)</span></label>
                                     <input type="text" name="name"
                                         value="{{ old('name', isset($generate) ? $generate->name : '') }}"
@@ -43,7 +43,17 @@
                                 </div>
                             </div>
 
-                            <div class="col-lg-12 mb-20">
+                            <div class="col-lg-6 mb-20">
+                                <div class="form-row">
+                                    <label for="" class="control-label">Tên Module <span
+                                            class="text-danger">(*)</span></label>
+                                    <input type="text" name="module"
+                                        value="{{ old('module', isset($generate) ? $generate->module : '') }}"
+                                        placeholder="" autocomplete="off" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 mb-20">
                                 <div class="form-row">
                                     <label for="" class="control-label">Loại Module<span
                                             class="text-danger">(*)</span></label>
@@ -53,6 +63,16 @@
                                         <option value="2">Module chi tiết</option>
                                         <option value="3">Module khác</option>
                                     </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 mb-20">
+                                <div class="form-row">
+                                    <label for="" class="control-label">Đường dẫn <span
+                                            class="text-danger">(*)</span></label>
+                                    <input type="text" name="path"
+                                        value="{{ old('path', isset($generate) ? $generate->path : '') }}"
+                                        placeholder="" autocomplete="off" class="form-control">
                                 </div>
                             </div>
 

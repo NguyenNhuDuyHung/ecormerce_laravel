@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserCatalogueRequest extends FormRequest
+class Store{Module}Request extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +22,17 @@ class UpdateUserCatalogueRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:191|unique:user_catalogues',
+            'name' => 'required',
+            'canonical' => 'required|unique:routers,canonical',
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
-            'name.required' => 'Bạn phải nhập tên nhóm',
-            'name.unique' => 'Tên nhóm đã tồn tại',
-            'name.string' => 'Tên nhóm phải là chuỗi ký tự ',
+            'name.required' => 'Bạn chưa nhập ô tiêu đề.',
+            'canonical.required' => 'Bạn chưa nhập ô đường dẫn',
+            'canonical.unique' => 'Đường dẫn đã tồn tại',
         ];
     }
 }

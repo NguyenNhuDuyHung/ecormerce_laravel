@@ -211,7 +211,6 @@ SCHEMA;
         $modelName = $request->input('name') . '.php';
         $modelPath = base_path('app/Models/' . $modelName);
         FILE::put($modelPath, $modelContent);
-
     }
 
     // make repository
@@ -310,16 +309,83 @@ SCHEMA;
         ];
     }
 
+    // make provider
+    private function makeProvider($request)
+    {
+        try {
+            $name = $request->input('name');
+
+            $providerPath = [
+                'serviceProviderPath' => base_path('app/Providers/AppServiceProvider.php'),
+                'repositoryServiceProviderPath' => base_path('app/Providers/RepositoryServiceProvider.php'),
+            ];
+            foreach ($providerPath as $key => $value) {
+                $content = file_get_contents($value);
+                $insertLine = $key == 'serviceProviderPath' ? "'App\Services\Interfaces\\" . $name . "ServiceInterface' => 'App\Services\\" . $name . "Service',"
+                    : "'App\Repositories\Interfaces\\" . $name . "RepositoryInterface' => 'App\Repositories\\" . $name . "Repository',";
+
+                $position = strpos($content, '];');
+
+                if ($position !== false) {
+                    $newContent = substr_replace($content, $insertLine, $position, 0);
+                    FILE::put($value, $newContent);
+                }
+            }
+            echo 123;
+            die();
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
+    // make request
+    private function makeRequest($request)
+    {
+        try {
+            // StoreModuleRequest UpdateModuleRequest DeleteModuleRequest
+            $name = $request->input('name');
+            $requestArray = [
+                'Store' . $name . 'Request',
+                'Update' . $name . 'Request',
+                'Delete' . $name . 'Request',
+            ];
+
+            $templateRequest = [
+                'TemplateStoreModuleRequest',
+                'TemplateUpdateModuleRequest',
+                'TemplateDeleteModuleRequest',
+            ];
+
+            if ($request->input('module_type') != 1) {
+                unset($requestArray[2]);
+                unset($templateRequest[2]);
+            }
+
+            foreach ($templateRequest as $key => $value) {
+                $requestTemplatePath = base_path('app/Templates/' . $value . '.php');
+                $requestContent = file_get_contents($requestTemplatePath);
+                $requestContent = str_replace('{Module}', $name, $requestContent);
+                $requestPath = base_path('app/Http/Requests/' . $requestArray[$key] . '.php');
+
+                FILE::put($requestPath, $requestContent);
+            }
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+    }
+
     public function create(Request $request)
     {
-
         // $this->makeDatabase($request);
         // $this->makeController($request);
         // $this->makeModel($request);
         // $this->makeRepository($request);
-        $this->makeService($request);
-        // $this->makeProvider();
-        // $this->makeRequest();
+        // $this->makeService($request);
+        // $this->makeProvider($request);
+        // $this->makeRequest($request);
         // $this->makeView();
         // $this->makeRoutes();
         // $this->makeRule();

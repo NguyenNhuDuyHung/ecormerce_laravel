@@ -2,9 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\{Module};
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\Check{Module}ChildrenRule;
 
-class UpdateUserCatalogueRequest extends FormRequest
+class Delete{Module}Request extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +24,9 @@ class UpdateUserCatalogueRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:191|unique:user_catalogues',
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'name.required' => 'Bạn phải nhập tên nhóm',
-            'name.unique' => 'Tên nhóm đã tồn tại',
-            'name.string' => 'Tên nhóm phải là chuỗi ký tự ',
+            'name' => [
+                new Check{Module}ChildrenRule($this->route("id")),
+            ]
         ];
     }
 }
