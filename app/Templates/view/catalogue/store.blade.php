@@ -1,4 +1,4 @@
-@include('backend.dashboard.components.breadcrumb', ['title' => $config['seo'][$config['method']]['title']])
+@include('backend.dashboard.components.breadcrum', ['title' => $config['seo'][$config['method']]['title']])
 
 @if (isset($errors) && $errors->any())
     <div class="alert alert-danger">
@@ -14,7 +14,7 @@
     $url =
         $config['method'] == 'create'
             ? route('{view}.store')
-            : route('{view}.update', $postCatalogue->id);
+            : route('{view}.update', ${module}->id);
 @endphp
 
 <form action="{{ $url }}" method="post" class="box">
@@ -33,7 +33,7 @@
                 </div>
 
                 @include('backend.dashboard.components.album', ['model' => ${module} ?? null])
-                @include('backend.dasboard.components.seo', ['model' => ${module} ?? null])
+                @include('backend.dashboard.components.seo', ['model' => ${module} ?? null])
             </div>
 
             <div class="col-lg-3">

@@ -12,6 +12,12 @@ use App\Http\Controllers\Backend\PostCatalogueController;
 use App\Http\Controllers\Backend\PostController;
 use App\Http\Controllers\Backend\UserCatalogueController;
 use App\Http\Controllers\Backend\UserController;
+//@@useController@@
+
+
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +120,7 @@ Route::group(['middleware' => ['admin', 'locale']], function () {
         Route::post('destroy/{id}', [GenerateController::class, 'destroy'])->where('id', '[0-9]+')->name('generate.destroy');
     });
 
+    //@@new-module@@
     // Ajax 
     Route::get('ajax/location/getLocation', [LocationController::class, 'getLocation'])->name('ajax.location.getLocation');
     Route::post('ajax/dashboard/changeStatus', [AjaxDashboardController::class, 'changeStatus'])->name('ajax.dashboard.changeStatus');

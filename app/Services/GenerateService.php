@@ -64,7 +64,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('{$this->convertModuleNameToTableName($payload['name'])}'); 
+        Schema::dropIfExists("{$this->convertModuleNameToTableName($payload['name'])}s"); 
     }
 };
 
@@ -86,6 +86,15 @@ Schema::create('{$pivot}', function (Blueprint \$table) {
     \$table->unsignedBigInteger('{$foreignKey}');
     \$table->unsignedBigInteger('language_id');
     \$table->foreign('{$foreignKey}')->references('id')->on('{$tableName}')->onDelete('cascade');
+    \$table->foreign('language_id')->references('id')->on('languages')->onDelete('cascade');
+    \$table->string('name');
+    \$table->text('description')->nullable();
+    \$table->longText('content')->nullable();
+    \$table->string('meta_title')->nullable();
+    \$table->string('meta_keyword')->nullable();
+    \$table->text('meta_description')->nullable();
+    \$table->string('canonical')->nullable();
+    \$table->timestamps();
 });
 
 SCHEMA;
@@ -150,7 +159,6 @@ SCHEMA;
             $controllerName = $name . 'Controller';
             $templateControllerPath = base_path('app/Templates/' . $controllerFileName . '.php');
             $controllerContent = file_get_contents($templateControllerPath);
-
             $replace = [
                 'ModuleTemplate' => $name,
                 'moduleTemplate' => lcfirst($name),
@@ -160,7 +168,7 @@ SCHEMA;
             ];
 
             foreach ($replace as $key => $value) {
-                $controllerContent = str_replace($key, $value, $controllerContent);
+                $controllerContent = str_replace('{' . $key . '}', $value, $controllerContent);
             }
             $controllerPath = base_path('app/Http/Controllers/Backend/' . $controllerName . '.php');
             FILE::put($controllerPath, $controllerContent);
@@ -228,8 +236,9 @@ SCHEMA;
 
             $replaceRepository = [
                 'Module' => $name,
-                'tableName' => $this->convertModuleNameToTableName($name) . 's',
-                'pivotTableName' => $this->convertModuleNameToTableName($name) . '_' . explode('_', $this->convertModuleNameToTableName($name))[0],
+                'tableName' => $this->convertModuleNameToTableName($name),
+                'tableNames' => $this->convertModuleNameToTableName($name) . 's',
+                'pivotTableName' => $this->convertModuleNameToTableName($name) . '_' . 'language',
                 'foreignKey' => $this->convertModuleNameToTableName($name) . '_id',
             ];
 
@@ -240,8 +249,7 @@ SCHEMA;
             }
 
             FILE::put($repository['Repository']['layerPath'], $layerContent);
-
-            die();
+            return true;
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
@@ -266,21 +274,19 @@ SCHEMA;
                 'module' => lcfirst($name),
                 'tableName' => $this->convertModuleNameToTableName($name) . 's',
                 'foreignKey' => $this->convertModuleNameToTableName($name) . '_id',
-                'pivotTableName' => $this->convertModuleNameToTableName($name) . '_' . '_language',
+                'pivotTableName' => $this->convertModuleNameToTableName($name) . '_' . 'language',
             ];
 
             $layerContent = $service['Service']['layerContent'];
             foreach ($replaceService as $key => $value) {
                 $layerContent = str_replace('{' . $key . '}', $value, $layerContent);
             }
-
             FILE::put($service['Service']['layerPath'], $layerContent);
-            die();
+            return true;
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
         }
-        die();
     }
 
     private function initializeServiceLayer($layer = '', $folder = '', $request)
@@ -332,8 +338,7 @@ SCHEMA;
                     FILE::put($value, $newContent);
                 }
             }
-            echo 123;
-            die();
+            return true;
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
@@ -417,20 +422,17 @@ SCHEMA;
 
             $this->CopyAndReplaceContent($sourcePath, $folderPath, $fileArray, $replacement);
             $this->CopyAndReplaceContent("{$sourcePath}components/", $componentsPath, $componentsFileArray, $replacement);
-            die();
             return true;
         } catch (\Exception $e) {
             echo $e->getMessage();
             return false;
         }
-
-        die();
     }
 
     private function CopyAndReplaceContent(string $sourcePath, string $destinationPath, array $fileArray, array $replacement)
     {
         foreach ($fileArray as $key => $value) {
-            $content = file_get_contents($sourcePath.$value);
+            $content = file_get_contents($sourcePath . $value);
             $destination = "$destinationPath/$value";
             foreach ($replacement as $key => $value) {
                 $content = str_replace('{' . $key . '}', $value, $content);
@@ -448,23 +450,57 @@ SCHEMA;
         }
     }
 
+    // make routes
+    private function makeRoutes($request)
+    {
+        $name = $request->input('name');
+        $module = $this->convertModuleNameToTableName($name);
+        $moduleExtract = explode('_', $module);
+        $routesPath = base_path('routes/web.php');
+        $content = file_get_contents($routesPath);
+
+        $routeUrl = count($moduleExtract) == 2 ? $moduleExtract[0] . '/' . $moduleExtract[1] : $moduleExtract[1];
+        $routeName = count($moduleExtract) == 2 ? $moduleExtract[0] . '.' . $moduleExtract[1] : $moduleExtract[0];
+
+        $routeGroup = <<<ROUTE
+Route::group(["prefix" => "{$routeUrl}"], function () {
+        Route::get("index", [{$name}Controller::class, "index"])->name("{$routeName}.index");
+        Route::get("create", [{$name}Controller::class, "create"])->name("{$routeName}.create");
+        Route::post("store", [{$name}Controller::class, "store"])->name("{$routeName}.store");
+        Route::get("edit/{id}", [{$name}Controller::class, "edit"])->where("id", "[0-9]+")->name("{$routeName}.edit");
+        Route::post("update/{id}", [{$name}Controller::class, "update"])->where("id", "[0-9]+")->name("{$routeName}.update");
+        Route::get("delete/{id}", [{$name}Controller::class, "delete"])->where("id", "[0-9]+")->name("{$routeName}.delete");
+        Route::post("destroy/{id}", [{$name}Controller::class, "destroy"])->where("id", "[0-9]+")->name("{$routeName}.destroy");
+    });
+
+    //@@new-module@@
+ROUTE;
+        $useController = <<<ROUTE
+use App\Http\Controllers\Backend\\{$name}Controller;
+//@@useController@@
+
+ROUTE;
+
+        $content = str_replace('//@@new-module@@', $routeGroup, $content);
+        $content = str_replace('//@@useController@@', $useController, $content);
+        FILE::put($routesPath, $content);
+    }
+
     public function create(Request $request)
     {
-        // $this->makeDatabase($request);
-        // $this->makeController($request);
-        // $this->makeModel($request);
-        // $this->makeRepository($request);
-        // $this->makeService($request);
-        // $this->makeProvider($request);
-        // $this->makeRequest($request);
-        $this->makeView($request);
-        // $this->makeRoutes();
-        // $this->makeRule();
-        // $this->makeLang();
-
-
-        DB::beginTransaction();
         try {
+            $database = $this->makeDatabase($request);
+            $controller = $this->makeController($request);
+            $model = $this->makeModel($request);
+            $repository = $this->makeRepository($request);
+            $service = $this->makeService($request);
+            $provider = $this->makeProvider($request);
+            $makeRequest = $this->makeRequest($request);
+            $view = $this->makeView($request);
+            $routes = $this->makeRoutes($request);
+            // $this->makeRule();
+            // $this->makeLang();
+            // DB::beginTransaction();
             $payload = $request->except(['_token', 'send']);
             $payload['user_id'] = Auth::id();
             $this->generateRepository->create($payload);
@@ -473,7 +509,7 @@ SCHEMA;
         } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage();
+            echo $e->getMessage().'-'.$e->getLine();die();
             return false;
         }
     }

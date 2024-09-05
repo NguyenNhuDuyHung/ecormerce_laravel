@@ -60,7 +60,7 @@ class {ModuleTemplate}Controller extends Controller
             ],
             'model' => '{ModuleView}',
         ];
-        $config['seo'] = config('apps.{moduleView}');
+        $config['seo'] = __('message.{moduleView}');
         $dropdown = $this->nestedSet->Dropdown();
         $template = 'backend.{moduleTemplate}.{moduleTemplate}.index';
         return view("backend.dashboard.layout", compact('template', 'config', '{moduleTemplate}s', 'dropdown'));
@@ -71,7 +71,7 @@ class {ModuleTemplate}Controller extends Controller
         $this->authorize('modules', '{moduleTemplate}.create');
 
         $config = $this->configData();
-        $config['seo'] = config('apps.{moduleTemplate}');
+        $config['seo'] = __('message.{moduleView}');
         $config['method'] = 'create';
 
         $dropdown = $this->nestedSet->Dropdown();
@@ -93,7 +93,7 @@ class {ModuleTemplate}Controller extends Controller
 
         $config = $this->configData();
         ${moduleTemplate} = $this->{moduleTemplate}Repository->get{ModuleTemplate}ById($id, $this->language);
-        $config['seo'] = config('apps.{moduleTemplate}');
+        $config['seo'] = __('message.{moduleView}');
         $config['method'] = 'edit';
         $dropdown = $this->nestedSet->Dropdown();
         $album = ${moduleTemplate}->album;
@@ -114,7 +114,7 @@ class {ModuleTemplate}Controller extends Controller
         $this->authorize('modules', '{moduleTemplate}.destroy');
 
         ${moduleTemplate} = $this->{moduleTemplate}Repository->get{ModuleTemplate}ById($id, $this->language);
-        $config['seo'] = config('apps.{moduleTemplate}');
+        $config['seo'] = __('message.{moduleView}');
         $template = 'backend.{moduleTemplate}.{moduleTemplate}.delete';
         return view("backend.dashboard.layout", compact('template', '{moduleTemplate}', 'config'));
     }

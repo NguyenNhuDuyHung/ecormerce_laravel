@@ -85,7 +85,7 @@ class {Module}Service extends BaseService implements {Module}ServiceInterface
                     'ASC'
                 ],
                 [
-                    ['{pivotTableName}_language as tb2', 'tb2.{foreignKey}', '=', '{tableName}.id'],
+                    ['{pivotTableName} as tb2', 'tb2.{foreignKey}', '=', '{tableName}.id'],
                 ],
                 ['languages'],
             );
