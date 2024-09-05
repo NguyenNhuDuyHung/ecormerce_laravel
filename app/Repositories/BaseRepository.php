@@ -102,6 +102,14 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->forceDelete();
     }
 
+    public function forceDeleteByCondition(array $condition = []){
+        $query = $this->model->newQuery();
+        foreach($condition as $key => $val){
+            $query->where($val[0], $val[1] , $val[2]);
+        }
+        return $query->forceDelete();
+    }
+
     public function createPivot($model, array $payload = [], string $relation = '')
     {
         return $model->{$relation}()->attach($model->id, $payload);

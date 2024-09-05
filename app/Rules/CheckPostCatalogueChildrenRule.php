@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use App\Models\PostCatalogue;
 
-class checkPostCatalogueChildrenRule implements ValidationRule
+class CheckPostCatalogueChildrenRule implements ValidationRule
 {
 
     protected $postCatalogueId;

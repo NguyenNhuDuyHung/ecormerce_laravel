@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Validation\Rules\Exists;
 
 /**
  * Class GenerateService
@@ -377,6 +378,76 @@ SCHEMA;
         }
     }
 
+    // make view
+    private function makeView($request)
+    {
+
+        try {
+            $name = $request->input('name');
+            $module = $this->convertModuleNameToTableName($name);
+            $extractModule = explode('_', $module);
+
+            $basePath = resource_path('views/backend/' . $extractModule[0]);
+            $folderPath = count($extractModule) == 2 ? "$basePath/{$extractModule[1]}" : "$basePath/{$extractModule[0]}";
+
+            $componentsPath = "$folderPath/components";
+
+            $this->createDirectory($folderPath);
+            $this->createDirectory($componentsPath);
+
+            $replacement = [
+                'view' => count($extractModule) == 2 ? "{$extractModule[0]}.{$extractModule[1]}" : $extractModule[0],
+                'module' => lcfirst($name),
+                'Module' => $name,
+            ];
+
+            $sourcePath = base_path("app/Templates/view/" . (count($extractModule) == 2 ? 'catalogue' : 'detail') . '/');
+
+            $fileArray = [
+                'store.blade.php',
+                'index.blade.php',
+                'delete.blade.php'
+            ];
+
+            $componentsFileArray = [
+                'aside.blade.php',
+                'filter.blade.php',
+                'table.blade.php',
+            ];
+
+            $this->CopyAndReplaceContent($sourcePath, $folderPath, $fileArray, $replacement);
+            $this->CopyAndReplaceContent("{$sourcePath}components/", $componentsPath, $componentsFileArray, $replacement);
+            die();
+            return true;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+            return false;
+        }
+
+        die();
+    }
+
+    private function CopyAndReplaceContent(string $sourcePath, string $destinationPath, array $fileArray, array $replacement)
+    {
+        foreach ($fileArray as $key => $value) {
+            $content = file_get_contents($sourcePath.$value);
+            $destination = "$destinationPath/$value";
+            foreach ($replacement as $key => $value) {
+                $content = str_replace('{' . $key . '}', $value, $content);
+            }
+            if (!FILE::exists($destination)) {
+                FILE::put($destination, $content);
+            }
+        }
+    }
+
+    private function createDirectory($path)
+    {
+        if (!FILE::exists($path)) {
+            FILE::makeDirectory($path, 0755, true);
+        }
+    }
+
     public function create(Request $request)
     {
         // $this->makeDatabase($request);
@@ -386,7 +457,7 @@ SCHEMA;
         // $this->makeService($request);
         // $this->makeProvider($request);
         // $this->makeRequest($request);
-        // $this->makeView();
+        $this->makeView($request);
         // $this->makeRoutes();
         // $this->makeRule();
         // $this->makeLang();

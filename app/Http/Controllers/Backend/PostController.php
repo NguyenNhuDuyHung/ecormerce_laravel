@@ -114,7 +114,7 @@ class PostController extends Controller
         $this->authorize('modules', 'post.destroy');
 
         $post = $this->postRepository->getPostById($id, $this->language);
-        $config['seo'] = config('apps.post');
+        $config['seo'] = __('message.post');
         $template = 'backend.post.post.delete';
         return view("backend.dashboard.layout", compact('template', 'post', 'config'));
     }

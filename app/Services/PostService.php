@@ -226,7 +226,10 @@ class PostService extends BaseService implements PostServiceInterface
         DB::beginTransaction();
         try {
             $this->postRepository->forceDelete($id);
-
+            $this->routerRepository->forceDeleteByCondition([
+                ['module_id', '=', $id],
+                ['controllers', '=', 'App\Http\Controllers\Frontend\PostController'],
+            ]);
             DB::commit();
             return true;
         } catch (\Exception $e) {
