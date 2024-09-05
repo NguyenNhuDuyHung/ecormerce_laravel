@@ -40,35 +40,34 @@ class GenerateService implements GenerateServiceInterface
     }
 
     // make database + file migration
-    private function createMigrationFile($payload)
+    private function createMigrationFile($schema, $dropTable = '')
     {
+
         $migrationTemplate = <<<MIGRATION
-        <?php
+<?php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+return new class extends Migration 
 {
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        {$payload['schema']}
+        {$schema}
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists("{$this->convertModuleNameToTableName($payload['name'])}s"); 
+        Schema::dropIfExists('{$dropTable}');
     }
 };
-
-
 MIGRATION;
         return $migrationTemplate;
     }
@@ -102,38 +101,77 @@ SCHEMA;
         return $pivotSchema;
     }
 
+    private function relationSchema($tableName = '', $module = '')
+    {
+        $schema = <<<SCHEMA
+Schema::create('{$tableName}', function (Blueprint \$table) {
+    \$table->unsignedBigInteger('{$module}_catalogue_id');
+    \$table->unsignedBigInteger('{$module}_id');
+    \$table->foreign('{$module}_catalogue_id')->references('id')->on('{$module}_catalogues')->onDelete('cascade');
+    \$table->foreign('{$module}_id')->references('id')->on('{$module}s')->onDelete('cascade');
+});
+SCHEMA;
+        return $schema;
+    }
+
     private function makeDatabase($request)
     {
-        DB::beginTransaction();
         try {
             $payload = $request->only('schema', 'name', 'module_type');
-            $tableName = $this->convertModuleNameToTableName($payload['name']) . 's';
-            $migrationFileName = date('Y_m_d_His') . '_create_' . $tableName . '_table.php';
-            $migrationPath = database_path('migrations/' . $migrationFileName);
-            $migrationTemplate = $this->createMigrationFile($payload);
-            FILE::put($migrationPath, $migrationTemplate);
-
-            if ($payload['module_type'] !== 3) {
-                $foreignKey = $this->convertModuleNameToTableName($payload['name']) . '_id';
-                $pivotTableName = $this->convertModuleNameToTableName($payload['name']) . '_language';
-                $pivotSchema = $this->pivotSchema($tableName, $foreignKey, $pivotTableName);
-                $migrationPivotTemplate = $this->createMigrationFile([
-                    'schema' => $pivotSchema,
-                    'name' => $pivotTableName,
-                ]);
-                $migrationPivotFileName = date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table.php';
-                $migrationPivotPath = database_path('migrations/' . $migrationPivotFileName);
-                FILE::put($migrationPivotPath, $migrationPivotTemplate);
+            $module = $this->convertModuleNameToTableName($payload['name']); //product
+            $moduleExtract = explode('_', $module);
+            $this->makeMainTable($request, $module, $payload);
+            if ($payload['module_type'] !== 'difference') {
+                $this->makeLanguageTable($request, $module);
+                if (count($moduleExtract) == 1) {
+                    $this->makeRelationTable($request, $module);
+                }
             }
             ARTISAN::call('migrate');
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
-            // Log::error($e->getMessage());
-            echo $e->getMessage();
+            echo $e->getMessage() . '-' . $e->getLine();
+            die();
             return false;
         }
     }
+
+    private function makeRelationTable($request, $module)
+    {
+        $moduleExtract = explode('_', $module);
+        $tableName = $module . '_catalogue_' . $moduleExtract[0];
+        $schema = $this->relationSchema($tableName, $module);
+        $migrationRelationFile = $this->createMigrationFile($schema, $tableName);
+        $migrationRelationFileName = date('Y_m_d_His', time() + 10) . '_create_' . $tableName . '_table.php';
+        $migrationRelationPath = database_path('migrations/' . $migrationRelationFileName);
+        FILE::put($migrationRelationPath, $migrationRelationFile);
+    }
+
+    private function makeLanguageTable($request, $module)
+    {
+        $foreignKey = $module . '_id';
+        $pivotTableName = $module . '_language';
+        $pivotSchema = $this->pivotSchema($module);
+        $dropPivotTable = $module . '_language';
+
+        $migrationPivot = $this->createMigrationFile($pivotSchema, $dropPivotTable);
+
+        $migrationPivotFileName = date('Y_m_d_His', time() + 10) . '_create_' . $pivotTableName . '_table.php';
+        $migrationPivotPath = database_path('migrations/' . $migrationPivotFileName);
+        FILE::put($migrationPivotPath, $migrationPivot);
+    }
+
+    private function makeMainTable($request, $module, $payload)
+    {
+        $moduleExtract = explode('_', $module); //product
+        $tableName = $module . 's';
+        $migrationFileName = date('Y_m_d_His') . '_create_' . $tableName . '_table.php';
+        $migrationPath = database_path('migrations/' . $migrationFileName);
+        $migrationTemplate = $this->createMigrationFile($payload['schema'], $tableName);
+        FILE::put($migrationPath, $migrationTemplate);
+    }
+
 
     // make controller
     private function makeController($request)
@@ -141,10 +179,10 @@ SCHEMA;
         $payload = $request->only('name', 'module_type');
 
         switch ($payload['module_type']) {
-            case 1:
+            case 'catalogue':
                 $this->createTemplateController($payload['name'], 'TemplateCatalogueController');
                 break;
-            case 2:
+            case 'detail':
                 $this->createTemplateController($payload['name'], 'TemplateController');
                 break;
             default:
@@ -498,7 +536,9 @@ ROUTE;
             $makeRequest = $this->makeRequest($request);
             $view = $this->makeView($request);
             $routes = $this->makeRoutes($request);
-            // $this->makeRule();
+            if ($request->input('module_type') == 'catalogue') {
+                // $this->makeRule($request);
+            }
             // $this->makeLang();
             // DB::beginTransaction();
             $payload = $request->except(['_token', 'send']);
@@ -509,7 +549,8 @@ ROUTE;
         } catch (\Exception $e) {
             DB::rollBack();
             // Log::error($e->getMessage());
-            echo $e->getMessage().'-'.$e->getLine();die();
+            echo $e->getMessage() . '-' . $e->getLine();
+            die();
             return false;
         }
     }

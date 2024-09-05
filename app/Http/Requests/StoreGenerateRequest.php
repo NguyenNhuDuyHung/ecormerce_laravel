@@ -24,7 +24,7 @@ class StoreGenerateRequest extends FormRequest
         return [
             'name' => 'required|unique:generates',
             'schema' => 'required',
-            'module_type' => 'gt:0',
+            // 'module_type' => 'gt:0',
             'module' => 'required',
             'path' => 'required',
         ];
@@ -35,7 +35,7 @@ class StoreGenerateRequest extends FormRequest
             'name.required' => 'Bạn chưa nhập tên model',
             'name.unique' => 'Tên module đã tồn tại',
             'schema.required' => 'Bạn chưa nhập schema',
-            'module_type.gt' => 'Bạn chưa chọn loại module',
+            // 'module_type.gt' => 'Bạn chưa chọn loại module',
             'module.required' => ' Bạn chưa nhập tên module',
             'path.required' => ' Bạn chưa nhập đường dẫn',
         ];

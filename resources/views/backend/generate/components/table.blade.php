@@ -18,11 +18,6 @@
                     <td>
                     {{ $generate->name }}
                     </td>
-                    <td class="text-center js-switch-{{ $generate->id }}">
-                        <input type="checkbox" value="{{ $generate->publish }}" class="js-switch status "
-                            data-field="publish" data-model="generate" {{ $generate->publish == 2 ? 'checked' : '' }}
-                            data-modelId="{{ $generate->id }}" />
-                    </td>
                     <td class="text-center">
                         <a href="{{ route('generate.edit', $generate->id) }}" class="btn btn-success"><i
                                 class="fa fa-edit"></i></a>
