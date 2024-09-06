@@ -374,8 +374,8 @@ class ComposerStaticInit6a343700b1a21fd385aac1a0d7e3f069
         ),
         'Psr\\Http\\Message\\' => 
         array (
-            0 => __DIR__ . '/..' . '/psr/http-message/src',
-            1 => __DIR__ . '/..' . '/psr/http-factory/src',
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
         'Psr\\Http\\Client\\' => 
         array (
@@ -624,6 +624,7 @@ class ComposerStaticInit6a343700b1a21fd385aac1a0d7e3f069
         'App\\Providers\\BroadcastServiceProvider' => __DIR__ . '/../..' . '/app/Providers/BroadcastServiceProvider.php',
         'App\\Providers\\EventServiceProvider' => __DIR__ . '/../..' . '/app/Providers/EventServiceProvider.php',
         'App\\Providers\\LanguageComposerServiceProvider' => __DIR__ . '/../..' . '/app/Providers/LanguageComposerServiceProvider.php',
+        'App\\Providers\\RepositoryServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RepositoryServiceProvider.php',
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Repositories\\BaseRepository' => __DIR__ . '/../..' . '/app/Repositories/BaseRepository.php',
         'App\\Repositories\\DistrictRepository' => __DIR__ . '/../..' . '/app/Repositories/DistrictRepository.php',
@@ -649,8 +650,9 @@ class ComposerStaticInit6a343700b1a21fd385aac1a0d7e3f069
         'App\\Repositories\\UserCatalogueRepository' => __DIR__ . '/../..' . '/app/Repositories/UserCatalogueRepository.php',
         'App\\Repositories\\UserRepository' => __DIR__ . '/../..' . '/app/Repositories/UserRepository.php',
         'App\\Repositories\\WardRepository' => __DIR__ . '/../..' . '/app/Repositories/WardRepository.php',
-        'App\\Rules\\checkPostCatalogueChildrenRule' => __DIR__ . '/../..' . '/app/Rules/checkPostCatalogueChildrenRule.php',
+        'App\\Rules\\CheckPostCatalogueChildrenRule' => __DIR__ . '/../..' . '/app/Rules/CheckPostCatalogueChildrenRule.php',
         'App\\Services\\BaseService' => __DIR__ . '/../..' . '/app/Services/BaseService.php',
+        'App\\Services\\GenerateService' => __DIR__ . '/../..' . '/app/Services/GenerateService.php',
         'App\\Services\\Interfaces\\BaseServiceInterface' => __DIR__ . '/../..' . '/app/Services/Interfaces/BaseServiceInterface.php',
         'App\\Services\\Interfaces\\GenerateServiceInterface' => __DIR__ . '/../..' . '/app/Services/Interfaces/GenerateServiceInterface.php',
         'App\\Services\\Interfaces\\LanguageServiceInterface' => __DIR__ . '/../..' . '/app/Services/Interfaces/LanguageServiceInterface.php',
