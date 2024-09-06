@@ -24,7 +24,7 @@ class {$class}CatalogueService extends BaseService implements {$class}CatalogueS
 
     protected ${module}CatalogueRepository;
     protected $routerRepository;
-    protected $nestedset;
+    protected $nestedSet;
     protected $language;
     protected $controllerName = '{$class}CatalogueController';
     
@@ -67,8 +67,8 @@ class {$class}CatalogueService extends BaseService implements {$class}CatalogueS
             ${module}Catalogue = $this->createCatalogue($request);
             if(${module}Catalogue->id > 0){
                 $this->updateLanguageForCatalogue(${module}Catalogue, $request, $languageId);
-                $this->createRouter(${module}Catalogue, $request, $this->controllerName);
-                $this->nestedset = new Nestedsetbie([
+                $this->createRouter(${module}Catalogue, $request, $this->controllerName, $languageId);
+                $this->nestedSet = new Nestedsetbie([
                     'table' => '{module}_catalogues',
                     'foreignkey' => '{module}_catalogue_id',
                     'language_id' =>  $languageId ,
@@ -93,9 +93,9 @@ class {$class}CatalogueService extends BaseService implements {$class}CatalogueS
             if($flag == TRUE){
                 $this->updateLanguageForCatalogue(${module}Catalogue, $request, $languageId);
                 $this->updateRouter(
-                    ${module}Catalogue, $request, $this->controllerName
+                    ${module}Catalogue, $request, $this->controllerName, $languageId
                 );
-                $this->nestedset = new Nestedsetbie([
+                $this->nestedSet = new Nestedsetbie([
                     'table' => '{module}_catalogues',
                     'foreignkey' => '{module}_catalogue_id',
                     'language_id' =>  $languageId ,
@@ -115,8 +115,12 @@ class {$class}CatalogueService extends BaseService implements {$class}CatalogueS
     public function destroy($id, $languageId){
         DB::beginTransaction();
         try{
-            ${module}Catalogue = $this->{module}CatalogueRepository->delete($id);
-            $this->nestedset = new Nestedsetbie([
+            ${module}Catalogue = $this->{module}CatalogueRepository->forceDelete($id);
+            $this->routerRepository->forceDeleteByCondition([
+                ['module_id', '=', $id],
+                ['controllers', '=', 'App\Http\Controllers\Frontend\{class}CatalogueController'],
+            ]);
+            $this->nestedSet = new Nestedsetbie([
                 'table' => '{module}_catalogues',
                 'foreignkey' => '{module}_catalogue_id',
                 'language_id' =>  $languageId ,

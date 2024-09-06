@@ -73,7 +73,7 @@ class {$class}Service extends BaseService implements {$class}ServiceInterface
             if(${module}->id > 0){
                 $this->updateLanguageFor{$class}(${module}, $request, $languageId);
                 $this->updateCatalogueFor{$class}(${module}, $request);
-                $this->createRouter(${module}, $request, $this->controllerName);
+                $this->createRouter(${module}, $request, $this->controllerName, $languageId);
             }
             DB::commit();
             return true;
@@ -93,7 +93,7 @@ class {$class}Service extends BaseService implements {$class}ServiceInterface
                 $this->updateLanguageFor{$class}(${module}, $request, $languageId);
                 $this->updateCatalogueFor{$class}(${module}, $request);
                 $this->updateRouter(
-                    ${module}, $request, $this->controllerName
+                    ${module}, $request, $this->controllerName, $languageId
                 );
             }
             DB::commit();
@@ -109,8 +109,11 @@ class {$class}Service extends BaseService implements {$class}ServiceInterface
     public function destroy($id){
         DB::beginTransaction();
         try{
-            ${module} = $this->{module}Repository->delete($id);
-            
+            ${module} = $this->{module}Repository->forceDelete($id);
+            $this->routerRepository->forceDeleteByCondition([
+                ['module_id', '=', $id],
+                ['controllers', '=', 'App\Http\Controllers\Frontend\{class}Controller'],
+            ]);
             DB::commit();
             return true;
         }catch(\Exception $e ){
@@ -138,8 +141,11 @@ class {$class}Service extends BaseService implements {$class}ServiceInterface
     private function updateLanguageFor{$class}(${module}, $request, $languageId){
         $payload = $request->only($this->payloadLanguage());
         $payload = $this->formatLanguagePayload($payload, ${module}->id, $languageId);
-        ${module}->languages()->detach([$this->language, ${module}->id]);
-        return $this->{module}Repository->createPivot(${module}, $payload, 'languages');
+        DB::table('{module}_language') // Tên bảng pivot
+            ->where('{module}_id', ${module}->id)
+            ->where('language_id', $languageId)
+            ->delete();
+        return $this->productRepository->createPivot(${module}, $payload, 'languages');
     }
 
     private function updateCatalogueFor{$class}(${module}, $request){

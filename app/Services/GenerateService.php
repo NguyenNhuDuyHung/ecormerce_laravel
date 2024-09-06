@@ -433,18 +433,16 @@ MIGRATION;
         $content = file_get_contents($routesPath);
         $routeUrl = (count($moduleExtract) == 2) ? "{$moduleExtract[0]}/$moduleExtract[1]" : $moduleExtract[0];
         $routeName = (count($moduleExtract) == 2) ? "{$moduleExtract[0]}.$moduleExtract[1]" : $moduleExtract[0];
-
-       
         
         $routeGroup = <<<ROUTE
 Route::group(['prefix' => '$routeUrl'], function () {
     Route::get('index', [{$name}Controller::class, 'index'])->name('{$routeName}.index');
     Route::get('create', [{$name}Controller::class, 'create'])->name('{$routeName}.create');
     Route::post('store', [{$name}Controller::class, 'store'])->name('{$routeName}.store');
-    Route::get('{id}/edit', [{$name}Controller::class, 'edit'])->where(['id' => '[0-9]+'])->name('{$routeName}.edit');
-    Route::post('{id}/update', [{$name}Controller::class, 'update'])->where(['id' => '[0-9]+'])->name('{$routeName}.update');
-    Route::get('{id}/delete', [{$name}Controller::class, 'delete'])->where(['id' => '[0-9]+'])->name('{$routeName}.delete');
-    Route::delete('{id}/destroy', [{$name}Controller::class, 'destroy'])->where(['id' => '[0-9]+'])->name('{$routeName}.destroy');
+    Route::get('edit/{id}', [{$name}Controller::class, 'edit'])->where(['id' => '[0-9]+'])->name('{$routeName}.edit');
+    Route::post('update/{id}', [{$name}Controller::class, 'update'])->where(['id' => '[0-9]+'])->name('{$routeName}.update');
+    Route::get('delete/{id}', [{$name}Controller::class, 'delete'])->where(['id' => '[0-9]+'])->name('{$routeName}.delete');
+    Route::post('destroy/{id}', [{$name}Controller::class, 'destroy'])->where(['id' => '[0-9]+'])->name('{$routeName}.destroy');
 });
 //@@new-module@@
 

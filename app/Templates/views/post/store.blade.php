@@ -30,7 +30,7 @@
                 </div>
 
                 @include('backend.dashboard.components.album')
-                @include('backend.{module}.{module}.components.seo', ['model' => ${module} ?? null])
+                @include('backend.dashboard.components.seo', ['model' => ${module} ?? null])
             </div>
 
             <div class="col-lg-3">

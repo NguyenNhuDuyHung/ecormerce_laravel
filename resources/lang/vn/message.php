@@ -15,6 +15,25 @@ return [
             'title' => 'Xóa nhóm sản phẩm'
         ],
     ],
+    'product' => [
+        'index' => [
+            'title' => 'Quản lý sản phẩm',
+            'tableHeading' => 'Danh sách sản phẩm'
+        ],
+        'create' => [
+            'title' => 'Thêm mới sản phẩm'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật sản phẩm'
+        ],
+        'delete' => [
+            'title' => 'Xóa sản phẩm'
+        ],
+        'information' => 'Thông tin chung',
+        'code' => 'Mã sản phẩm',
+        'made_in' => 'Xuất xứ',
+        'price' => 'Giá bán sản phẩm',
+    ],
     'postCatalogue' => [
         'index' => [
             'title' => "Quản lý  nhóm bài viết",

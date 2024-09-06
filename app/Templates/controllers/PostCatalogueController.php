@@ -51,17 +51,18 @@ class {$class}CatalogueController extends Controller
         $this->authorize('modules', '{module}.catalogue.index');
         ${module}Catalogues = $this->{module}CatalogueService->paginate($request, $this->language);
         $config = [
-            'js' => [
+           'js' => [
                 'backend/js/plugins/switchery/switchery.js',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'
+                'backend/library/switchery.js',
+                'backend/library/changeStatus.js',
+                'backend/library/selectAll.js',
             ],
             'css' => [
-                'backend/css/plugins/switchery/switchery.css',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
+                'backend/css/plugins/switchery/switchery.css'
             ],
             'model' => '{$class}Catalogue',
         ];
-        $config['seo'] = __('messages.{module}Catalogue');
+        $config['seo'] = __('message.{module}Catalogue');
         $template = 'backend.{module}.catalogue.index';
         return view('backend.dashboard.layout', compact(
             'template',
@@ -73,7 +74,7 @@ class {$class}CatalogueController extends Controller
     public function create(){
         $this->authorize('modules', '{module}.catalogue.create');
         $config = $this->configData();
-        $config['seo'] = __('messages.{module}Catalogue');
+        $config['seo'] = __('message.{module}Catalogue');
         $config['method'] = 'create';
         $dropdown  = $this->nestedset->Dropdown();
         $template = 'backend.{module}.catalogue.store';
@@ -95,7 +96,7 @@ class {$class}CatalogueController extends Controller
         $this->authorize('modules', '{module}.catalogue.update');
         ${module}Catalogue = $this->{module}CatalogueRepository->get{$class}CatalogueById($id, $this->language);
         $config = $this->configData();
-        $config['seo'] = __('messages.{module}Catalogue');
+        $config['seo'] = __('message.{module}Catalogue');
         $config['method'] = 'edit';
         $dropdown  = $this->nestedset->Dropdown();
         $template = 'backend.{module}.catalogue.store';
@@ -116,7 +117,7 @@ class {$class}CatalogueController extends Controller
 
     public function delete($id){
         $this->authorize('modules', '{module}.catalogue.destroy');
-        $config['seo'] = __('messages.{module}Catalogue');
+        $config['seo'] = __('message.{module}Catalogue');
         ${module}Catalogue = $this->{module}CatalogueRepository->get{$class}CatalogueById($id, $this->language);
         $template = 'backend.{module}.catalogue.delete';
         return view('backend.dashboard.layout', compact(
@@ -135,18 +136,17 @@ class {$class}CatalogueController extends Controller
 
     private function configData(){
         return [
+            'css' => [
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
+            ],
             'js' => [
-                'backend/plugins/ckeditor/ckeditor.js',
+                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
                 'backend/plugins/ckfinder_2/ckfinder.js',
                 'backend/library/finder.js',
+                'backend/library/select2.js',
+                'backend/plugins/ckeditor/ckeditor.js',
                 'backend/library/seo.js',
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js'
-            ],
-            'css' => [
-                'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css'
             ]
-          
         ];
     }
-
 }
