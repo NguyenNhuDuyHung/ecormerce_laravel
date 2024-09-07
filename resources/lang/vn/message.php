@@ -34,6 +34,44 @@ return [
         'made_in' => 'Xuất xứ',
         'price' => 'Giá bán sản phẩm',
     ],
+    'attributeCatalogue' => [
+        'index' => [
+            'title' => 'Quản lý loại thuộc tính',
+            'tableHeading' => 'Danh sách loại thuộc tính'
+        ],
+        'create' => [
+            'title' => 'Thêm mới loại thuộc tính'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật loại thuộc tính'
+        ],
+        'delete' => [
+            'title' => 'Xóa loại thuộc tính'
+        ],
+        'information' => 'Thông tin chung',
+        'code' => 'Mã loại thuộc tính',
+        'made_in' => 'Xuất xứ',
+        'price' => 'Giá bán loại thuộc tính',
+    ],
+    'attribute' => [
+        'index' => [
+            'title' => 'Quản lý thuộc tính',
+            'tableHeading' => 'Danh sách thuộc tính'
+        ],
+        'create' => [
+            'title' => 'Thêm mới thuộc tính'
+        ],
+        'edit' => [
+            'title' => 'Cập nhật thuộc tính'
+        ],
+        'delete' => [
+            'title' => 'Xóa thuộc tính'
+        ],
+        'information' => 'Thông tin chung',
+        'code' => 'Mã thuộc tính',
+        'made_in' => 'Xuất xứ',
+        'price' => 'Giá bán thuộc tính',
+    ],
     'postCatalogue' => [
         'index' => [
             'title' => "Quản lý  nhóm bài viết",

@@ -60,7 +60,7 @@ class PermissionController extends Controller
     public function store(StorePermissionRequest $request)
     {
         if ($this->permissionService->create($request)) {
-            return redirect()->route('permission.index')->with("success", "Đã thêm nhóm người dùng");
+            return redirect()->route('permission.create')->with("success", "Đã thêm nhóm người dùng");
         }
         return redirect()->route("permission.create")->with("error", "Đã xảy ra lỗi khi thêm nhóm người dùng");
     }

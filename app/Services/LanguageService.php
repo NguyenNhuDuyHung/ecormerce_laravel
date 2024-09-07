@@ -4,23 +4,26 @@ namespace App\Services;
 
 use App\Services\Interfaces\LanguageServiceInterface;
 use App\Repositories\Interfaces\LanguageRepositoryInterface as LanguageRepository;
-
+use App\Repositories\Interfaces\RouterRepositoryInterface as RouterRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Str;
 
 /**
  * Class LanguageService
  * @package App\Services
  */
-class LanguageService implements LanguageServiceInterface
+class LanguageService extends BaseService implements LanguageServiceInterface
 {
     protected $languageRepository;
-    public function __construct(LanguageRepository $languageRepository)
+    protected $routerRepository;
+    public function __construct(LanguageRepository $languageRepository, RouterRepository $routerRepository)
     {
+        $this->routerRepository = $routerRepository;
         $this->languageRepository = $languageRepository;
     }
 
@@ -202,6 +205,21 @@ class LanguageService implements LanguageServiceInterface
             $model->languages()->detach([$option['languageId'], $model->id]);
 
             $repositoryInstance->createPivot($model, $payload, 'languages');
+
+            $conditions = [
+                ['module_id', '=', $option['id']],
+                ['controllers', '=', 'App\Http\Controllers\Frontend\\' . ucfirst($option['model']) . 'Controller'],
+                ['language_id', '=', $option['languageId']],
+            ];
+            $this->routerRepository->forceDeleteByCondition($conditions);
+
+            $router = [
+                'canonical' => Str::slug($request->input('translate_canonical')),
+                'module_id' => $option['id'],
+                'language_id' => $option['languageId'],
+                'controllers' => 'App\Http\Controllers\Frontend\\' . ucfirst($option['model']) . 'Controller',
+            ];
+            $this->routerRepository->create($router);
 
             DB::commit();
             return true;

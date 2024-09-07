@@ -57,7 +57,6 @@
         <hr>
 
         <div class="text-right mb15">
-            <button class="btn btn-primary" name="send" value="send" type="submit">Thêm</button>
             <button class="btn btn-primary" name="send" value="send" type="submit">Lưu thông tin
             </button>
         </div>

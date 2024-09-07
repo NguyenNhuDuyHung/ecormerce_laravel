@@ -14,6 +14,8 @@ use App\Http\Controllers\Backend\UserCatalogueController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\ProductCatalogueController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\AttributeCatalogueController;
+use App\Http\Controllers\Backend\AttributeController;
 //@@useController@@
 
 
@@ -140,7 +142,27 @@ Route::group(['prefix' => 'product'], function () {
     Route::get('delete/{id}', [ProductController::class, 'delete'])->where(['id' => '[0-9]+'])->name('product.delete');
     Route::post('destroy/{id}', [ProductController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('product.destroy');
 });
+Route::group(['prefix' => 'attribute/catalogue'], function () {
+    Route::get('index', [AttributeCatalogueController::class, 'index'])->name('attribute.catalogue.index');
+    Route::get('create', [AttributeCatalogueController::class, 'create'])->name('attribute.catalogue.create');
+    Route::post('store', [AttributeCatalogueController::class, 'store'])->name('attribute.catalogue.store');
+    Route::get('edit/{id}', [AttributeCatalogueController::class, 'edit'])->where(['id' => '[0-9]+'])->name('attribute.catalogue.edit');
+    Route::post('update/{id}', [AttributeCatalogueController::class, 'update'])->where(['id' => '[0-9]+'])->name('attribute.catalogue.update');
+    Route::get('delete/{id}', [AttributeCatalogueController::class, 'delete'])->where(['id' => '[0-9]+'])->name('attribute.catalogue.delete');
+    Route::post('destroy/{id}', [AttributeCatalogueController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('attribute.catalogue.destroy');
+});
+Route::group(['prefix' => 'attribute'], function () {
+    Route::get('index', [AttributeController::class, 'index'])->name('attribute.index');
+    Route::get('create', [AttributeController::class, 'create'])->name('attribute.create');
+    Route::post('store', [AttributeController::class, 'store'])->name('attribute.store');
+    Route::get('edit/{id}', [AttributeController::class, 'edit'])->where(['id' => '[0-9]+'])->name('attribute.edit');
+    Route::post('update/{id}', [AttributeController::class, 'update'])->where(['id' => '[0-9]+'])->name('attribute.update');
+    Route::get('delete/{id}', [AttributeController::class, 'delete'])->where(['id' => '[0-9]+'])->name('attribute.delete');
+    Route::post('destroy/{id}', [AttributeController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('attribute.destroy');
+});
 //@@new-module@@
+
+
 
 
     // Ajax 
