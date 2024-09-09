@@ -16,14 +16,16 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
 
     public function __construct(
         AttributeCatalogue $model
-    ){
+    ) {
         $this->model = $model;
     }
 
-    
 
-    public function getAttributeCatalogueById(int $id = 0, $language_id = 0){
-        return $this->model->select([
+
+    public function getAttributeCatalogueById(int $id = 0, $language_id = 0)
+    {
+        return $this->model->select(
+            [
                 'attribute_catalogues.id',
                 'attribute_catalogues.parent_id',
                 'attribute_catalogues.image',
@@ -40,9 +42,17 @@ class AttributeCatalogueRepository extends BaseRepository implements AttributeCa
                 'tb2.canonical',
             ]
         )
-        ->join('attribute_catalogue_language as tb2', 'tb2.attribute_catalogue_id', '=','attribute_catalogues.id')
-        ->where('tb2.language_id', '=', $language_id)
-        ->find($id);
+            ->join('attribute_catalogue_language as tb2', 'tb2.attribute_catalogue_id', '=', 'attribute_catalogues.id')
+            ->where('tb2.language_id', '=', $language_id)
+            ->find($id);
     }
 
+    public function getAllAttributeTranslations(int $languageId = 0)
+    {
+        return $this->model->with([
+            'attribute_catalogue_language' => function ($query) use ($languageId) {
+                $query->where('language_id', $languageId);
+            }, 
+        ])->get();
+    }
 }

@@ -39,4 +39,8 @@ class Attribute extends Model
     public function attribute_catalogues(){
         return $this->belongsToMany(AttributeCatalogue::class, 'attribute_catalogue_attribute' , 'attribute_id', 'attribute_catalogue_id');
     }
+
+    public function attribute_language(){
+        return $this->hasMany(AttributeLanguage::class, 'attribute_id');
+    }
 }

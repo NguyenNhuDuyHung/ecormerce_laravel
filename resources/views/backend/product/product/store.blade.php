@@ -30,6 +30,7 @@
                 </div>
 
                 @include('backend.dashboard.components.album')
+                @include('backend.product.product.components.variant')
                 @include('backend.dashboard.components.seo', ['model' => $product ?? null])
             </div>
 
