@@ -108,6 +108,7 @@ class ProductController extends Controller
     {
         $this->authorize('modules', 'product.update');
         $product = $this->productRepository->getProductById($id, $this->language);
+        $attributeCatalogue = $this->attributeCatalogueRepository->getAllAttributeTranslations($this->language);
         $config = $this->configData();
         $config['seo'] = __('message.product');
         $config['method'] = 'edit';
@@ -120,6 +121,7 @@ class ProductController extends Controller
             'dropdown',
             'product',
             'album',
+            'attributeCatalogue',
         ));
     }
 

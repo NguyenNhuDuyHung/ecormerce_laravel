@@ -23,7 +23,7 @@ class BaseService implements BaseServiceInterface
     protected $routerRepository;
     protected $controllerName;
     protected $nestedSet;
-    public function __construct( RouterRepository $routerRepository)
+    public function __construct(RouterRepository $routerRepository)
     {
         $this->routerRepository = $routerRepository;
     }
@@ -68,5 +68,11 @@ class BaseService implements BaseServiceInterface
         $response = $this->routerRepository->update($router->id, $payload);
 
         return $response;
+    }
+
+    public function formatJson($request, $inputName)
+    {
+        return $request->input($inputName) && !empty($request->input($inputName))
+            ? json_encode($request->input($inputName)) : '';
     }
 }
