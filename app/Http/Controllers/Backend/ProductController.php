@@ -168,7 +168,6 @@ class ProductController extends Controller
                 'backend/plugins/ckeditor/ckeditor.js',
                 'backend/library/seo.js',
                 'backend/plugins/nice-select/js/jquery.nice-select.min.js',
-                'backend/library/niceSelect.js',
                 'backend/js/plugins/switchery/switchery.js',
                 'backend/library/switchery.js',
                 'backend/library/variant.js', 

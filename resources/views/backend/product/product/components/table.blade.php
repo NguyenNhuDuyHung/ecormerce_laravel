@@ -20,11 +20,6 @@
                     </td>
                     <td>
                         <div class="uk-flex uk-flex-middle">
-                            <div class="image mr5">
-                                <div class="img-cover">
-                                    <img src="{{ $product->image }}" alt="">
-                                </div>
-                            </div>
                             <div class="main-info">
                                 <div class="name">
                                     <span class="maintitle">{{ $product->name }}</span>

@@ -114,4 +114,9 @@ class BaseRepository implements BaseRepositoryInterface
     {
         return $model->{$relation}()->attach($model->id, $payload);
     }
+
+    // insert nhiều bản ghi
+    public function insertBatch(array $payload = []) {
+        return $this->model->insert($payload);
+    }
 }

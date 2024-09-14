@@ -27,5 +27,5 @@ interface BaseRepositoryInterface
     public function forceDeleteByCondition(array $condition = []);
     public function delete(int $id);
     public function createPivot($model, array $payload = [], string $relation = '');
-
+    public function insertBatch(array $payload = []);
 }

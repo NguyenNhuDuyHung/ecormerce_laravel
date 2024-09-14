@@ -12,13 +12,14 @@
         <div class="row">
             <div class="col-lg-12">
                 <div class="uk-flex uk-flex-middle variant-checkbox">
-                    <input type="checkbox" value="" name="accept" id="variantCheckbox" class="variantInputCheckbox">
+                    <input type="checkbox" value="1" name="accept" id="variantCheckbox" class="variantInputCheckbox"
+                        {{old('accept') == 1 ? 'checked' : ''}}>
                     <label for="variantCheckbox" class="turnOnVariant">Sản phẩm này có nhiều biến thể. Ví dụ như khác
                         nhau về màu sắc, kích thước</label>
                 </div>
             </div>
         </div>
-        <div class="variant-wrapper hidden">
+        <div class="variant-wrapper {{old('accept') == 1 ? '' : 'hidden'}}">
             <div class="row variant-container">
                 <div class="col-lg-3">
                     <div class="attribute-title">Chọn thuộc tính</div>
@@ -28,7 +29,39 @@
                 </div>
             </div>
             <div class="variant-body">
-
+                @if(old('attributeCatalogue'))
+                    @foreach(old('attributeCatalogue') as $keyAttribute => $valueAttribute)
+                        <div class="row mb20 variant-item">
+                            <div class="col-lg-3">
+                                <div class="attribute-catalogue">
+                                    <select name="attributeCatalogue[]" id="" class="choose-attribute niceSelect">
+                                        <option value="">Chọn Nhóm thuộc tính</option>
+                                        @foreach($attributeCatalogue as $key => $value)
+                                            <option {{ $valueAttribute == $value->id ? 'selected' : '' }} value="{{ $value->id }}">
+                                                {{ $value->attribute_catalogue_language->first()->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-8">
+                                <select name="attribute[{{ $valueAttribute }}][]" id=""
+                                    class="form-control selectVariant variant-{{$valueAttribute}}" multiple
+                                    data-catid="{{ $valueAttribute }}"></select>
+                            </div>
+                            <div class="col-lg-1">
+                                <button type="button" class="remove-attribute btn btn-danger"><svg data-icon="TrashSolidLarge"
+                                        aria-hidden="true" focusable="false" width="15" height="16" viewBox="0 0 15 16"
+                                        class="bem-Svg" style="display: block;">
+                                        <path fill="currentColor"
+                                            d="M2 14a1 1 0 001 1h9a1 1 0 001-1V6H2v8zM13 2h-3a1 1 0 01-1-1H6a1 1 0 01-1 1H1v2h13V2h-1z">
+                                        </path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                @endif
             </div>
             <div class="variant-foot mt10">
                 <button type="button" class="add-variant">Thêm phiên bản mới</button>
@@ -54,14 +87,15 @@
 </div>
 
 <script>
-    var attributeCatalogue = @json(
-    $attributeCatalogue->map(function ($item) {
-        return [
-            'id' => $item->id, // Lấy ID của từng mục
-            'names' => $item->attribute_catalogue_language->map(function ($subItem) {
-                return $subItem->name; // Lấy tên của từng mục con
-            })->values() // Lấy danh sách tên dưới dạng mảng
-        ];
-    })
-);
+    var attributeCatalogue = @json($attributeCatalogue->map(function ($item) {
+    $name = $item->attribute_catalogue_language->first()->name;
+    return [
+        'id' => $item->id,
+        'names' => $name
+    ];
+})->values());
+
+    var attribute = '{{ base64_encode(json_encode(old('attribute'))) }}';
+    var variant = '{{ base64_encode(json_encode(old('variant'))) }}';
+
 </script>

@@ -43,7 +43,8 @@ turnOnVariant.addEventListener("click", () => {
         html = html + '<div class="col-lg-3">';
         html = html + '<div class="attribute-catalogue">';
         html = html =
-            html + '<select name="" id="" class="choose-attribute niceSelect">';
+            html +
+            '<select name="attributeCatalogue[]" id="" class="choose-attribute niceSelect">';
         html = html + '<option value="">Chọn Nhóm thuộc tính</option>';
         for (let i = 0; i < attributeCatalogue.length; i++) {
             html =
@@ -90,7 +91,7 @@ turnOnVariant.addEventListener("click", () => {
                     .parents(".col-lg-3")
                     .siblings(".col-lg-8")
                     .html(
-                        '<input type="text" name="" disabled="" class="fake-variant form-control">'
+                        '<input type="text" name="attribute[" + attributeCatalogueId + "][]"  disabled="" class="fake-variant form-control">'
                     );
             }
             HT.disabledAttributeCatalogueChoose();
@@ -227,8 +228,8 @@ turnOnVariant.addEventListener("click", () => {
             { name: "variant[file_name][]", class: "variant_filename" },
             { name: "variant[file_url][]", class: "variant_fileurl" },
             { name: "variant[album][]", class: "variant_album" },
-            { name: "attribute[name][]", value: attributeString },
-            { name: "attribute[id][]", value: attributeId },
+            { name: "productVariant[name][]", value: attributeString },
+            { name: "productVariant[id][]", value: attributeId },
         ];
 
         $.each(inputHiddenFields, function (_, field) {
@@ -243,7 +244,7 @@ turnOnVariant.addEventListener("click", () => {
         });
 
         $row.append($("<td>").addClass("td-quantity").text("-"))
-            .append($("<td>").addClass("td-price").text("-"))
+            .append($("<td>").addClass("td-price").text(mainPrice))
             .append(
                 $("<td>")
                     .addClass("td-sku")
@@ -786,6 +787,110 @@ turnOnVariant.addEventListener("click", () => {
             .attr("src", variant.album[0]);
     };
 
+    HT.setupSelectMultiple = (callback) => {
+        if ($(".selectVariant").length) {
+            let count = $(".selectVariant").length;
+            $(".selectVariant").each(function () {
+                let _this = $(this);
+                let attributeCatalogueId = _this.attr("data-catid");
+                if (attribute != "") {
+                    $.get(
+                        "ajax/attribute/loadAttribute",
+                        {
+                            attribute: attribute,
+                            attributeCatalogueId: attributeCatalogueId,
+                        },
+                        function (json) {
+                            if (
+                                json.items != "undefined" &&
+                                json.items.length
+                            ) {
+                                for (let i = 0; i < json.items.length; i++) {
+                                    var option = new Option(
+                                        json.items[i].text,
+                                        json.items[i].id,
+                                        true,
+                                        true
+                                    );
+                                    _this.append(option).trigger("change");
+                                }
+                            }
+
+                            if (--count == 0 && callback) {
+                                callback();
+                            }
+                        }
+                    );
+                }
+
+                HT.getSelect2(_this);
+            });
+        }
+    };
+
+    HT.productVariant = () => {
+        variant = JSON.parse(atob(variant));
+
+        $(".variant-row").each(function (index, value) {
+            let _this = $(this);
+            let inputHiddenFields = [
+                {
+                    name: "variant[quantity][]",
+                    class: "variant_quantity",
+                    value: variant.quantity[index],
+                },
+                {
+                    name: "variant[sku][]",
+                    class: "variant_sku",
+                    value: variant.sku[index],
+                },
+                {
+                    name: "variant[price][]",
+                    class: "variant_price",
+                    value: variant.price[index],
+                },
+                {
+                    name: "variant[barcode][]",
+                    class: "variant_barcode",
+                    value: variant.barcode[index],
+                },
+                {
+                    name: "variant[filename][]",
+                    class: "variant_filename",
+                    value: variant.file_name[index],
+                },
+                {
+                    name: "variant[fileurl][]",
+                    class: "variant_fileurl",
+                    value: variant.file_url[index],
+                },
+                {
+                    name: "variant[album][]",
+                    class: "variant_album",
+                    value: variant.album[index],
+                },
+            ];
+
+            for (let i = 0; i < inputHiddenFields.length; i++) {
+                _this
+                    .find("." + inputHiddenFields[i].class)
+                    .val(inputHiddenFields[i].value ? inputHiddenFields[i].value : 0);
+            }
+
+            let album = variant.album[index];
+            let variantImage = album
+                ? album.split(",")[0]
+                : "https://daks2k3a4ib2z.cloudfront.net/6343da4ea0e69336d8375527/6343da5f04a965c89988b149_1665391198377-image16-p-500.jpg";
+
+            _this
+                .find(".td-quantity")
+                .html(HT.addCommas(variant.quantity[index]));
+            _this.find(".td-price").html(HT.addCommas(variant.price[index]));
+            _this.find(".td-sku").html(HT.addCommas(index));
+            _this.find(".imageSrc").attr("src", variantImage);
+        });
+    };
+
     $(document).ready(function () {
         HT.addVariant();
         HT.niceSelect();
@@ -798,5 +903,8 @@ turnOnVariant.addEventListener("click", () => {
         HT.updateVariant();
         HT.cancleVariantUpdate();
         HT.saveVariantUpdate();
+        HT.setupSelectMultiple(() => {
+            HT.productVariant();
+        });
     });
 })(jQuery);
