@@ -40,7 +40,7 @@ Route::get('/', function () {
 });
 
 // Backend Routes
-Route::group(['middleware' => ['admin', 'locale']], function () {
+Route::group(['middleware' => ['admin', 'locale', 'default_backend_locale']], function () {
     Route::get('dashboard/index', [DashboardController::class, 'index'])->name('dashboard.index');
 
     // User
