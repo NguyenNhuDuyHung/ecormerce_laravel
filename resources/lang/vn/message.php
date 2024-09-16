@@ -1,5 +1,13 @@
 <?php
 return [
+    'system' => [
+        'index' => [
+            'title' => 'Cấu hình hệ thống',
+        ],
+        'create' => [
+            'title' => 'Cập nhật thông tin'
+        ],
+    ],
     'productCatalogue' => [
         'index' => [
             'title' => 'Quản lý nhóm sản phẩm',

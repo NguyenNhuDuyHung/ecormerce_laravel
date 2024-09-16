@@ -5,7 +5,7 @@ return [
         [
             'title' => 'QL sản phẩm',
             'icon' => 'fa fa-cube',
-            'name' => ['product','attribute'],
+            'name' => ['product', 'attribute'],
             'subModule' => [
                 [
                     'title' => 'QL Nhóm sản phẩm',
@@ -59,7 +59,7 @@ return [
         [
             'title' => 'Cấu hình chung',
             'icon' => "fa fa-th-large",
-            'name' => ['language', 'permission', 'generate'],
+            'name' => ['language', 'permission', 'generate', 'system'],
             'subModule' => [
                 [
                     'title' => 'Ngôn ngữ',
@@ -73,8 +73,12 @@ return [
                     'title' => 'Module',
                     'route' => 'generate/index',
                 ],
+                [
+                    'title' => 'Cấu hình hệ thống',
+                    'route' => 'system/index',
+                ],
 
             ]
-        ]
+        ],
     ]
 ];
