@@ -119,4 +119,9 @@ class BaseRepository implements BaseRepositoryInterface
     public function insertBatch(array $payload = []) {
         return $this->model->insert($payload);
     }
+
+    // Upsert 
+    public function updateOrInsert(array $payload = [], array $condition = []) {
+        return $this->model->updateOrInsert($condition, $payload);
+    }
 }

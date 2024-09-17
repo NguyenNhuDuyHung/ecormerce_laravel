@@ -10,10 +10,10 @@
 </div>
 @endif
 
-<form action="" method="post" class="box">
+<form action="{{ route('system.store') }}" method="post" class="box">
     @csrf
     <div class="wrapper wrapper-content animated fadeInRight">
-        @foreach($system as $key => $value)
+        @foreach($systemConfig as $key => $value)
         <div class="row">
             <div class="col-lg-5">
                 <div class="panel-head">
@@ -41,20 +41,21 @@
                                     </label>
                                     @switch($item['type'])
                                     @case('text')
-                                    {!! renderSystemInput($name) !!}
+                                    {!! renderSystemInput($name, $systems) !!}
                                     @break
                                     @case('images')
-                                    {!! renderSystemImages($name) !!}
+                                    {!! renderSystemImages($name, $systems) !!}
                                     @break
                                     @case('textarea')
-                                    {!! renderSystemTextArea($name) !!}
+                                    {!! renderSystemTextArea($name, $systems) !!}
                                     @break
                                     @case('select')
-                                    {!! renderSystemSelect($item, $name) !!}
+                                    {!! renderSystemSelect($item, $name, $systems) !!}
                                     @break
-                                    @default
-                                    {!! renderSystemImages($name) !!}
+                                    @case('editor')
+                                    {!! renderSystemEditor($name, $systems) !!}
                                     @break
+                                    
                                     @endswitch
                                 </div>
                             </div>

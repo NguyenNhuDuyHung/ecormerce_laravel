@@ -165,6 +165,7 @@ Route::group(['middleware' => ['admin', 'locale', 'default_backend_locale']], fu
 
     Route::group(['prefix' => 'system'], function () {
         Route::get('index', [SystemController::class, 'index'])->name('system.index');
+        Route::post('store', [SystemController::class, 'store'])->name('system.store');
     });
 
     //@@new-module@@

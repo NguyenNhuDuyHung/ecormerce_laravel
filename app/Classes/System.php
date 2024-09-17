@@ -13,8 +13,8 @@ class System
 				'company' => ['type' => 'text', 'label' => 'Tên công ty'],
 				'brand' => ['type' => 'text', 'label' => 'Tên thương hiệu'],
 				'slogan' => ['type' => 'text', 'label' => 'Slogan'],
-				'logo' => ['type' => 'image', 'label' => 'Logo Website', 'title' => "Click vào ô phía dưới để tải logo"],
-				'favicon' => ['type' => 'image', 'label' => 'Favicon Website', 'title' => "Click vào ô phải dưới để tải favicon"],
+				'logo' => ['type' => 'images', 'label' => 'Logo Website', 'title' => "Click vào ô phía dưới để tải logo"],
+				'favicon' => ['type' => 'images', 'label' => 'Favicon Website', 'title' => "Click vào ô phải dưới để tải favicon"],
 				'copyright' => ['type' => 'text', 'label' => 'Copyright'],
 				'website' => [
 					'type' => 'select',
@@ -24,6 +24,7 @@ class System
 						'close' => 'Đang đóng Website',
 					]
 				],
+				'short_intro' => ['type' => 'editor', 'label' => "Giới thiệu ngắn"],
 			]
 		];
 
@@ -38,7 +39,7 @@ class System
 				'sell_phone' => ['type' => 'text', 'label' => 'Hotline kinh doanh'],
 				'phone' => ['type' => 'text', 'label' => 'Số cố định'],
 				'fax' => ['type' => 'text', 'label' => 'Fax'],
-				'email' => ['type' => 'email', 'label' => 'Email'],
+				'email' => ['type' => 'text', 'label' => 'Email'],
 				'tax' => ['type' => 'text', 'label' => 'Mã số thuế'],
 				'website' => ['type' => 'text', 'label' => 'Website'],
 				'map' => [
@@ -60,7 +61,7 @@ class System
 				'meta_title' => ['type' => 'text', 'label' => 'Tiêu đề SEO'],
 				'meta_description' => ['type' => 'text', 'label' => 'Mô tả SEO'],
 				'meta_keyword' => ['type' => 'text', 'label' => 'Từ khóa SEO'],
-				'meta_images' => ['type' => 'image', 'label' => 'Ảnh SEO', 'title' => "Click được phải dưới để tải meta image"],
+				'meta_images' => ['type' => 'images', 'label' => 'Ảnh SEO', 'title' => "Click được phải dưới để tải meta image"],
 				'canonical' => ['type' => 'text', 'label' => 'Canonical'],
 			]
 		];
