@@ -34,7 +34,7 @@ class SystemService implements SystemServiceInterface
                         'language_id' => $languageId,
                         'user_id' => Auth::id()
                     ];
-                    $condition = ['keyword' => $key];
+                    $condition = ['keyword' => $key, 'language_id' => $languageId];
 
                     // Gọi updateOrInsert cho mỗi phần tử
                     $this->systemRepository->updateOrInsert($payload, $condition);

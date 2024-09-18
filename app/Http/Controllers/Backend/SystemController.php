@@ -32,7 +32,13 @@ class SystemController extends Controller
     public function index()
     {
         $systemConfig = $this->systemLibrary->config();
-        $systems = convert_array($this->systemRepository->all(), 'keyword', 'content');
+
+        $systems = convert_array(
+            $this->systemRepository->
+                findByCondition([['language_id', '=', $this->language]], TRUE),
+            'keyword',
+            'content'
+        );
         $config = $this->config();
         $config['seo'] = __('message.system');
         $template = 'backend.system.index';

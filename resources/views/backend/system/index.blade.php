@@ -55,7 +55,7 @@
                                     @case('editor')
                                     {!! renderSystemEditor($name, $systems) !!}
                                     @break
-                                    
+
                                     @endswitch
                                 </div>
                             </div>
