@@ -389,3 +389,8 @@ table strong {
     height: 168px;
     width: 100%;
 }
+
+#accordion .panel-title {
+    font-size: 14px;
+    margin: 0;
+}

@@ -77,7 +77,17 @@ return [
                     'title' => 'Cấu hình hệ thống',
                     'route' => 'system/index',
                 ],
-
+            ]
+        ],
+        [
+            'title' => 'Quản lý Menu',
+            'icon' => "fa fa-th-large",
+            'name' => ['menu'],
+            'subModule' => [
+                [
+                    'title' => 'Cài đặt Menu',
+                    'route' => 'menu/index',
+                ],
             ]
         ],
     ]

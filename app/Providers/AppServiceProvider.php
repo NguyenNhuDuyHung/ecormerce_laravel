@@ -23,14 +23,15 @@ class AppServiceProvider extends ServiceProvider
 
         'App\Services\Interfaces\PostServiceInterface' => 'App\Services\PostService',
 
-        'App\Services\Interfaces\PermissionServiceInterface'=> 'App\Services\PermissionService',
+        'App\Services\Interfaces\PermissionServiceInterface' => 'App\Services\PermissionService',
 
         'App\Services\Interfaces\GenerateServiceInterface' => 'App\Services\GenerateService',
-    'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
+        'App\Services\Interfaces\ProductCatalogueServiceInterface' => 'App\Services\ProductCatalogueService',
         'App\Services\Interfaces\ProductServiceInterface' => 'App\Services\ProductService',
         'App\Services\Interfaces\AttributeCatalogueServiceInterface' => 'App\Services\AttributeCatalogueService',
         'App\Services\Interfaces\AttributeServiceInterface' => 'App\Services\AttributeService',
-        'App\Services\Interfaces\SystemServiceInterface'=> 'App\Services\SystemService',
+        'App\Services\Interfaces\SystemServiceInterface' => 'App\Services\SystemService',
+        'App\Services\Interfaces\MenuServiceInterface' => 'App\Services\MenuService',
     ];
 
     public function register(): void

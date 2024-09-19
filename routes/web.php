@@ -18,6 +18,8 @@ use App\Http\Controllers\Backend\ProductCatalogueController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\AttributeCatalogueController;
 use App\Http\Controllers\Backend\AttributeController;
+use App\Http\Controllers\Backend\MenuController;
+
 //@@useController@@
 
 
@@ -166,6 +168,16 @@ Route::group(['middleware' => ['admin', 'locale', 'default_backend_locale']], fu
     Route::group(['prefix' => 'system'], function () {
         Route::get('index', [SystemController::class, 'index'])->name('system.index');
         Route::post('store', [SystemController::class, 'store'])->name('system.store');
+    });
+
+    Route::group(['prefix' => 'menu'], function () {
+        Route::get('index', [MenuController::class, 'index'])->name('menu.index');
+        Route::get('create', [MenuController::class, 'create'])->name('menu.create');
+        Route::post('store', [MenuController::class, 'store'])->name('menu.store');
+        Route::get('edit/{id}', [MenuController::class, 'edit'])->where(['id' => '[0-9]+'])->name('menu.edit');
+        Route::post('update/{id}', [MenuController::class, 'update'])->where(['id' => '[0-9]+'])->name('menu.update');
+        Route::get('delete/{id}', [MenuController::class, 'delete'])->where(['id' => '[0-9]+'])->name('menu.delete');
+        Route::post('destroy/{id}', [MenuController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('menu.destroy');
     });
 
     //@@new-module@@

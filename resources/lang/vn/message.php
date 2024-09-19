@@ -1,5 +1,14 @@
 <?php
 return [
+    'menu' => [
+        'index' => [
+            'title' => 'Quản lý menu',
+            'tableHeading' => 'Danh sách menu',
+        ],
+        'create' => [
+            'title' => 'Thêm mới Menu'
+        ],
+    ],
     'system' => [
         'index' => [
             'title' => 'Cấu hình hệ thống',
