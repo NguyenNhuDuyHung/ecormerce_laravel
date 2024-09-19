@@ -24,6 +24,11 @@
                             <div class="col-lg-12">
                                 <select class="setupSelect2" name="menu_catalogue_id" id="" style="width: 100%;">
                                     <option value="">[Chọn vị trí hiển thị]</option>
+                                    @if(count($menuCatalogues))
+                                        @foreach($menuCatalogues as $key => $menuCatalogue)
+                                            <option value="{{ $menuCatalogue->id }}">{{ $menuCatalogue->name }}</option>
+                                        @endforeach
+                                    @endif
                                 </select>
                             </div>
                         </div>

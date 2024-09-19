@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Services\Interfaces\MenuServiceInterface as MenuService;
 use App\Repositories\Interfaces\MenuRepositoryInterface as MenuRepository;
+use App\Repositories\Interfaces\MenuCatalogueRepositoryInterface as MenuCatalogueRepository;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use Illuminate\Http\Request;
@@ -13,17 +14,19 @@ class MenuController extends Controller
 {
     protected $menuService;
     protected $menuRepository;
+    protected $menuCatalogueRepository;
 
-    public function __construct(MenuService $menuService, MenuRepository $menuRepository)
+    public function __construct(MenuService $menuService, MenuRepository $menuRepository, MenuCatalogueRepository $menuCatalogueRepository)
     {
         $this->menuService = $menuService;
         $this->menuRepository = $menuRepository;
+        $this->menuCatalogueRepository = $menuCatalogueRepository;
     }
 
     public function index(Request $request)
     {
         $this->authorize('modules', 'menu.index');
-
+        dd($menuCatalogues);
         $menus = $this->menuService->paginate($request);
 
         $config = [
@@ -36,7 +39,7 @@ class MenuController extends Controller
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
             ],
-            'model' => 'User',
+            'model' => 'Menu',
         ];
         $config['seo'] = __('message.menu');
 
@@ -47,14 +50,14 @@ class MenuController extends Controller
     public function create()
     {
         $this->authorize('modules', 'menu.create');
-
+        $menuCatalogues = $this->menuCatalogueRepository->all();
         $config = $this->configData();
 
         $config['seo'] = __('message.menu');
         $config['method'] = 'create';
 
         $template = 'backend.menu.menu.store';
-        return view('backend.dashboard.layout', compact('template', 'config'));
+        return view('backend.dashboard.layout', compact('template', 'config', 'menuCatalogues'));
     }
 
     public function store(StoreMenuRequest $request)
@@ -112,6 +115,7 @@ class MenuController extends Controller
             'js' => [
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
                 'backend/library/select2.js',
+                'backend/library/menu.js',
             ]
         ];
     }
