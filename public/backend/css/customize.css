@@ -394,3 +394,28 @@ table strong {
     font-size: 14px;
     margin: 0;
 }
+
+.menu-item {
+    display: flex;
+    align-items: center;
+}
+
+.delete-menu i {
+    font-size: 18px;
+    color: red;
+}
+
+.m0 {
+    margin: 0 !important;
+}
+.m-item {
+    margin-bottom: 10px;
+}
+
+.m-item label {
+    margin: 0;
+    font-weight: normal;
+    color: blue;
+    margin-left: 6px;
+    cursor: pointer;
+}

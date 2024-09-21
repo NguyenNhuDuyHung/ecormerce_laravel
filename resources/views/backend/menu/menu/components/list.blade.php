@@ -29,28 +29,33 @@
                             </div>
                         </div>
                     </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" class="collapsed"
-                                    aria-expanded="false">Nhóm bài viết</a>
-                            </h4>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" aria-expanded="false"
-                            style="height: 0px;">
-                            <div class="panel-body">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                                incididunt ut labore et
-                                dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                                nisi ut aliquip
-                                ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                                cillum dolore eu
-                                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-                                officia
-                                deserunt mollit anim id est laborum.
+
+                    @foreach(__('module.model') as $key => $value)
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-model="{{ $key }}" data-parent="#accordion"
+                                        href="#{{$key}}" class="collapsed menu-module"
+                                        aria-expanded="false">{{ $value }}</a>
+                                </h4>
+                            </div>
+                            <div id="{{$key}}" class="panel-collapse collapse {{ $key == 'PostCatalogue' ? 'in' : '' }}"
+                                aria-expanded="false" style="">
+                                <div class="panel-body">
+                                    <input type="text" name="keyword" class="form-control search-menu"
+                                        placeholder="Tìm kiếm...">
+
+                                    <div class="menu-list mt-20">
+
+
+                                        <div id="paginationMenu"></div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    @endforeach
+
                 </div>
             </div>
         </div>
@@ -75,30 +80,11 @@
                 </div>
                 <div class="hr-line-dashed" style="margin: 10px 0;"></div>
                 <div class="menu-wrapper">
-                    <div class="notification text-center">
+                    <div class="notification text-center ">
                         <h4 style="font-weight: 500; font-size: 14px; color: #000;">Danh sách liên kết này chưa có bất
                             kỳ đường dẫn nào!</h4>
                         <p style="color:#555; margin-top:10px;">Hãy nhấn vào <span style="color: blue;">"Thêm đường
                                 dẫn"</span> để bắt đầu thêm!</p>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" name="menu[name][]" value="">
-                        </div>
-                        <div class="col-lg-4">
-                            <input type="text" class="form-control" name="menu[title][]" value="">
-                        </div>
-                        <div class="col-lg-2">
-                            <input type="text" class="form-control" name="menu[order][]" value="">
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-row text-center">
-                                <a href="" class="delete-menu">
-                                    <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>

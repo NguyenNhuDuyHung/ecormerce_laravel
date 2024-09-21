@@ -26,7 +26,6 @@ class MenuController extends Controller
     public function index(Request $request)
     {
         $this->authorize('modules', 'menu.index');
-        dd($menuCatalogues);
         $menus = $this->menuService->paginate($request);
 
         $config = [

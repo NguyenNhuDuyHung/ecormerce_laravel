@@ -196,6 +196,8 @@ Route::group(['middleware' => ['admin', 'locale', 'default_backend_locale']], fu
 
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->name('ajax.menu.createCatalogue');
 
+    Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->name('ajax.dashboard.getMenu');
+
 });
 
 
