@@ -6,7 +6,14 @@ return [
             'tableHeading' => 'Danh sách menu',
         ],
         'create' => [
-            'title' => 'Thêm mới Menu'
+            'title' => 'Thêm mới Menu',
+            'children' => 'Quản lý menu con'
+        ],
+        'show' => [
+            'title' => 'Danh sách menu'
+        ],
+        'delete' => [
+            'title' => 'Xóa menu'
         ],
     ],
     'system' => [

@@ -19,7 +19,7 @@ interface BaseRepositoryInterface
         array $relations = [],
         array $rawQuery = []
     );
-    public function findById(int $id);
+    public function findById(int $id, array $column = ['*'], array $relation = []);
     public function create(array $payload);
     public function update(int $id, array $payload = []);
     public function updateByWhereIn($whereInField = '', array $whereIn = [], array $payload = []);
@@ -29,4 +29,5 @@ interface BaseRepositoryInterface
     public function createPivot($model, array $payload = [], string $relation = '');
     public function insertBatch(array $payload = []);
     public function updateOrInsert(array $payload = [], array $condition = []);
+    public function findByCondition($condition = [], $flag = false, $relation = [], $orderBy = ['id', 'DESC']);
 }

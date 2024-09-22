@@ -119,10 +119,15 @@
         let removeRow = $("<div>").addClass("form-row text-center");
         let $a = $("<a>").addClass("delete-menu");
         let $i = $("<i>").addClass("fa fa-trash");
+        let $input = $("<input>")
+            .addClass("hidden")
+            .attr("value", 0)
+            .attr("name", "menu[id][]");
 
         $a.append($i);
         removeRow.append($a);
         removeCol.append(removeRow);
+        removeCol.append($input);
         row.append(removeCol);
 
         return row;
@@ -316,6 +321,74 @@
         });
     };
 
+    // show
+
+    HT.setupNestable = () => {
+        if ($("#nestable2").length) {
+            $("#nestable2")
+                .nestable({
+                    group: 1,
+                })
+                .on("change", HT.updateNestableOutput);
+        }
+    };
+
+    HT.updateNestableOutput = (e) => {
+        var list = $(e.currentTarget),
+            output = $(list.data("output"));
+
+        let json = window.JSON.stringify(list.nestable("serialize"));
+
+        if (json.length) {
+            let option = {
+                json: json,
+                _token: _token,
+                menu_catalogue_id: $('#dataCatalogue').attr('data-catalogueId'),
+            };
+
+            $.ajax({
+                url: "ajax/menu/drag",
+                type: "POST",
+                data: option,
+                dataType: "JSON",
+                success: function (data) {
+                    console.log(data);
+                },
+                beforeSend: function () {},
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("Lỗi: " + textStatus + errorThrown);
+                },
+            });
+        }
+
+        var updateOutput = function (e) {
+            var list = e.length ? e : $(e.target),
+                output = list.data("output");
+            if (window.JSON) {
+                output.val(window.JSON.stringify(list.nestable("serialize"))); //, null, 2));
+            } else {
+                output.val("JSON browser support required for this demo.");
+            }
+        };
+    };
+
+    HT.runUpdateNestableOutput = () => {
+        updateOutput($("#nestable2").data("output", $("#nestable2-output")));
+    };
+
+    HT.expandAndCollapse = () => {
+        $("#nestable-menu").on("click", function (e) {
+            var target = $(e.target),
+                action = target.data("action");
+            if (action === "expand-all") {
+                $(".dd").nestable("expandAll");
+            }
+            if (action === "collapse-all") {
+                $(".dd").nestable("collapseAll");
+            }
+        });
+    };
+
     $(document).ready(function () {
         HT.createMenuCatalogue();
         HT.createMenuRow();
@@ -324,5 +397,8 @@
         HT.chooseMenu();
         HT.getPaginationMenu();
         HT.searchMenu();
+        HT.setupNestable();
+        HT.updateNestableOutput();
+        HT.expandAndCollapse();
     });
 })(jQuery);

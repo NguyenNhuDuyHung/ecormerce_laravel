@@ -423,3 +423,11 @@ table strong {
 .none {
     display: none;
 }
+
+
+.create-children-menu {
+    position: absolute;
+    top: 11px;
+    right: 11px;
+    z-index: 100;
+}

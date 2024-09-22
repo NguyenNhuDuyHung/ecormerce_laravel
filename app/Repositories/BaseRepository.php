@@ -57,23 +57,28 @@ class BaseRepository implements BaseRepositoryInterface
         int $modelId,
         array $column = ['*'],
         array $relation = []
-    ){
+    ) {
         return $this->model->select($column)->with($relation)->findOrFail($modelId);
     }
 
-    public function findByCondition($condition = [], $flag = false)
+    public function findByCondition($condition = [], $flag = false, $relation = [], $orderBy = ['id', 'DESC'])
     {
         $query = $this->model->newQuery();
         foreach ($condition as $key => $value) {
             $query = $query->where($value[0], $value[1], $value[2]);
         }
+        $query->with($relation);
+        $query->orderBy($orderBy[0], $orderBy[1]);
         return $flag == false ? $query->first() : $query->get();
     }
 
     public function update(int $id = 0, array $payload = [])
     {
         $model = $this->findById($id);
-        return $model->update($payload);
+        $model->fill($payload);
+        $model->save();
+
+        return $model;
     }
 
     public function updateByWhere($condition = [], array $payload = [])
@@ -102,10 +107,11 @@ class BaseRepository implements BaseRepositoryInterface
         return $model->forceDelete();
     }
 
-    public function forceDeleteByCondition(array $condition = []){
+    public function forceDeleteByCondition(array $condition = [])
+    {
         $query = $this->model->newQuery();
-        foreach($condition as $key => $val){
-            $query->where($val[0], $val[1] , $val[2]);
+        foreach ($condition as $key => $val) {
+            $query->where($val[0], $val[1], $val[2]);
         }
         return $query->forceDelete();
     }
@@ -116,12 +122,14 @@ class BaseRepository implements BaseRepositoryInterface
     }
 
     // insert nhiều bản ghi
-    public function insertBatch(array $payload = []) {
+    public function insertBatch(array $payload = [])
+    {
         return $this->model->insert($payload);
     }
 
     // Upsert 
-    public function updateOrInsert(array $payload = [], array $condition = []) {
+    public function updateOrInsert(array $payload = [], array $condition = [])
+    {
         return $this->model->updateOrInsert($condition, $payload);
     }
 }

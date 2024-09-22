@@ -180,6 +180,9 @@ Route::group(['middleware' => ['admin', 'locale', 'default_backend_locale']], fu
         Route::post('update/{id}', [MenuController::class, 'update'])->where(['id' => '[0-9]+'])->name('menu.update');
         Route::get('delete/{id}', [MenuController::class, 'delete'])->where(['id' => '[0-9]+'])->name('menu.delete');
         Route::post('destroy/{id}', [MenuController::class, 'destroy'])->where(['id' => '[0-9]+'])->name('menu.destroy');
+
+        Route::get('children/{id}', [MenuController::class, 'children'])->where(['id' => '[0-9]+'])->name('menu.children');
+        Route::post('saveChildren/{id}', [MenuController::class, 'saveChildren'])->where(['id' => '[0-9]+'])->name('menu.save.children');
     });
 
     //@@new-module@@
@@ -197,6 +200,7 @@ Route::group(['middleware' => ['admin', 'locale', 'default_backend_locale']], fu
     Route::post('ajax/menu/createCatalogue', [AjaxMenuController::class, 'createCatalogue'])->name('ajax.menu.createCatalogue');
 
     Route::get('ajax/dashboard/getMenu', [AjaxDashboardController::class, 'getMenu'])->name('ajax.dashboard.getMenu');
+    Route::post('ajax/menu/drag', [AjaxMenuController::class, 'drag'])->name('ajax.menu.drag');
 
 });
 

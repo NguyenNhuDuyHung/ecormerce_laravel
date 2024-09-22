@@ -7,6 +7,7 @@ use App\Services\Interfaces\MenuServiceInterface as MenuService;
 use App\Repositories\Interfaces\MenuRepositoryInterface as MenuRepository;
 use App\Repositories\Interfaces\MenuCatalogueRepositoryInterface as MenuCatalogueRepository;
 use App\Services\Interfaces\MenuCatalogueServiceInterface as MenuCatalogueService;
+use App\Http\Requests\StoreMenuChildrenRequest;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use Illuminate\Http\Request;
@@ -77,21 +78,58 @@ class MenuController extends Controller
     public function store(StoreMenuRequest $request)
     {
         if ($this->menuService->create($request, $this->language)) {
-            return redirect()->route('menu.index')->with("success", "Đã thêm người dùng");
+            return redirect()->route('menu.index')->with("success", "Đã thêm thành công");
         }
-        return redirect()->route("menu.create")->with("error", "Đã xảy ra lỗi khi thêm người dùng");
+        return redirect()->route("menu.create")->with("error", "Đã xảy ra lỗi khi, hãy thử lại sau!");
     }
 
     public function edit($id)
     {
         $this->authorize('modules', 'menu.update');
+        $language = $this->language;
+        $menus = $this->menuRepository->findByCondition([
+            ['menu_catalogue_id', '=', $id],
+        ], TRUE, [
+            'languages' => function ($query) use ($language) {
+                $query->where('language_id', $language);
+            }
+        ], ['order', 'DESC']);
 
-        $menu = $this->menuRepository->findById($id);
         $config = $this->configData();
         $config['seo'] = __('message.menu');
-        $config['method'] = 'edit';
-        $template = 'backend.menu.menu.store';
-        return view('backend.dashboard.layout', compact('template', 'config', 'provinces', 'menu'));
+        $config['method'] = 'show';
+        $template = 'backend.menu.menu.show';
+        return view('backend.dashboard.layout', compact('template', 'config', 'menus', 'id'));
+    }
+
+    public function children($id)
+    {
+        $this->authorize('modules', 'menu.create');
+        $language = $this->language;
+
+        $menu = $this->menuRepository->findById($id, ['*'], [
+            'languages' => function ($query) use ($language) {
+                $query->where('language_id', $language);
+            }
+        ]);
+
+        $menuChildren = $this->menuService->getAndConvertMenu($menu, $language);
+
+        $config = $this->configData();
+        $config['seo'] = __('message.menu');
+        $config['method'] = 'children';
+
+        $template = 'backend.menu.menu.children';
+        return view('backend.dashboard.layout', compact('template', 'config', 'menu', 'menuChildren'));
+    }
+
+    public function saveChildren($id, StoreMenuChildrenRequest $request)
+    {
+        $menu = $this->menuRepository->findById($id);
+        if ($this->menuService->saveChildren($request, $this->language, $menu)) {
+            return redirect()->route('menu.edit', ['id' => $menu->menu_catalogue_id])->with("success", "Đã thêm thành công");
+        }
+        return redirect()->route("menu.edit", ['id' => $menu->menu_catalogue_id])->with("error", "Đã xảy ra lỗi khi, hãy thử lại sau!");
     }
 
     public function update($id, UpdateMenuRequest $request)
@@ -130,6 +168,7 @@ class MenuController extends Controller
                 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js',
                 'backend/library/select2.js',
                 'backend/library/menu.js',
+                'backend/js/plugins/nestable/jquery.nestable.js',
             ]
         ];
     }
