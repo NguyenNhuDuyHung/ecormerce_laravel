@@ -6,27 +6,42 @@ use App\Http\Controllers\Controller;
 use App\Services\Interfaces\MenuServiceInterface as MenuService;
 use App\Repositories\Interfaces\MenuRepositoryInterface as MenuRepository;
 use App\Repositories\Interfaces\MenuCatalogueRepositoryInterface as MenuCatalogueRepository;
+use App\Services\Interfaces\MenuCatalogueServiceInterface as MenuCatalogueService;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use Illuminate\Http\Request;
+use App\Models\Language;
 
 class MenuController extends Controller
 {
     protected $menuService;
     protected $menuRepository;
     protected $menuCatalogueRepository;
+    protected $language;
+    protected $menuCatalogueService;
 
-    public function __construct(MenuService $menuService, MenuRepository $menuRepository, MenuCatalogueRepository $menuCatalogueRepository)
-    {
+    public function __construct(
+        MenuService $menuService,
+        MenuRepository $menuRepository,
+        MenuCatalogueRepository $menuCatalogueRepository,
+        MenuCatalogueService $menuCatalogueService
+    ) {
         $this->menuService = $menuService;
         $this->menuRepository = $menuRepository;
         $this->menuCatalogueRepository = $menuCatalogueRepository;
+        $this->menuCatalogueService = $menuCatalogueService;
+        $this->middleware(function ($request, $next) {
+            $locale = app()->getLocale(); // vn en cn
+            $language = Language::where('canonical', $locale)->first();
+            $this->language = $language->id;
+            return $next($request);
+        });
     }
 
     public function index(Request $request)
     {
         $this->authorize('modules', 'menu.index');
-        $menus = $this->menuService->paginate($request);
+        $menuCatalogues = $this->menuCatalogueService->paginate($request);
 
         $config = [
             'js' => [
@@ -38,12 +53,12 @@ class MenuController extends Controller
             'css' => [
                 'backend/css/plugins/switchery/switchery.css'
             ],
-            'model' => 'Menu',
+            'model' => 'MenuCatalogue',
         ];
         $config['seo'] = __('message.menu');
 
         $template = 'backend.menu.menu.index';
-        return view("backend.dashboard.layout", compact('template', 'config', 'menus'));
+        return view("backend.dashboard.layout", compact('template', 'config', 'menuCatalogues'));
     }
 
     public function create()
@@ -61,7 +76,7 @@ class MenuController extends Controller
 
     public function store(StoreMenuRequest $request)
     {
-        if ($this->menuService->create($request)) {
+        if ($this->menuService->create($request, $this->language)) {
             return redirect()->route('menu.index')->with("success", "Đã thêm người dùng");
         }
         return redirect()->route("menu.create")->with("error", "Đã xảy ra lỗi khi thêm người dùng");

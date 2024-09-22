@@ -24,7 +24,12 @@ class MenuCatalogueService extends BaseService implements MenuCatalogueServiceIn
 
     public function paginate($request)
     {
-        return [];
+        $condition['keyword'] = addcslashes($request->input('keyword'), '\\%_');
+        $condition['publish'] = $request->integer('publish');
+        $perpage = $request->integer('perpage');
+        $menuCatalogues = $this->menuCatalogueRepository
+            ->pagination($this->paginateSelect(), $condition, $perpage, ['path' => 'menu/index']);
+        return $menuCatalogues;
     }
 
     public function create($request)
@@ -79,5 +84,15 @@ class MenuCatalogueService extends BaseService implements MenuCatalogueServiceIn
             // echo $e->getMessage();die();
             return false;
         }
+    }
+
+    private function paginateSelect()
+    {
+        return [
+            'id',
+            'name',
+            'keyword',
+            'publish',
+        ];
     }
 }

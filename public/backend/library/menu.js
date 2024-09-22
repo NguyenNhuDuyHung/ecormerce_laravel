@@ -89,12 +89,12 @@
             {
                 class: "col-lg-4",
                 name: "menu[name][]",
-                value: typeof option != undefined ? option.name : "",
+                value: typeof option != "undefined" ? option.name : "",
             },
             {
                 class: "col-lg-4",
                 name: "menu[canonical][]",
-                value: typeof option != undefined ? option.canonical : "",
+                value: typeof option != "undefined" ? option.canonical : "",
             },
             {
                 class: "col-lg-2",

@@ -6,43 +6,32 @@
             </th>
             <th>Tên Menu</th>
             <th>Từ khóa</th>
-            <th>Người tạo</th>
-            <th>Ngày tạo</th>
             <th class="text-center">Tình trạng</th>
             <th class="text-center">Thao tác</th>
         </tr>
     </thead>
     <tbody>
-        @if (isset($menus) && is_object($menus))
-            @foreach ($menus as $menu)
+        @if (isset($menuCatalogues) && is_object($menuCatalogues))
+            @foreach ($menuCatalogues as $menuCatalogue)
                 <tr>
                     <td>
-                        <input type="checkbox" value="{{ $menu->id }}" class="input-checkbox checkBoxItem">
+                        <input type="checkbox" value="{{ $menuCatalogue->id }}" class="input-checkbox checkBoxItem">
                     </td>
                     <td>
-                        {{ $menu->name }}
+                        {{ $menuCatalogue->name }}
                     </td>
                     <td>
-                        {{ $menu->email }}
+                        {{ $menuCatalogue->keyword }}
                     </td>
-                    <td>
-                        {{ $menu->phone }}
-                    </td>
-                    <td>
-                        {{ $menu->address }}
-                    </td>
-                    <td>
-                        {{ $menu->user_catalogues->name }}
-                    </td>
-                    <td class="text-center js-switch-{{ $menu->id }}">
-                        <input type="checkbox" value="{{ $menu->publish }}" class="js-switch status"
-                            data-field="publish" data-model="User" data-modelId="{{ $menu->id }}"
-                            {{ $menu->publish == 2 ? 'checked' : '' }} />
+                    <td class="text-center js-switch-{{ $menuCatalogue->id }}">
+                        <input type="checkbox" value="{{ $menuCatalogue->publish }}" class="js-switch status"
+                            data-field="publish" data-model="{{ $config['model'] }}" data-modelId="{{ $menuCatalogue->id }}"
+                            {{ $menuCatalogue->publish == 2 ? 'checked' : '' }} />
                     </td>
                     <td class="text-center" style="display: flex; justify-content: center; gap: 5px;">
-                        <a href="{{ route('user.edit', $menu->id) }}" class="btn btn-success"><i
+                        <a href="{{ route('menu.edit', $menuCatalogue->id) }}" class="btn btn-success"><i
                                 class="fa fa-edit"></i></a>
-                        <form action="{{ route('user.delete', $menu->id) }}" method="get">
+                        <form action="{{ route('menu.delete', $menuCatalogue->id) }}" method="get">
                             <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
                         </form>
                     </td>

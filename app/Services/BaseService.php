@@ -75,4 +75,46 @@ class BaseService implements BaseServiceInterface
         return $request->input($inputName) && !empty($request->input($inputName))
             ? json_encode($request->input($inputName)) : '';
     }
+
+    public function updateStatus($post = [])
+    {
+        DB::beginTransaction();
+        try {
+            $model = lcfirst($post['model']) . 'Repository';
+            $payload[$post['field']] = (($post['value'] == 1) ? 2 : 1);
+            $this->{$model}->update($post['modelId'], $payload);
+            // $this->changeUserStatus($post, $payload[$post['field']]);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
+
+    public function updateStatusAll($post)
+    {
+        DB::beginTransaction();
+        try {
+            $model = lcfirst($post['model']) . 'Repository';
+            $field = $post['field'];
+            $payload = [$field => $post['value'] == 1 ? 2 : 1];
+            $flag = $this->{$model}->updateByWhereIn('id', $post['ids'], $payload);
+            // $this->changeUserStatus($post, $post['value']);
+            // $this->changeUserStatus($post, $post['value']);
+
+            DB::commit();
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // Log::error($e->getMessage());
+            echo $e->getMessage();
+            die();
+            return false;
+        }
+    }
 }

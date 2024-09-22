@@ -47,7 +47,6 @@
 
                                     <div class="menu-list mt-20">
 
-
                                         <div id="paginationMenu"></div>
                                     </div>
 
@@ -80,12 +79,35 @@
                 </div>
                 <div class="hr-line-dashed" style="margin: 10px 0;"></div>
                 <div class="menu-wrapper">
-                    <div class="notification text-center ">
+                    <div
+                        class="notification text-center {{is_array(old('menu')) && count(old('menu')) ? 'none' : '' }}">
                         <h4 style="font-weight: 500; font-size: 14px; color: #000;">Danh sách liên kết này chưa có bất
                             kỳ đường dẫn nào!</h4>
                         <p style="color:#555; margin-top:10px;">Hãy nhấn vào <span style="color: blue;">"Thêm đường
                                 dẫn"</span> để bắt đầu thêm!</p>
                     </div>
+
+                    @if(is_array(old('menu')) && count(old('menu')))
+                        @foreach(old('menu')['name'] as $key => $value)
+                            <div class="row mb-20 menu-item {{old('menu')['canonical'][$key]}}">
+                                <div class="col-lg-4">
+                                    <input type="text" value="{{ $value }}" class="form-control" name="menu[name][]">
+                                </div>
+                                <div class="col-lg-4">
+                                    <input type="text" value="{{ old('menu')['canonical'][$key] }}" class="form-control"
+                                        name="menu[canonical][]">
+                                </div>
+                                <div class="col-lg-2">
+                                    <input type="text" value="{{ old('menu')['order'][$key] }}" class="form-control"
+                                        name="menu[order][]">
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-row text-center"><a class="delete-menu"><i class="fa fa-trash"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @endif
                 </div>
             </div>
         </div>

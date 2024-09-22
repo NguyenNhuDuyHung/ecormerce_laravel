@@ -20,11 +20,13 @@ class Nestedsetbie
 
 	public function Get()
 	{
+		$catalogue = isset($this->params['isMenu']) && $this->params['isMenu'] == true ? '' : '_catalogue';
 		$foreignkey = (isset($this->params['foreignkey'])) ? $this->params['foreignkey'] : 'post_catalogue_id';
 		$moduleExtract = explode('_', $this->params['table']);
+		$join = isset($this->params['isMenu']) && $this->params['isMenu'] == true ? substr($moduleExtract[0], 0, -1) : $moduleExtract[0];
 		$result = DB::table($this->params['table'] . ' as tb1')
 			->select('tb1.id', 'tb2.name', 'tb1.parent_id', 'tb1.lft', 'tb1.rgt', 'tb1.level', 'tb1.order')
-			->join($moduleExtract[0] . '_catalogue_language as tb2', 'tb1.id', '=', 'tb2.' . $foreignkey . '')
+			->join($join . $catalogue . '_language as tb2', 'tb1.id', '=', 'tb2.' . $foreignkey . '')
 			->where('tb2.language_id', '=', $this->params['language_id'])->whereNull('tb1.deleted_at')
 			->orderBy('tb1.lft', 'asc')->get()->toArray();
 		$this->data = $result;

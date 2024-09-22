@@ -33,8 +33,7 @@
                     </div>
 
                     <div class="col-lg-6">
-                        <select class="setupSelect2" name="menu_catalogue_id" id="" style="width: 100%;">
-                            <option value="none">[Chọn kiểu menu]</option>
+                        <select class="setupSelect2" name="type" id="" style="width: 100%;">
                             @foreach(__('module.type') as $key => $value)
                                 <option value="{{ $key }}">{{ $value }}</option>
                             @endforeach

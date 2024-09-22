@@ -49,7 +49,8 @@
                     <form class="m-t" role="form" action="{{ route('auth.login') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <input type="text" name="email" class="form-control" placeholder="Username" value="{{ old('email') }}">
+                            <input type="text" name="email" class="form-control" placeholder="Username"
+                                value="{{ old('email') }}">
                             @if ($errors->has('email'))
                                 <span class="text-danger">{{ $errors->first('email') }}</span>
                             @endif
